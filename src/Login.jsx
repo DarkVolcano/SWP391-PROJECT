@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const clientId =
   "242000824863-hdrd5enmg6b0hg1pbn1pe0asvset9r14.apps.googleusercontent.com";
@@ -10,9 +11,7 @@ const clientId =
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [notice, setNotice] = useState("");
   const { setUser, setLoginMessage } = useContext(UserContext);
-  const [noticeVisible, setNoticeVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,23 +36,10 @@ const Login = () => {
           navigate("/HomeManager");
         }
       } else {
-        setNotice("Invalid username or password.");
-        setNoticeVisible(true);
-        setTimeout(() => {
-          setNoticeVisible(false);
-        }, 5000);
       }
     } catch (error) {
-      setNotice("An error occurred while trying to log in.");
-      setNoticeVisible(true);
-      setTimeout(() => {
-        setNoticeVisible(false);
-      }, 5000);
+      toast.error("Invalid email or password");
     }
-  };
-
-  const handleCloseNotice = () => {
-    setNoticeVisible(false);
   };
 
   const handleCallbackResponse = (response) => {
@@ -61,9 +47,7 @@ const Login = () => {
     const userObject = jwtDecode(response.credential);
     console.log(userObject);
     setUser(userObject);
-    setLoginMessage("Login successful");
     navigate("/Home");
-    alert("Login successful");
   };
 
   useEffect(() => {
@@ -82,6 +66,7 @@ const Login = () => {
 
   return (
     <div className="loginN">
+      <ToastContainer />
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
@@ -138,17 +123,6 @@ const Login = () => {
               Login
             </button>
           </div>
-          {notice && (
-            <div className={`error ${noticeVisible ? "" : "hide"}`}>
-              <span className="check">
-                <i className="fa fa-warning"></i>
-              </span>
-              <span className="msg">{notice}</span>
-              <span className="crose" onClick={handleCloseNotice}>
-                <i className="fa fa-times"></i>
-              </span>
-            </div>
-          )}
           <div className="or">OR</div>
           <div id="signInDiv"></div>
           <div className="mt-3 text-center">
