@@ -4,7 +4,6 @@ import moment from "moment";
 import "moment/locale/vi";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
-// Custom CSS for events
 const styles = `
   .start {
     background-color: green !important;
@@ -38,10 +37,10 @@ const generateEvents = () => {
   const interval = 2; // every 2 hours
 
   for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-    const dayStart = moment().startOf('week').add(dayOffset, 'days'); // start from the beginning of the week
+    const dayStart = moment().startOf("week").add(dayOffset, "days"); // start from the beginning of the week
     for (let hour = startHour; hour < endHour; hour += interval) {
-      const start = moment(dayStart).add(hour, 'hours').toDate();
-      const end = moment(start).add(1, 'hour').toDate();
+      const start = moment(dayStart).add(hour, "hours").toDate();
+      const end = moment(start).add(1, "hour").toDate();
 
       events.push({
         id: dayOffset * 100 + hour,
@@ -55,12 +54,17 @@ const generateEvents = () => {
   return events;
 };
 const Event = ({ event }) => {
-  const startTime = moment(event.start).format('HH:mm');
-  const endTime = moment(event.end).format('HH:mm');
+  const startTime = moment(event.start).format("HH:mm");
+  const endTime = moment(event.end).format("HH:mm");
   return (
     <div>
       <div className="rbc-event-label-time">
-        <div className="start-time">{startTime}</div> – <div className="end-time">{endTime}</div>
+        <div className="start-time" style={{ display: "none" }}>
+          {startTime}
+        </div>
+        <div className="end-time" style={{ display: "none" }}>
+          {endTime}
+        </div>
       </div>
       <div className="rbc-event-content">{event.title}</div>
     </div>
@@ -68,7 +72,6 @@ const Event = ({ event }) => {
 };
 
 const BookInfor = () => {
-  // set moment's locale to Vietnamese
   moment.locale("vi");
   const localizer = momentLocalizer(moment);
   const [events, setEvents] = useState(generateEvents());
@@ -93,7 +96,9 @@ const BookInfor = () => {
   };
 
   const eventPropGetter = (event, start, end, isSelected) => {
-    const className = `${moment(start).hour() === 7 ? 'start' : ''} ${moment(end).hour() === 20 ? 'end' : ''}`.trim();
+    const className = `${moment(start).hour() === 7 ? "start" : ""} ${
+      moment(end).hour() === 20 ? "end" : ""
+    }`.trim();
     return {
       className,
     };
@@ -109,7 +114,7 @@ const BookInfor = () => {
       selectable
       defaultView={Views.WEEK}
       views={[Views.WEEK]}
-      style={{ height: '600px' }}
+      style={{ height: "600px", width: "600px", margin: "110px" }}
       eventPropGetter={eventPropGetter}
       components={{
         event: Event,
