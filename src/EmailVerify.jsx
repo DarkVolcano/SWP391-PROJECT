@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import "react-toastify/dist/ReactToastify.css";
 
 const Verify = () => {
   const [email, setEmail] = useState("");
@@ -14,14 +14,13 @@ const Verify = () => {
     const url = `https://localhost:7088/api/Accounts/SendMail?toEmail=${email}`;
     const data = { email: email };
 
-    // Log the URL and data being sent
     console.log("API URL:", url);
     console.log("Data to be sent:", data);
 
     axios
       .post(url, data)
       .then((result) => {
-        console.log("Email sent response:", result); // Log the response
+        console.log("Email sent response:", result);
         clear();
         toast.success("Send successfully");
         navigate("/OTPVerify");
@@ -30,7 +29,7 @@ const Verify = () => {
         console.log(
           "Email send error:",
           error.response ? error.response.data : error.message
-        ); // Log the error
+        );
         toast.error("Send failed");
       });
   };
@@ -41,7 +40,7 @@ const Verify = () => {
 
   return (
     <div className="loginN">
-      <ToastContainer /> {/* Add ToastContainer for displaying toasts */}
+      <ToastContainer />
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
@@ -56,7 +55,7 @@ const Verify = () => {
         <form
           className="col-md-7 mt-3 pt-3 pb-3"
           style={{ width: "auto", height: "auto" }}
-          onSubmit={handleSubEmail} // Handle form submission
+          onSubmit={handleSubEmail}
         >
           <div className="form-floating mb-3">
             <input
