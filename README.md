@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm i --legacy-peer-deps`
+
+react-scripts exists inside node_modules, but it also installs many other dependencies required to run a project with create-react-app.
+
 ### `npm start`
 
 Runs the app in the development mode.\
