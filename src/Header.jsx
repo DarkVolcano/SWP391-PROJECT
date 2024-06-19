@@ -124,9 +124,6 @@ const Header = () => {
             <button className="in">
               <NavLink to="/Login">Sign in</NavLink>
             </button>
-            <button className="up">
-              <NavLink to="/Register">Sign up</NavLink>
-            </button>
           </>
         )}
       </ul>
