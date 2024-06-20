@@ -41,16 +41,14 @@ const Role = () => {
     getData();
   }, []);
 
-  const getData = () => {
-    axios
-      .get("https://localhost:7088/api/Roles")
-      .then((result) => {
-        console.log(result.data);
-        setData(result.data.items);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const getData = async () => {
+    try {
+      const result = await axios.get("https://localhost:7088/api/Roles");
+      console.log(result.data);
+      setData(result.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const handleClose = () => setShow(false);
@@ -69,7 +67,7 @@ const Role = () => {
       .then((result) => {
         handleDeleteClose();
         getData();
-        toast.success("Account has been delete");
+        toast.success("Role has been delete");
       })
       .catch((error) => {
         toast.error(error);
@@ -105,7 +103,7 @@ const Role = () => {
         handleClose();
         getData();
         clear();
-        toast.success("Account has been update");
+        toast.success("Role has been update");
       })
       .catch((error) => {
         toast.error(error);
@@ -113,7 +111,7 @@ const Role = () => {
   };
 
   const handleSave = () => {
-    const url = "https://localhost:7088/api/Accounts/Register_Staff_Manager";
+    const url = "https://localhost:7088/api/Roles";
     const data = {
       roleName: roleName,
       status: status,
@@ -125,7 +123,7 @@ const Role = () => {
         getData();
         clear();
         handleCreateClose();
-        toast.success("Account has been added");
+        toast.success("Role has been added");
       })
       .catch((error) => {
         toast.error(error);
@@ -169,7 +167,7 @@ const Role = () => {
           </nav>
           <div className="home-content">
             <div className="infor">
-              {/* <div className="total">{data.length} total</div> */}
+              <div className="total">{data.length} total</div>
               <div className="function">
                 <Button
                   className="btn btn-primary create"
@@ -219,7 +217,7 @@ const Role = () => {
                             viewBox="0 0 54 54"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                            onClick={() => handleEdit(item.accountId)}
+                            onClick={() => handleEdit(item.roleId)}
                             style={{
                               background: "#000",
                               borderRadius: "30px",
@@ -289,7 +287,7 @@ const Role = () => {
                             fill="none"
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            onClick={() => handleDeleteShow(item.accountId)}
+                            onClick={() => handleDeleteShow(item.roleId)}
                             style={{
                               background: "#000",
                               borderRadius: "30px",
@@ -344,7 +342,7 @@ const Role = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Create Account</Modal.Title>
+              <Modal.Title>Create Role</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -393,7 +391,7 @@ const Role = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter account name"
+                    placeholder="Enter role name"
                     value={editRoleName}
                     onChange={(e) => setEditRoleName(e.target.value)}
                   />
@@ -423,9 +421,7 @@ const Role = () => {
             <Modal.Header closeButton>
               <Modal.Title>Delete Confirmation</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              Are you sure you want to delete this account?
-            </Modal.Body>
+            <Modal.Body>Are you sure you want to delete this role?</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleDeleteClose}>
                 Cancel
