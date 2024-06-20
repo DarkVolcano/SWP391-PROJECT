@@ -25,6 +25,7 @@ const Users = () => {
   }, []);
 
   const [data, setData] = useState([]);
+  const [roles, setRoles] = useState([]);
   const [show, setShow] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteAccountId, setDeleteAccountId] = useState("");
@@ -62,6 +63,22 @@ const Users = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  const fetchRoles = () => {
+    axios
+      .get("https://localhost:7088/api/Roles")
+      .then((response) => {
+        console.log(response.data);
+        setRoles(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -137,7 +154,6 @@ const Users = () => {
   };
 
   const handleSave = () => {
-    // const url = 'https://localhost:7088/api/Accounts';
     const url = "https://localhost:7088/api/Accounts/CreateAccount";
     const data = {
       accountName: accountName,
@@ -239,7 +255,7 @@ const Users = () => {
                 <th>Full Name</th>
                 <th>Phone</th>
                 <th>Email</th>
-                <th className="center">RoleID</th>
+                <th className="center">Role</th>
                 <th className="center">Status</th>
                 <th className="center" style={{ borderTopRightRadius: "10px" }}>
                   Actions
@@ -249,6 +265,9 @@ const Users = () => {
             <tbody>
               {data && data.length > 0
                 ? data.map((item, index) => {
+                    const role = roles.find(
+                      (role) => role.roleId === item.roleId
+                    );
                     return (
                       <tr key={index}>
                         <td style={{ display: "none" }}>{index + 1}</td>
@@ -256,7 +275,9 @@ const Users = () => {
                         <td>{item.fullName}</td>
                         <td>{item.phone}</td>
                         <td>{item.email}</td>
-                        <td className="center">{item.roleId}</td>
+                        <td className="center">
+                          {role ? role.roleName : "Unknown"}
+                        </td>
                         <td className="center">
                           {item.status ? "Active" : "Disable"}
                         </td>
@@ -433,13 +454,18 @@ const Users = () => {
                   />
                 </Col>
                 <Col sm={12}>
-                  <input
-                    type="text"
+                  <select
                     className="form-control mb-3"
-                    placeholder="Enter role id"
                     value={roleID}
                     onChange={(e) => setRoleID(e.target.value)}
-                  />
+                  >
+                    <option value="">Select Role</option>
+                    {roles.map((role) => (
+                      <option key={role.roleId} value={role.roleId}>
+                        {role.roleName}
+                      </option>
+                    ))}
+                  </select>
                 </Col>
                 <Col sm={12}>
                   <input
