@@ -30,17 +30,6 @@ const Home = () => {
               Date play
             </label>
           </div>
-          <div className="form-floating">
-            <input
-              type="time"
-              className="form-control"
-              id="inputTime"
-              placeholder="Choose time"
-            ></input>
-            <label htmlFor="inputTime" className="form-label">
-              Time play
-            </label>
-          </div>
           <button style={{ width: "58px" }}>
             <svg
               width="24"
