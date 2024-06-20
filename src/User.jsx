@@ -52,6 +52,7 @@ const Users = () => {
 
   useEffect(() => {
     getData();
+    fetchRoles();
   }, []);
 
   const getData = () => {
@@ -65,10 +66,6 @@ const Users = () => {
         console.log(error);
       });
   };
-
-  useEffect(() => {
-    fetchRoles();
-  }, []);
 
   const fetchRoles = () => {
     axios
