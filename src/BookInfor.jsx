@@ -6,11 +6,11 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const styles = `
   .start {
-    background-color: green !important;
+    background-color: rgb(86, 202, 112) !important;
     color: white;
   }
   .end {
-    background-color: red !important;
+    background-color: rgb(187, 0, 0) !important;
     color: white;
   }
   .start-time {
@@ -23,6 +23,9 @@ const styles = `
   }
   .rbc-event .rbc-event-label {
     display: none;
+  }
+  .rbc-event{
+    background-color: rgb(0, 170, 187);
   }
 `;
 const styleSheet = document.createElement("style");
