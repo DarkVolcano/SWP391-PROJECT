@@ -1,17 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import "./StyleDashboard.css";
-import { COURT } from "./courts";
+import Table from "react-bootstrap/Table";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const Court = () => {
-  const [court, setCourt] = useState(COURT);
-  const [filteredCourt, setFilteredCourt] = useState(COURT);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [selectedCourt, setSelectedCourt] = useState(null);
-  const [activeFilter, setActiveFilter] = useState(null);
-  const [ruleContent, setRuleContent] = useState("");
+  const [data, setData] = useState([]);
+  const [roles, setRoles] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [managers, setManagers] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [show, setShow] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteCourtId, setDeleteCourtId] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  const [areaId, setAreaId] = useState("");
+  const [courtName, setCourtName] = useState("");
+  const [openTime, setOpenTime] = useState("");
+  const [closeTime, setCloseTime] = useState("");
+  const [rules, setRules] = useState("");
+  const [status, setStatus] = useState(true);
+  const [image, setImage] = useState("");
+  const [managerId, setManagerId] = useState("");
+  const [title, setTitle] = useState("");
+  const [address, setAddress] = useState("");
+  const [totalRate, setTotalRate] = useState("");
+  const [priceAvr, setPriceAvr] = useState("");
+  const [courtId, setCourtId] = useState("");
+
+  const [number, setNumber] = useState("");
+  const [subStatus, setSubStatus] = useState(true);
+
+  const [amenityId, setAmenityId] = useState("");
+  const [amenStatus, setAmenStatus] = useState(true);
+
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [weekdayPrice, setWeekdayPrice] = useState("");
+  const [weekendPrice, setWeekendPrice] = useState("");
+  const [slotStatus, setSlotStatus] = useState(true);
+
+  const [editAreaId, setEditAreaId] = useState("");
+  const [editCourtName, setEditCourtName] = useState("");
+  const [editOpenTime, setEditOpenTime] = useState("");
+  const [editCloseTime, setEditCloseTime] = useState("");
+  const [editRules, setEditRules] = useState("");
+  const [editStatus, setEditStatus] = useState(true);
+  const [editImage, setEditImage] = useState("");
+  const [editManagerId, setEditManagerId] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editaddress, setEditAddress] = useState("");
+  const [editTotalRate, setEditTotalRate] = useState("");
+  const [editPriceAvr, setEditPriceAvr] = useState("");
+  const [editCourtId, setEditCourtId] = useState("");
 
   useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
@@ -26,380 +76,794 @@ const Court = () => {
     };
   }, []);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-    const searchResults = court.filter((court) =>
-      court.courtName.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setFilteredCourt(searchResults);
+  useEffect(() => {
+    getData();
+    fetchArea();
+    fetchManager();
+    fetchAmenity();
+  }, []);
+
+  const getData = () => {
+    axios
+      .get("https://localhost:7088/api/Courts?pageNumber=1&pageSize=10")
+      .then((result) => {
+        console.log(result.data);
+        setData(result.data.items);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const handleSort = () => {
-    const sortedCourt = [...filteredCourt].sort((a, b) => {
-      if (sortOrder === "asc") {
-        return a.courtName.localeCompare(b.courtName);
-      } else {
-        return b.courtName.localeCompare(a.courtName);
-      }
-    });
-    setFilteredCourt(sortedCourt);
-    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  const fetchArea = () => {
+    axios
+      .get("https://localhost:7088/api/Areas")
+      .then((response) => {
+        console.log(response.data);
+        setAreas(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleFilter = (property) => {
-    setActiveFilter(property);
+  const fetchManager = () => {
+    axios
+      .get("https://localhost:7088/api/Accounts?pageNumber=1&pageSize=10")
+      .then((respond) => {
+        console.log(respond.data);
+        setManagers(respond.data.items);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const handleInputChange = (e) => {
-    setSearchTerm(e.target.value);
-    const searchResults = court.filter((court) =>
-      court[activeFilter].toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    setFilteredCourt(searchResults);
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  const fetchRoles = () => {
+    axios
+      .get("https://localhost:7088/api/Roles")
+      .then((response) => {
+        console.log(response.data);
+        setRoles(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
-  const handleRuleChange = (event, editor) => {
+  const fetchAmenity = () => {
+    axios
+      .get("https://localhost:7088/api/Amenities")
+      .then((responses) => {
+        console.log(responses.data);
+        setAmenities(responses.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleEditorChange = (event, editor) => {
     const data = editor.getData();
-    setRuleContent(data);
+    setRules(data);
+  };
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const handleDeleteClose = () => setShowDeleteModal(false);
+  const handleDeleteShow = (id) => {
+    setDeleteCourtId(id);
+    setShowDeleteModal(true);
+  };
+  const handleCreateClose = () => setShowCreateModal(false);
+  const handleCreateShow = () => setShowCreateModal(true);
+
+  const handleDelete = () => {
+    axios
+      .delete(`https://localhost:7088/api/Courts/${deleteCourtId}`)
+      .then((result) => {
+        handleDeleteClose();
+        getData();
+        toast.success("Court has been delete");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  const handleEdit = (id) => {
+    handleShow();
+    axios
+      .get(`https://localhost:7088/api/Accounts/id?id=${id}`)
+      .then((result) => {
+        console.log(result.data);
+        setEditAreaId(result.data.areaId);
+        setEditCourtName(result.data.courtName);
+        setEditOpenTime(result.data.openTime);
+        setEditCloseTime(result.data.closeTime);
+        setEditRules(result.data.rules);
+        setEditImage(result.data.image);
+        setEditManagerId(result.data.managerId);
+        setEditTitle(result.data.title);
+        setEditAddress(result.data.address);
+        setEditTotalRate(result.data.totalRate);
+        setEditPriceAvr(result.data.priceAvr);
+        setEditStatus(result.data.status);
+        setEditCourtId(id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdate = (id) => {
+    const url = `https://localhost:7088/api/Accounts/id?id=${editCourtId}`;
+    const data = {
+      courtId: editCourtId,
+      areaId: editAreaId,
+      courtName: editCourtName,
+      openTime: editOpenTime,
+      closeTime: editCloseTime,
+      rules: editRules,
+      image: editImage,
+      managerId: editManagerId,
+      title: editTitle,
+      address: editaddress,
+      totalRate: editTotalRate,
+      priceAvr: editPriceAvr,
+      status: editStatus,
+    };
+
+    axios
+      .put(url, data)
+      .then((result) => {
+        handleClose();
+        getData();
+        clear();
+        toast.success("Court has been update");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  const handleSave = () => {
+    const url = "https://localhost:7088/api/Courts";
+    const data = {
+      areaId: areaId,
+      courtName: courtName,
+      openTime: openTime,
+      closeTime: closeTime,
+      rules: rules,
+      image: image,
+      managerId: managerId,
+      title: title,
+      address: address,
+      totalRate: totalRate,
+      priceAvr: priceAvr,
+      status: status,
+      number: number,
+      subStatus: status,
+      amenityId: amenityId,
+      amenStatus: status,
+      startTime: startTime,
+      endTime: endTime,
+      weekdayPrice: weekdayPrice,
+      weekendPrice: weekendPrice,
+      slotStatus: status,
+    };
+
+    axios
+      .post(url, data)
+      .then((result) => {
+        getData();
+        clear();
+        handleCreateClose();
+        toast.success("Court has been added");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  const clear = () => {
+    setAreaId("");
+    setCourtName("");
+    setOpenTime("");
+    setCloseTime("");
+    setRules("");
+    setImage("");
+    setManagerId("");
+    setTitle("");
+    setAddress("");
+    setTotalRate("");
+    setPriceAvr("");
+    setStatus(true);
+    setNumber("");
+    setSubStatus(true);
+    setAmenityId("");
+    setAmenStatus(true);
+    setStartTime("");
+    setEndTime("");
+    setWeekdayPrice("");
+    setWeekendPrice("");
+    setSlotStatus(true);
+    setEditAreaId("");
+    setEditCourtName("");
+    setEditOpenTime("");
+    setEditCloseTime("");
+    setEditRules("");
+    setEditImage("");
+    setEditManagerId("");
+    setEditTitle("");
+    setEditAddress("");
+    setEditTotalRate("");
+    setEditPriceAvr("");
+    setEditStatus(false);
+    setEditCourtId("");
+  };
+
+  const handleActiveChange = (e) => {
+    if (e.target.checked) {
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
+  };
+
+  const handleEditActiveChange = (e) => {
+    if (e.target.checked) {
+      setEditStatus(true);
+    } else {
+      setEditStatus(false);
+    }
   };
 
   return (
-    <section className="home-section" style={{ padding: "0 27px" }}>
-      <nav>
-        <div className="sidebar-button">
-          <i className="bx bx-menu sidebarBtn"></i>
-          <span className="dashboard">Court</span>
-        </div>
-      </nav>
-
-      <div className="home-content">
-        <div className="infor">
-          <div className="total">{filteredCourt.length} total</div>
-          <div className="function">
-            <button onClick={handleSort}>
-              Sort {sortOrder === "asc" ? "Descending" : "Ascending"}
-            </button>
-            <input
-              type="text"
-              placeholder="Search by court name"
-              value={searchTerm}
-              onChange={handleSearch}
-            />
-            <button className="create">
-              <a href="#popup1" id="openPopUp">
-                Create court
-              </a>
-            </button>
-          </div>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th onClick={() => handleFilter("courtID")}>
-                Court ID{" "}
-                {activeFilter === "courtID" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("complexeID")}>
-                Complexe ID{" "}
-                {activeFilter === "complexeID" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("courtName")}>
-                Court Name{" "}
-                {activeFilter === "courtName" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("image")}>
-                Image{" "}
-                {activeFilter === "image" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("openTime")}>
-                Open time{" "}
-                {activeFilter === "openTime" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("closeTime")}>
-                Close time{" "}
-                {activeFilter === "closeTime" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("rule")}>
-                Rule{" "}
-                {activeFilter === "rule" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th onClick={() => handleFilter("status")}>
-                Status{" "}
-                {activeFilter === "status" && (
-                  <input
-                    type="text"
-                    className="search"
-                    onChange={handleInputChange}
-                  />
-                )}
-              </th>
-              <th className="center">Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredCourt.map((court) => (
-              <tr key={court.courtID}>
-                <td>{court.courtID}</td>
-                <td>{court.complexeID}</td>
-                <td>{court.courtName}</td>
-                <td>
-                  <img
-                    src={court.image}
-                    style={{ width: "100px", height: "auto" }}
-                  />
-                </td>
-                <td>{court.openTime}</td>
-                <td>{court.closeTime}</td>
-                <td>{court.rule}</td>
-                <td>{court.status}</td>
-                <td className="put">
-                  <button
-                    className="detail"
-                    onClick={() => {
-                      setSelectedCourt(court);
-                      setRuleContent(court.rule);
-                    }}
-                  >
-                    <a href="#popup1" id="openPopUp">
-                      <svg
-                        width="33"
-                        height="33"
-                        viewBox="0 0 66 66"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <rect
-                          width="65.8739"
-                          height="65.8739"
-                          rx="32.937"
-                          fill="#292D32"
-                        />
-                        <mask
-                          id="mask0_146_689"
-                          style={{ maskType: "alpha" }}
-                          maskUnits="userSpaceOnUse"
-                          x="7"
-                          y="5"
-                          width="55"
-                          height="54"
-                        >
-                          <path
-                            d="M35.5517 21.8315L21.1497 36.2335L21.1497 36.2335C20.5042 36.879 20.1814 37.2018 19.9692 37.5983C19.757 37.9948 19.6675 38.4424 19.4885 39.3376L18.0527 46.5164C17.8507 47.5266 17.7496 48.0318 18.037 48.3191C18.3243 48.6065 18.8295 48.5054 19.8397 48.3034L27.0185 46.8676L27.0185 46.8676C27.9137 46.6886 28.3613 46.5991 28.7578 46.3869C29.1543 46.1747 29.4771 45.8519 30.1226 45.2064L44.5246 30.8044L35.5517 21.8315Z"
-                            fill="white"
-                          />
-                          <path
-                            d="M35.5517 21.8315L21.1497 36.2335L21.1497 36.2335C20.5042 36.879 20.1814 37.2018 19.9692 37.5983C19.757 37.9948 19.6675 38.4424 19.4885 39.3376L18.0527 46.5164C17.8507 47.5266 17.7496 48.0318 18.037 48.3191C18.3243 48.6065 18.8295 48.5054 19.8397 48.3034L27.0185 46.8676L27.0185 46.8676C27.9137 46.6886 28.3613 46.5991 28.7578 46.3869C29.1543 46.1747 29.4771 45.8519 30.1226 45.2064L44.5246 30.8044L35.5517 21.8315Z"
-                            fill="black"
-                            fill-opacity="0.1"
-                          />
-                          <path
-                            d="M36.9096 20.9468L21.3131 36.5433L21.3131 36.5433L21.2752 36.5812L21.2752 36.5812C21.2445 36.6118 21.2142 36.6421 21.1841 36.6721C20.6814 37.1741 20.27 37.5849 19.9808 38.0957C19.6915 38.6066 19.551 39.1707 19.3792 39.86C19.3689 39.9012 19.3585 39.9428 19.348 39.9849L18.1268 44.8699C18.1207 44.8942 18.1146 44.9185 18.1085 44.9428C17.9874 45.4268 17.8647 45.9169 17.8249 46.3233C17.7817 46.7656 17.7978 47.4567 18.3489 48.0077C18.9 48.5588 19.5911 48.575 20.0333 48.5317C20.4397 48.492 20.9298 48.3693 21.4138 48.2481C21.4381 48.242 21.4624 48.2359 21.4867 48.2299L26.3717 47.0086C26.4138 46.9981 26.4554 46.9877 26.4966 46.9775C27.1859 46.8057 27.7501 46.6651 28.2609 46.3759C28.7718 46.0866 29.1826 45.6752 29.6845 45.1725C29.7145 45.1425 29.7448 45.1121 29.7755 45.0814L45.4098 29.4471L45.4432 29.4137C45.9825 28.8744 46.4372 28.4198 46.7814 28.018C47.1414 27.5976 47.4497 27.1584 47.6373 26.6286C47.9653 25.7024 47.9653 24.6915 47.6373 23.7652C47.4497 23.2355 47.1414 22.7962 46.7814 22.3759C46.4372 21.9741 45.9825 21.5194 45.4431 20.9801L45.4098 20.9468L45.3765 20.9134C44.8372 20.3741 44.3825 19.9194 43.9807 19.5752C43.5604 19.2152 43.1212 18.9069 42.5914 18.7194C41.6651 18.3914 40.6543 18.3914 39.728 18.7194C39.1983 18.9069 38.759 19.2152 38.3387 19.5752C37.9369 19.9195 37.4822 20.3741 36.9429 20.9135L36.9096 20.9468Z"
-                            stroke="white"
-                            stroke-width="2.50406"
-                          />
-                          <path
-                            d="M36.9096 20.9468L21.3131 36.5433L21.3131 36.5433L21.2752 36.5812L21.2752 36.5812C21.2445 36.6118 21.2142 36.6421 21.1841 36.6721C20.6814 37.1741 20.27 37.5849 19.9808 38.0957C19.6915 38.6066 19.551 39.1707 19.3792 39.86C19.3689 39.9012 19.3585 39.9428 19.348 39.9849L18.1268 44.8699C18.1207 44.8942 18.1146 44.9185 18.1085 44.9428C17.9874 45.4268 17.8647 45.9169 17.8249 46.3233C17.7817 46.7656 17.7978 47.4567 18.3489 48.0077C18.9 48.5588 19.5911 48.575 20.0333 48.5317C20.4397 48.492 20.9298 48.3693 21.4138 48.2481C21.4381 48.242 21.4624 48.2359 21.4867 48.2299L26.3717 47.0086C26.4138 46.9981 26.4554 46.9877 26.4966 46.9775C27.1859 46.8057 27.7501 46.6651 28.2609 46.3759C28.7718 46.0866 29.1826 45.6752 29.6845 45.1725C29.7145 45.1425 29.7448 45.1121 29.7755 45.0814L45.4098 29.4471L45.4432 29.4137C45.9825 28.8744 46.4372 28.4198 46.7814 28.018C47.1414 27.5976 47.4497 27.1584 47.6373 26.6286C47.9653 25.7024 47.9653 24.6915 47.6373 23.7652C47.4497 23.2355 47.1414 22.7962 46.7814 22.3759C46.4372 21.9741 45.9825 21.5194 45.4431 20.9801L45.4098 20.9468L45.3765 20.9134C44.8372 20.3741 44.3825 19.9194 43.9807 19.5752C43.5604 19.2152 43.1212 18.9069 42.5914 18.7194C41.6651 18.3914 40.6543 18.3914 39.728 18.7194C39.1983 18.9069 38.759 19.2152 38.3387 19.5752C37.9369 19.9195 37.4822 20.3741 36.9429 20.9135L36.9096 20.9468Z"
-                            stroke="black"
-                            stroke-opacity="0.1"
-                            stroke-width="2.50406"
-                          />
-                          <path
-                            d="M35.5518 21.8315L44.5246 30.8044"
-                            stroke="white"
-                            stroke-width="2.50406"
-                          />
-                          <path
-                            d="M35.5518 21.8315L44.5246 30.8044"
-                            stroke="black"
-                            stroke-opacity="0.1"
-                            stroke-width="2.50406"
-                          />
-                        </mask>
-                        <g mask="url(#mask0_146_689)">
-                          <rect
-                            x="-2.51172"
-                            y="4.87988"
-                            width="64.1115"
-                            height="59.1798"
-                            fill="#F49D1A"
-                          />
-                        </g>
-                      </svg>
-                    </a>
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {selectedCourt && (
-          <div id="popup1" className="overlay">
-            <div className="popup">
-              <div className="tabname">
-                <div>Court</div>
-                <a className="close" href="#">
-                  &times;
-                </a>
-              </div>
-              <div className="content">
-                <form className="pt-3 pb-3" style={{ padding: "30px" }}>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputcourtID"
-                      defaultValue={selectedCourt.courtID}
-                    />
-                    <label htmlFor="inputcourtID" className="form-label">
-                      Court ID
-                    </label>
-                  </div>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputcomplexeID"
-                      defaultValue={selectedCourt.complexeID}
-                    />
-                    <label htmlFor="inputcomplexeID" className="form-label">
-                      Complexe ID
-                    </label>
-                  </div>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputcourtName"
-                      defaultValue={selectedCourt.courtName}
-                    />
-                    <label htmlFor="inputcourtName" className="form-label">
-                      Court Came
-                    </label>
-                  </div>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputImage"
-                      defaultValue={selectedCourt.image}
-                    />
-                    <label htmlFor="inputImage" className="form-label">
-                      Image
-                    </label>
-                  </div>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputOpenTime"
-                      defaultValue={selectedCourt.openTime}
-                    />
-                    <label htmlFor="inputOpenTime" className="form-label">
-                      Open Time
-                    </label>
-                  </div>
-                  <div className="form-floating mb-3">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputCloseTime"
-                      defaultValue={selectedCourt.closeTime}
-                    />
-                    <label htmlFor="inputCloseTime" className="form-label">
-                      Close Time
-                    </label>
-                  </div>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={ruleContent}
-                    onReady={(editor) => {
-                      console.log("Editor is ready to use!", editor);
-                    }}
-                    onChange={(event) => {
-                      console.log(event);
-                    }}
-                    onBlur={(event, editor) => {
-                      console.log("Blur.", editor);
-                    }}
-                    onFocus={(event, editor) => {
-                      console.log("Focus.", editor);
-                    }}
-                  />
-                  {/* <div className="form-floating mb-3">
-                <input type="text" className="form-control" id="inputStatus"   defaultValue={selectedCourt.status} />
-                <label htmlFor="inputStatus" className="form-label">Status</label>
-              </div> */}
-                  <div className="form-floating mb-3">
-                    <select
-                      className="form-select"
-                      id="inputStatus"
-                      defaultValue={selectedCourt.status}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Disable">Disable</option>
-                    </select>
-                    <label htmlFor="inputStatus" className="form-label">
-                      Status
-                    </label>
-                  </div>
-                </form>
-              </div>
-              <div className="pop-footer">
-                <button className="btn btn-primary">
-                  <a href="#">Cancel</a>
-                </button>
-                <button className="btn btn-primary">Save</button>
-                <button className="btn btn-danger">Delete</button>
+    <>
+      <Fragment>
+        <ToastContainer />
+        <section className="home-section" style={{ padding: "0 27px" }}>
+          <nav>
+            <div className="sidebar-button">
+              <i className="bx bx-menu sidebarBtn"></i>
+              <span className="dashboard">Court</span>
+            </div>
+          </nav>
+          <div className="home-content">
+            <div className="infor">
+              <div className="total">{data.length} total</div>
+              <div className="function">
+                <Button
+                  className="btn btn-primary create"
+                  onClick={handleCreateShow}
+                >
+                  Create
+                </Button>
               </div>
             </div>
           </div>
-        )}
-      </div>
-    </section>
+
+          <Table
+            striped
+            bordered
+            hover
+            style={{ margin: "14px 0", border: "none" }}
+          >
+            <thead>
+              <tr>
+                <th style={{ display: "none" }}>#</th>
+                <th style={{ borderTopLeftRadius: "10px", border: "none" }}>
+                  Area
+                </th>
+                <th>Court Name</th>
+                <th>Open Time</th>
+                <th>Close Time</th>
+                <th>Rules</th>
+                <th>Image</th>
+                <th>Manager</th>
+                <th>Title</th>
+                <th>Address</th>
+                <th>Total Rate</th>
+                <th>Price Average</th>
+                <th className="center">Status</th>
+                <th className="center" style={{ borderTopRightRadius: "10px" }}>
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {data && data.length > 0
+                ? data.map((item, index) => {
+                    const area = areas.find(
+                      (area) => area.areaId === item.areaId
+                    );
+                    const manager = managers.find(
+                      (manager) => manager.accountId === item.managerId
+                    );
+                    return (
+                      <tr key={index}>
+                        <td style={{ display: "none" }}>{index + 1}</td>
+                        <td className="center">
+                          {area ? area.location : "Unknown"}
+                        </td>
+                        <td>{item.courtName}</td>
+                        <td>{item.openTime}</td>
+                        <td>{item.closeTime}</td>
+                        <td>{item.rules}</td>
+                        <td>
+                          <img src={item.image} />
+                        </td>
+                        <td className="center">
+                          {manager ? manager.fullName : "Unknown"}
+                        </td>
+                        <td>{item.title}</td>
+                        <td>{item.address}</td>
+                        <td>{item.totalRate}</td>
+                        <td>{item.priceAvr}</td>
+                        <td className="center">
+                          {item.status ? "Active" : "Disable"}
+                        </td>
+                        <td className="center">
+                          <svg
+                            width="33"
+                            height="33"
+                            viewBox="0 0 54 54"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            onClick={() => handleEdit(item.courtId)}
+                            style={{
+                              background: "#000",
+                              borderRadius: "30px",
+                              padding: "4px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <mask
+                              id="mask0_544_736"
+                              style={{ maskType: "alpha" }}
+                              maskUnits="userSpaceOnUse"
+                              x="0"
+                              y="0"
+                              width="54"
+                              height="54"
+                            >
+                              <path
+                                d="M28.0405 16.8232L13.6385 31.2252L13.6385 31.2252C12.993 31.8707 12.6702 32.1935 12.458 32.59C12.2458 32.9865 12.1563 33.4341 11.9772 34.3293L10.5415 41.5081C10.3394 42.5183 10.2384 43.0235 10.5258 43.3108C10.8131 43.5982 11.3182 43.4971 12.3285 43.2951L19.5073 41.8593L19.5073 41.8593C20.4025 41.6803 20.85 41.5908 21.2466 41.3786C21.6431 41.1664 21.9658 40.8436 22.6114 40.1981L37.0133 25.7961L28.0405 16.8232Z"
+                                fill="white"
+                              />
+                              <path
+                                d="M28.0405 16.8232L13.6385 31.2252L13.6385 31.2252C12.993 31.8707 12.6702 32.1935 12.458 32.59C12.2458 32.9865 12.1563 33.4341 11.9772 34.3293L10.5415 41.5081C10.3394 42.5183 10.2384 43.0235 10.5258 43.3108C10.8131 43.5982 11.3182 43.4971 12.3285 43.2951L19.5073 41.8593L19.5073 41.8593C20.4025 41.6803 20.85 41.5908 21.2466 41.3786C21.6431 41.1664 21.9658 40.8436 22.6114 40.1981L37.0133 25.7961L28.0405 16.8232Z"
+                                fill="black"
+                                fill-opacity="0.1"
+                              />
+                              <path
+                                d="M13.7635 31.5729L13.7635 31.5729C13.7328 31.6035 13.7024 31.6338 13.6724 31.6638C13.1697 32.1658 12.7583 32.5766 12.469 33.0874C12.1798 33.5983 12.0392 34.1624 11.8675 34.8517C11.8572 34.8929 11.8468 34.9345 11.8363 34.9766L10.6151 39.8616C10.609 39.8859 10.6029 39.9102 10.5968 39.9345C10.4757 40.4185 10.353 40.9086 10.3132 41.315C10.2699 41.7573 10.2861 42.4484 10.8372 42.9994C11.3882 43.5505 12.0793 43.5667 12.5216 43.5234C12.928 43.4837 13.4181 43.361 13.9021 43.2398C13.9264 43.2337 13.9507 43.2276 13.975 43.2216L18.86 42.0003C18.9021 41.9898 18.9437 41.9794 18.9849 41.9692C19.6742 41.7974 20.2384 41.6568 20.7492 41.3676C21.2601 41.0783 21.6708 40.6669 22.1728 40.1642C22.2028 40.1342 22.2331 40.1038 22.2638 40.0731L37.8981 24.4388L37.9315 24.4054C38.4708 23.8661 38.9255 23.4115 39.2697 23.0097C39.6297 22.5893 39.938 22.1501 40.1256 21.6203C40.4536 20.694 40.4536 19.6832 40.1256 18.7569C39.938 18.2272 39.6297 17.7879 39.2697 17.3676C38.9255 16.9658 38.4708 16.5111 37.9314 15.9718L37.8981 15.9385L37.8648 15.9051C37.3255 15.3658 36.8708 14.9111 36.469 14.5669C36.0487 14.2069 35.6094 13.8986 35.0797 13.7111C34.1534 13.3831 33.1426 13.3831 32.2163 13.7111C31.6865 13.8986 31.2473 14.2069 30.827 14.5669C30.4251 14.9111 29.9705 15.3658 29.4312 15.9052L29.3978 15.9385L13.8014 31.535L13.8013 31.535L13.7635 31.5729Z"
+                                stroke="white"
+                                stroke-width="2.50406"
+                              />
+                              <path
+                                d="M13.7635 31.5729L13.7635 31.5729C13.7328 31.6035 13.7024 31.6338 13.6724 31.6638C13.1697 32.1658 12.7583 32.5766 12.469 33.0874C12.1798 33.5983 12.0392 34.1624 11.8675 34.8517C11.8572 34.8929 11.8468 34.9345 11.8363 34.9766L10.6151 39.8616C10.609 39.8859 10.6029 39.9102 10.5968 39.9345C10.4757 40.4185 10.353 40.9086 10.3132 41.315C10.2699 41.7573 10.2861 42.4484 10.8372 42.9994C11.3882 43.5505 12.0793 43.5667 12.5216 43.5234C12.928 43.4837 13.4181 43.361 13.9021 43.2398C13.9264 43.2337 13.9507 43.2276 13.975 43.2216L18.86 42.0003C18.9021 41.9898 18.9437 41.9794 18.9849 41.9692C19.6742 41.7974 20.2384 41.6568 20.7492 41.3676C21.2601 41.0783 21.6708 40.6669 22.1728 40.1642C22.2028 40.1342 22.2331 40.1038 22.2638 40.0731L37.8981 24.4388L37.9315 24.4054C38.4708 23.8661 38.9255 23.4115 39.2697 23.0097C39.6297 22.5893 39.938 22.1501 40.1256 21.6203C40.4536 20.694 40.4536 19.6832 40.1256 18.7569C39.938 18.2272 39.6297 17.7879 39.2697 17.3676C38.9255 16.9658 38.4708 16.5111 37.9314 15.9718L37.8981 15.9385L37.8648 15.9051C37.3255 15.3658 36.8708 14.9111 36.469 14.5669C36.0487 14.2069 35.6094 13.8986 35.0797 13.7111C34.1534 13.3831 33.1426 13.3831 32.2163 13.7111C31.6865 13.8986 31.2473 14.2069 30.827 14.5669C30.4251 14.9111 29.9705 15.3658 29.4312 15.9052L29.3978 15.9385L13.8014 31.535L13.8013 31.535L13.7635 31.5729Z"
+                                stroke="black"
+                                stroke-opacity="0.1"
+                                stroke-width="2.50406"
+                              />
+                              <path
+                                d="M28.04 16.8232L37.0129 25.7961"
+                                stroke="white"
+                                stroke-width="2.50406"
+                              />
+                              <path
+                                d="M28.04 16.8232L37.0129 25.7961"
+                                stroke="black"
+                                stroke-opacity="0.1"
+                                stroke-width="2.50406"
+                              />
+                            </mask>
+                            <g mask="url(#mask0_544_736)">
+                              <rect
+                                x="-10.0234"
+                                y="-0.12793"
+                                width="64.1115"
+                                height="59.1798"
+                                fill="#F49D1A"
+                              />
+                            </g>
+                          </svg>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="icon icon-tabler icon-tabler-trash"
+                            width="33"
+                            height="33"
+                            viewBox="0 0 24 24"
+                            stroke-width="2"
+                            stroke="currentColor"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            onClick={() => handleDeleteShow(item.courtId)}
+                            style={{
+                              background: "#000",
+                              borderRadius: "30px",
+                              padding: "4px",
+                              cursor: "pointer",
+                            }}
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <line
+                              x1="4"
+                              y1="7"
+                              x2="20"
+                              y2="7"
+                              style={{ color: "red" }}
+                            />
+                            <line
+                              x1="10"
+                              y1="11"
+                              x2="10"
+                              y2="17"
+                              style={{ color: "red" }}
+                            />
+                            <line
+                              x1="14"
+                              y1="11"
+                              x2="14"
+                              y2="17"
+                              style={{ color: "red" }}
+                            />
+                            <path
+                              d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"
+                              style={{ color: "red" }}
+                            />
+                            <path
+                              d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"
+                              style={{ color: "red" }}
+                            />
+                          </svg>
+                        </td>
+                      </tr>
+                    );
+                  })
+                : "Loading..."}
+            </tbody>
+          </Table>
+
+          <Modal
+            show={showCreateModal}
+            onHide={handleCreateClose}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Create Court</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <h3>Court</h3>
+              <Row>
+                <Col sm={12}>
+                  <select
+                    className="form-control mb-3"
+                    value={areaId}
+                    onChange={(e) => setAreaId(e.target.value)}
+                  >
+                    <option value="">Select Area</option>
+                    {areas.map((area) => (
+                      <option key={area.areaId} value={area.areaId}>
+                        {area.location}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter court name"
+                    value={courtName}
+                    onChange={(e) => setCourtName(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="time"
+                    className="form-control mb-3"
+                    placeholder="Enter open time"
+                    value={openTime}
+                    onChange={(e) => setOpenTime(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="time"
+                    className="form-control mb-3"
+                    placeholder="Enter close time"
+                    value={closeTime}
+                    onChange={(e) => setCloseTime(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <CKEditor
+                    editor={ClassicEditor}
+                    data={rules}
+                    onChange={handleEditorChange}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="file"
+                    className="form-control mb-3"
+                    placeholder="Choose image"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <select
+                    className="form-control mb-3"
+                    value={managerId}
+                    onChange={(e) => setManagerId(e.target.value)}
+                  >
+                    <option value="">Select Manager</option>
+                    {managers
+                      .filter((manager) => manager.roleId === 4)
+                      .map((manager) => (
+                        <option
+                          key={manager.managerId}
+                          value={manager.managerId}
+                        >
+                          {manager.fullName}
+                        </option>
+                      ))}
+                  </select>
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter address"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter rate"
+                    value={totalRate}
+                    onChange={(e) => setTotalRate(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter price"
+                    value={priceAvr}
+                    onChange={(e) => setPriceAvr(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={status}
+                    onChange={handleActiveChange}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+              <h3>Sub</h3>
+              <Row>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter sub name"
+                    value={number}
+                    onChange={(e) => setNumber(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={subStatus}
+                    onChange={handleActiveChange}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+              <h3>Amenity</h3>
+              <Row>
+                <Col sm={12}>
+                  <select
+                    className="form-control mb-3"
+                    value={amenityId}
+                    onChange={(e) => setAmenityId(e.target.value)}
+                  >
+                    <option value="">Select Amenity</option>
+                    {amenities.map((amenity) => (
+                      <option key={amenity.amenityId} value={amenity.amenityId}>
+                        {amenity.description}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={amenStatus}
+                    onChange={handleActiveChange}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+              <h3>Slot</h3>
+              <Row>
+                <Col sm={12}>
+                  <input
+                    type="time"
+                    className="form-control mb-3"
+                    placeholder="Enter start time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="time"
+                    className="form-control mb-3"
+                    placeholder="Enter end time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter week day price"
+                    value={weekdayPrice}
+                    onChange={(e) => setWeekdayPrice(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter weekend price"
+                    value={weekendPrice}
+                    onChange={(e) => setWeekendPrice(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={status}
+                    onChange={handleActiveChange}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCreateClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleSave}>
+                Submit
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* <Modal
+            show={show}
+            onHide={handleClose}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Modify / Update Account</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Row>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter account name"
+                    value={editAccountname}
+                    onChange={(e) => setEditAccountname(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter full name"
+                    value={editFullname}
+                    onChange={(e) => setEditFullname(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter phone"
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter email"
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter role id"
+                    value={editRoleID}
+                    onChange={(e) => setEditRoleID(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={editStatus}
+                    onChange={(e) => handleEditActiveChange(e)}
+                    value={editStatus}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleUpdate}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal> */}
+
+          <Modal show={showDeleteModal} onHide={handleDeleteClose} centered>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Confirmation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to delete this court?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleDeleteClose}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </section>
+      </Fragment>
+    </>
   );
 };
 
