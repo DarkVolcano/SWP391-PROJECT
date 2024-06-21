@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
 
 const Sidebar = () => {
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   React.useEffect(() => {
     let sidebar = document.querySelector(".sidebar");
@@ -68,13 +68,13 @@ const Sidebar = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to="./RegCou">
+          <NavLink to="/Area">
             <i className="bx bx-pie-chart-alt-2"></i>
-            <span className="links_name">Register Court</span>
+            <span className="links_name">Area</span>
           </NavLink>
         </li>
         <li className="log_out">
-          <Link to="/Login">
+          <Link to="/Login" onClick={logout}>
             <i className="bx bx-log-out"></i>
             <span className="links_name">Log out</span>
           </Link>
