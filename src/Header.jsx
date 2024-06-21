@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 import "https://cdn.lordicon.com/lordicon.js";
 
 const Header = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, logout } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,6 +33,7 @@ const Header = () => {
   }, [dropdownOpen]);
 
   const handleSignOut = () => {
+    logout();
     navigate("/");
   };
 
