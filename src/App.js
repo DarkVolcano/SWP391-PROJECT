@@ -13,6 +13,7 @@ import BookInStaff from "./BookInfStaff";
 import { USERS } from "./data";
 import Users from "./User";
 import Court from "./Court";
+import Area from "./Area";
 import About from "./AboutUS";
 import Payment from "./Payment";
 import "./App.css";
@@ -76,6 +77,15 @@ const App = () => {
               <>
                 <Sidebar />
                 <Court />
+              </>
+            }
+          />
+          <Route
+            path="Area"
+            element={
+              <>
+                <Sidebar />
+                <Area />
               </>
             }
           />
