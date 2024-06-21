@@ -36,6 +36,7 @@ const Login = () => {
           navigate("/HomeManager");
         }
       } else {
+        toast.error("Invalid email or password");
       }
     } catch (error) {
       toast.error("Invalid email or password");
