@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -315,13 +316,45 @@ const Court = () => {
     }
   };
 
-  const handleEditActiveChange = (e) => {
-    if (e.target.checked) {
-      setEditStatus(true);
+  const handleCourtActive = (e) => {
+    if (e.target.defaultChecked) {
+      setStatus(true);
     } else {
-      setEditStatus(false);
+      setStatus(false);
     }
   };
+
+  const handleSubActive = (e) => {
+    if (e.target.defaultChecked) {
+      setSubStatus(true);
+    } else {
+      setSubStatus(false);
+    }
+  };
+
+  const handleAmenActive = (e) => {
+    if (e.target.defaultChecked) {
+      setAmenStatus(true);
+    } else {
+      setAmenStatus(false);
+    }
+  };
+
+  const handleSlotActive = (e) => {
+    if (e.target.defaultChecked) {
+      setSlotStatus(true);
+    } else {
+      setSlotStatus(false);
+    }
+  };
+
+  // const handleEditActiveChange = (e) => {
+  //   if (e.target.checked) {
+  //     setEditStatus(true);
+  //   } else {
+  //     setEditStatus(false);
+  //   }
+  // };
 
   return (
     <>
@@ -545,7 +578,7 @@ const Court = () => {
             <Modal.Body>
               <h3>Court</h3>
               <Row>
-                <Col sm={12}>
+                <Col sm={6}>
                   <select
                     className="form-control mb-3"
                     value={areaId}
@@ -559,7 +592,7 @@ const Court = () => {
                     ))}
                   </select>
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -568,7 +601,7 @@ const Court = () => {
                     onChange={(e) => setCourtName(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="time"
                     className="form-control mb-3"
@@ -577,7 +610,7 @@ const Court = () => {
                     onChange={(e) => setOpenTime(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="time"
                     className="form-control mb-3"
@@ -593,7 +626,7 @@ const Court = () => {
                     onChange={handleEditorChange}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="file"
                     className="form-control mb-3"
@@ -602,7 +635,7 @@ const Court = () => {
                     onChange={(e) => setImage(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <select
                     className="form-control mb-3"
                     value={managerId}
@@ -621,7 +654,7 @@ const Court = () => {
                       ))}
                   </select>
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -630,7 +663,7 @@ const Court = () => {
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -639,7 +672,7 @@ const Court = () => {
                     onChange={(e) => setAddress(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -648,7 +681,7 @@ const Court = () => {
                     onChange={(e) => setTotalRate(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -657,18 +690,26 @@ const Court = () => {
                     onChange={(e) => setPriceAvr(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
-                  <input
+                <Col sm={6} style={{ display: "none" }}>
+                  {/* <input
                     type="checkbox"
                     checked={status}
                     onChange={handleActiveChange}
                   />
-                  <label>Status</label>
+                  <label>Status</label> */}
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label="Status"
+                    defaultChecked={status}
+                    onChange={handleCourtActive}
+                    style={{ paddingLeft: "2.5em" }}
+                  />
                 </Col>
               </Row>
               <h3>Sub</h3>
               <Row>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -677,18 +718,26 @@ const Court = () => {
                     onChange={(e) => setNumber(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
-                  <input
+                <Col sm={6} style={{ display: "none" }}>
+                  {/* <input
                     type="checkbox"
                     checked={subStatus}
                     onChange={handleActiveChange}
                   />
-                  <label>Status</label>
+                  <label>Status</label> */}
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label="Status"
+                    defaultChecked={subStatus}
+                    onChange={handleSubActive}
+                    style={{ paddingLeft: "2.5em" }}
+                  />
                 </Col>
               </Row>
               <h3>Amenity</h3>
               <Row>
-                <Col sm={12}>
+                <Col sm={6}>
                   <select
                     className="form-control mb-3"
                     value={amenityId}
@@ -702,18 +751,26 @@ const Court = () => {
                     ))}
                   </select>
                 </Col>
-                <Col sm={12}>
-                  <input
+                <Col sm={6} style={{ display: "none" }}>
+                  {/* <input
                     type="checkbox"
                     checked={amenStatus}
                     onChange={handleActiveChange}
                   />
-                  <label>Status</label>
+                  <label>Status</label> */}
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label="Status"
+                    defaultChecked={amenStatus}
+                    onChange={handleAmenActive}
+                    style={{ paddingLeft: "2.5em" }}
+                  />
                 </Col>
               </Row>
               <h3>Slot</h3>
               <Row>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="time"
                     className="form-control mb-3"
@@ -722,7 +779,7 @@ const Court = () => {
                     onChange={(e) => setStartTime(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="time"
                     className="form-control mb-3"
@@ -731,7 +788,7 @@ const Court = () => {
                     onChange={(e) => setEndTime(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -740,7 +797,7 @@ const Court = () => {
                     onChange={(e) => setWeekdayPrice(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -749,13 +806,21 @@ const Court = () => {
                     onChange={(e) => setWeekendPrice(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
-                  <input
+                <Col sm={6} style={{ display: "none" }}>
+                  {/* <input
                     type="checkbox"
                     checked={status}
                     onChange={handleActiveChange}
                   />
-                  <label>Status</label>
+                  <label>Status</label> */}
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label="Status"
+                    defaultChecked={slotStatus}
+                    onChange={handleSlotActive}
+                    style={{ paddingLeft: "2.5em" }}
+                  />
                 </Col>
               </Row>
             </Modal.Body>
