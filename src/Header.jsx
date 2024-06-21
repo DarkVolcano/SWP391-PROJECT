@@ -104,14 +104,14 @@ const Header = () => {
                 onClick={toggleDropdown}
                 style={{ width: "max-content" }}
               >
-                Hello {user.name || user.userName}
-                <img src={user.picture} />
+                Hello {user.name || user.accountName}
+                <img src={user.picture || user.image} />
               </button>
               <div
                 id="myDropdown"
                 className={`dropdown-content ${dropdownOpen ? "show" : ""}`}
               >
-                <NavLink to={`/Profile/${user.id}`}>Profile</NavLink>
+                <NavLink to={`/Profile/${user.accountId}`}>Profile</NavLink>
                 <Link to="/Login">Logout</Link>
                 <>
                   <button onClick={handleSignOut}>Sign Out</button>
