@@ -401,8 +401,8 @@ const Court = () => {
                 <th>Manager</th>
                 <th>Title</th>
                 <th>Address</th>
-                <th>Total Rate</th>
-                <th>Price Average</th>
+                <th style={{ display: "none" }}>Total Rate</th>
+                <th style={{ display: "none" }}>Price Average</th>
                 <th className="center">Status</th>
                 <th className="center" style={{ borderTopRightRadius: "10px" }}>
                   Actions
@@ -429,15 +429,15 @@ const Court = () => {
                         <td>{item.closeTime}</td>
                         <td>{item.rules}</td>
                         <td>
-                          <img src={item.image} />
+                          <img src={item.image} style={{ width: "100px" }} />
                         </td>
                         <td className="center">
                           {manager ? manager.fullName : "Unknown"}
                         </td>
                         <td>{item.title}</td>
                         <td>{item.address}</td>
-                        <td>{item.totalRate}</td>
-                        <td>{item.priceAvr}</td>
+                        <td style={{ display: "none" }}>{item.totalRate}</td>
+                        <td style={{ display: "none" }}>{item.priceAvr}</td>
                         <td className="center">
                           {item.status ? "Active" : "Disable"}
                         </td>
