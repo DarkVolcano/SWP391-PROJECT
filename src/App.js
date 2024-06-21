@@ -175,7 +175,7 @@ const App = () => {
             element={<OtpInputWithValidation numberOfDigits={6} />}
           ></Route>
           <Route path="NewPassword" element={<NewPass />}></Route>
-          <Route path="Profile/:id" element={<Profile />}></Route>
+          <Route path="Profile/:accountId" element={<Profile />}></Route>
           <Route path="Register" element={<Signup />}></Route>
         </Routes>
       </BrowserRouter>
