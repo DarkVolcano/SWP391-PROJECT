@@ -27,6 +27,7 @@ import OtpInputWithValidation from "./OTPVerify";
 import NewPass from "./NewPassword";
 import Book from "./BookPlay";
 import BookInfor from "./BookInfor";
+import BookingType from "./BookingType";
 
 const App = () => {
   return (
@@ -86,6 +87,15 @@ const App = () => {
               <>
                 <Sidebar />
                 <Area />
+              </>
+            }
+          />
+          <Route
+            path="BookingType"
+            element={
+              <>
+                <Sidebar />
+                <BookingType />
               </>
             }
           />
