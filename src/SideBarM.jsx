@@ -35,7 +35,7 @@ const SidebarM = () => {
         />
         <div style={{ display: "grid" }}>
           <span className="logo_name" style={{ fontSize: "12px" }}>
-            Admin
+            Manager
           </span>
           <span className="logo_name" style={{ fontSize: "17px" }}>
             {user ? user.accountName : "Minion"}
