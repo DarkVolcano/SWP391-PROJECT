@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import "./StyleDashboard.css";
+import "./StyleDashboardAdmin.css";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -59,13 +59,13 @@ const Court = () => {
   const [editImage, setEditImage] = useState("");
   const [editManagerId, setEditManagerId] = useState("");
   const [editTitle, setEditTitle] = useState("");
-  const [editaddress, setEditAddress] = useState("");
+  const [editAddress, setEditAddress] = useState("");
   const [editTotalRate, setEditTotalRate] = useState("");
   const [editPriceAvr, setEditPriceAvr] = useState("");
   const [editCourtId, setEditCourtId] = useState("");
 
   useEffect(() => {
-    let sidebar = document.querySelector(".sidebar");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
@@ -179,7 +179,7 @@ const Court = () => {
   const handleEdit = (id) => {
     handleShow();
     axios
-      .get(`https://localhost:7088/api/Accounts/id?id=${id}`)
+      .get(`https://localhost:7088/api/Courts/Update/${id}`)
       .then((result) => {
         console.log(result.data);
         setEditAreaId(result.data.areaId);
@@ -202,7 +202,7 @@ const Court = () => {
   };
 
   const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Accounts/id?id=${editCourtId}`;
+    const url = `https://localhost:7088/api/Courts/Update/${editCourtId}`;
     const data = {
       courtId: editCourtId,
       areaId: editAreaId,
@@ -213,7 +213,7 @@ const Court = () => {
       image: editImage,
       managerId: editManagerId,
       title: editTitle,
-      address: editaddress,
+      address: editAddress,
       totalRate: editTotalRate,
       priceAvr: editPriceAvr,
       status: editStatus,
@@ -263,6 +263,7 @@ const Court = () => {
       .then((result) => {
         getData();
         clear();
+        console.log(result.data);
         handleCreateClose();
         toast.success("Court has been added");
       })
@@ -394,9 +395,8 @@ const Court = () => {
                   Area
                 </th>
                 <th>Court Name</th>
-                <th>Open Time</th>
-                <th>Close Time</th>
-                <th>Rules</th>
+                <th>Time</th>
+                <th style={{ display: "none" }}>Rules</th>
                 <th>Image</th>
                 <th>Manager</th>
                 <th>Title</th>
@@ -425,9 +425,8 @@ const Court = () => {
                           {area ? area.location : "Unknown"}
                         </td>
                         <td>{item.courtName}</td>
-                        <td>{item.openTime}</td>
-                        <td>{item.closeTime}</td>
-                        <td>{item.rules}</td>
+                        <td>{item.openTime + " - " + item.closeTime}</td>
+                        <td style={{ display: "none" }}>{item.rules}</td>
                         <td>
                           <img src={item.image} style={{ width: "100px" }} />
                         </td>
@@ -584,7 +583,7 @@ const Court = () => {
                     value={areaId}
                     onChange={(e) => setAreaId(e.target.value)}
                   >
-                    <option value="">Select Area</option>
+                    {/* <option value="">Select Area</option> */}
                     {areas.map((area) => (
                       <option key={area.areaId} value={area.areaId}>
                         {area.location}
@@ -619,11 +618,20 @@ const Court = () => {
                     onChange={(e) => setCloseTime(e.target.value)}
                   />
                 </Col>
-                <Col sm={12}>
+                {/* <Col sm={12}>
                   <CKEditor
                     editor={ClassicEditor}
                     data={rules}
                     onChange={handleEditorChange}
+                  />
+                </Col> */}
+                <Col sm={6}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter rule"
+                    value={rules}
+                    onChange={(e) => setRules(e.target.value)}
                   />
                 </Col>
                 <Col sm={6}>
@@ -691,12 +699,6 @@ const Court = () => {
                   />
                 </Col>
                 <Col sm={6} style={{ display: "none" }}>
-                  {/* <input
-                    type="checkbox"
-                    checked={status}
-                    onChange={handleActiveChange}
-                  />
-                  <label>Status</label> */}
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -719,12 +721,6 @@ const Court = () => {
                   />
                 </Col>
                 <Col sm={6} style={{ display: "none" }}>
-                  {/* <input
-                    type="checkbox"
-                    checked={subStatus}
-                    onChange={handleActiveChange}
-                  />
-                  <label>Status</label> */}
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -752,12 +748,6 @@ const Court = () => {
                   </select>
                 </Col>
                 <Col sm={6} style={{ display: "none" }}>
-                  {/* <input
-                    type="checkbox"
-                    checked={amenStatus}
-                    onChange={handleActiveChange}
-                  />
-                  <label>Status</label> */}
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -807,12 +797,6 @@ const Court = () => {
                   />
                 </Col>
                 <Col sm={6} style={{ display: "none" }}>
-                  {/* <input
-                    type="checkbox"
-                    checked={status}
-                    onChange={handleActiveChange}
-                  />
-                  <label>Status</label> */}
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -834,7 +818,7 @@ const Court = () => {
             </Modal.Footer>
           </Modal>
 
-          {/* <Modal
+          <Modal
             show={show}
             onHide={handleClose}
             size="lg"
@@ -842,7 +826,7 @@ const Court = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Account</Modal.Title>
+              <Modal.Title>Modify / Update Court</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -850,27 +834,27 @@ const Court = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter account name"
-                    value={editAccountname}
-                    onChange={(e) => setEditAccountname(e.target.value)}
+                    placeholder="Enter court name"
+                    value={editCourtName}
+                    onChange={(e) => setEditCourtName(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="text"
+                    type="time"
                     className="form-control mb-3"
-                    placeholder="Enter full name"
-                    value={editFullname}
-                    onChange={(e) => setEditFullname(e.target.value)}
+                    placeholder="Choose open time"
+                    value={editOpenTime}
+                    onChange={(e) => setEditOpenTime(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="text"
+                    type="time"
                     className="form-control mb-3"
-                    placeholder="Enter phone"
-                    value={editPhone}
-                    onChange={(e) => setEditPhone(e.target.value)}
+                    placeholder="Choose close time"
+                    value={editCloseTime}
+                    onChange={(e) => setEditCloseTime(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
@@ -878,27 +862,27 @@ const Court = () => {
                     type="text"
                     className="form-control mb-3"
                     placeholder="Enter email"
-                    value={editEmail}
-                    onChange={(e) => setEditEmail(e.target.value)}
+                    value={editRules}
+                    onChange={(e) => setEditRules(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter role id"
-                    value={editRoleID}
-                    onChange={(e) => setEditRoleID(e.target.value)}
+                    placeholder="Enter title"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="checkbox"
-                    checked={editStatus}
-                    onChange={(e) => handleEditActiveChange(e)}
-                    value={editStatus}
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter address"
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)}
                   />
-                  <label>Status</label>
                 </Col>
               </Row>
             </Modal.Body>
@@ -910,7 +894,7 @@ const Court = () => {
                 Save Changes
               </Button>
             </Modal.Footer>
-          </Modal> */}
+          </Modal>
 
           <Modal show={showDeleteModal} onHide={handleDeleteClose} centered>
             <Modal.Header closeButton>
