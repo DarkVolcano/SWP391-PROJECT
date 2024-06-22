@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import "./StyleDashboard.css";
+import "./StyleDashboardAdmin.css";
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Users = () => {
   useEffect(() => {
-    let sidebar = document.querySelector(".sidebar");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
