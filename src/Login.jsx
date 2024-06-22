@@ -33,7 +33,7 @@ const Login = () => {
         } else if (user.roleId === 3) {
           navigate("/HomeStaff");
         } else {
-          navigate("/HomeManager");
+          navigate("/DashboardManager");
         }
       } else {
         toast.error("Invalid email or password");
