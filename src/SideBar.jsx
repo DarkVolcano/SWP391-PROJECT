@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import "./StyleDashboard.css";
+import "./StyleDashboardAdmin.css";
 import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
 
@@ -7,7 +7,7 @@ const Sidebar = () => {
   const { user, logout } = useContext(UserContext);
 
   React.useEffect(() => {
-    let sidebar = document.querySelector(".sidebar");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
@@ -20,7 +20,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="sidebar">
+    <div className="sidebarA">
       <div className="logo-details">
         <i className="bx bxl-c-plus-plus"></i>
         <span className="logo_name">RacketUp</span>
