@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import "./StyleDashboard.css";
+import "./StyleDashboardAdmin.css";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [noticeVisible, setNoticeVisible] = useState(false);
 
   React.useEffect(() => {
-    let sidebar = document.querySelector(".sidebar");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
