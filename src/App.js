@@ -4,6 +4,7 @@ import Login from "./Login";
 import Signup from "./Register";
 import Profile from "./Profile";
 import Sidebar from "./SideBar";
+import SidebarM from "./SideBarM";
 import Dashboard from "./Dashboard";
 import Header from "./Header";
 import Home from "./Home";
@@ -28,6 +29,9 @@ import NewPass from "./NewPassword";
 import Book from "./BookPlay";
 import BookInfor from "./BookInfor";
 import BookingType from "./BookingType";
+import DashboardManager from "./DashboardManager";
+import Amenity from "./Amenity";
+import AmenityCourt from "./AmenityCourt";
 
 const App = () => {
   return (
@@ -180,12 +184,29 @@ const App = () => {
             }
           />
           <Route
-            path="HomeManager"
+            path="DashboardManager"
             element={
               <>
-                <Header />
-                <HomeManager />
-                <Footer />
+                <SidebarM />
+                <DashboardManager />
+              </>
+            }
+          />
+          <Route
+            path="Amenity"
+            element={
+              <>
+                <SidebarM />
+                <Amenity />
+              </>
+            }
+          />
+          <Route
+            path="AmenityCourt"
+            element={
+              <>
+                <SidebarM />
+                <AmenityCourt />
               </>
             }
           />
