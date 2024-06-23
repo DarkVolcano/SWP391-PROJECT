@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Book = () => {
   const [data, setData] = useState([]);
+  const [areas, setAreas] = useState([]);
   const [search, setSearch] = useState("");
 
   const [courtName, setCourtName] = useState("");
@@ -20,6 +21,7 @@ const Book = () => {
 
   useEffect(() => {
     getData();
+    fetchArea();
   }, []);
 
   const getData = () => {
@@ -31,6 +33,18 @@ const Book = () => {
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  const fetchArea = () => {
+    axios
+      .get("https://localhost:7088/api/Areas")
+      .then((response) => {
+        console.log(response.data);
+        setAreas(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   };
 
@@ -119,23 +133,33 @@ const Book = () => {
         <span clasName="text">?</span>
       </div>
       {data && data.length > 0 ? (
-        data.map((item, index) => (
-          <div className="book-box" key={index}>
-            <div className="book-infor">
-              <div className="book-text">
-                <div className="book-place">{item.courtName}</div>
-                <div className="book-slot">18:00 - 20:00</div>
-                <div className="book-price">Giá tham khảo:120K - 150K</div>
-                <div className="book-con">
-                  Tiêu chuẩn sân: Tiêu chuẩn quốc tế
+        data.map((item, index) => {
+          const area = areas.find((area) => area.areaId === item.areaId);
+          return (
+            <div className="book-box" key={index}>
+              <div className="book-infor">
+                <div className="book-text">
+                  <div className="book-place">{item.courtName}</div>
+                  <div className="book-slot">
+                    {item.openTime + " - " + item.closeTime}
+                  </div>
+                  <div className="book-price">
+                    Giá tham khảo: {item.priceAvr}VND
+                  </div>
+                  <div className="book-con">
+                    Khu vực: {area ? area.location : "Unknown"}
+                  </div>
+                  <div className="book-con">
+                    Tiêu chuẩn sân: Tiêu chuẩn quốc tế
+                  </div>
+                </div>
+                <div className="book-image">
+                  <img src={item.image} />
                 </div>
               </div>
-              <div className="book-image">
-                <img src={item.image} />
-              </div>
             </div>
-          </div>
-        ))
+          );
+        })
       ) : (
         <p>No court available</p>
       )}
