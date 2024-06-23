@@ -154,7 +154,7 @@ const App = () => {
             }
           />
           <Route
-            path="BookInfor"
+            path="BookInfor/:courtId"
             element={
               <>
                 <Header />
