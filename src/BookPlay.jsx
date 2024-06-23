@@ -1,23 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "./UserContext";
 
 const Book = () => {
   const [data, setData] = useState([]);
   const [areas, setAreas] = useState([]);
   const [search, setSearch] = useState("");
-
-  const [courtName, setCourtName] = useState("");
-  const [openTime, setOpenTime] = useState("");
-  const [closeTime, setCloseTime] = useState("");
-  const [rules, setRules] = useState("");
-  const [image, setImage] = useState("");
-  const [title, setTitle] = useState("");
-  const [address, setAddress] = useState("");
-  const [totalRate, setTotalRate] = useState("");
-  const [priceAvr, setPriceAvr] = useState("");
+  const { setCourt } = useContext(UserContext);
 
   useEffect(() => {
     getData();
@@ -67,13 +59,17 @@ const Book = () => {
       });
   };
 
+  const handleBookingClick = (court) => {
+    setCourt(court);
+  };
+
   return (
     <div className="body-book">
       <ToastContainer />
       <div className="book-fil">
         <div className="form-floating mb-3">
           <input
-            type="password"
+            type="date"
             className="form-control"
             id="chooseday"
             placeholder="Choose date"
@@ -84,7 +80,7 @@ const Book = () => {
         </div>
         <div className="form-floating mb-3">
           <input
-            type="password"
+            type="text"
             className="form-control"
             id="chooseplace"
             placeholder="Choose place"
@@ -130,7 +126,7 @@ const Book = () => {
           <span>Main Task :</span>
           <span>Extra Work/Change Location</span>
         </span>
-        <span clasName="text">?</span>
+        <span className="text">?</span>
       </div>
       {data && data.length > 0 ? (
         data.map((item, index) => {
@@ -141,20 +137,27 @@ const Book = () => {
                 <div className="book-text">
                   <div className="book-place">{item.courtName}</div>
                   <div className="book-slot">
-                    {item.openTime + " - " + item.closeTime}
+                    {item.openTime} - {item.closeTime}
+                    <NavLink
+                      to={`/BookInfor/${item.courtId}`}
+                      onClick={() => handleBookingClick(item)}
+                    >
+                      Đặt ngay
+                    </NavLink>
                   </div>
                   <div className="book-price">
-                    Giá tham khảo: {item.priceAvr}VND
+                    Giá tham khảo: {item.priceAvr} VND
                   </div>
                   <div className="book-con">
                     Khu vực: {area ? area.location : "Unknown"}
                   </div>
+                  <div className="book-con">Địa chỉ: {item.address}</div>
                   <div className="book-con">
                     Tiêu chuẩn sân: Tiêu chuẩn quốc tế
                   </div>
                 </div>
                 <div className="book-image">
-                  <img src={item.image} />
+                  <img src={item.image} alt={item.courtName} />
                 </div>
               </div>
             </div>
