@@ -8,6 +8,11 @@ export const UserProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  const [court, setCourt] = useState(() => {
+    const savedCourt = localStorage.getItem("court");
+    return savedCourt ? JSON.parse(savedCourt) : null;
+  });
+
   const [loginMessage, setLoginMessage] = useState("");
 
   useEffect(() => {
@@ -18,15 +23,33 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (court) {
+      localStorage.setItem("court", JSON.stringify(court));
+    } else {
+      localStorage.removeItem("court");
+    }
+  }, [court]);
+
   const logout = () => {
     setUser(null);
+    setCourt(null);
     setLoginMessage("");
     localStorage.removeItem("user");
+    localStorage.removeItem("court");
   };
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, loginMessage, setLoginMessage, logout }}
+      value={{
+        user,
+        setUser,
+        court,
+        setCourt,
+        loginMessage,
+        setLoginMessage,
+        logout,
+      }}
     >
       {children}
     </UserContext.Provider>
