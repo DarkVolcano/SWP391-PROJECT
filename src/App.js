@@ -20,7 +20,6 @@ import Payment from "./Payment";
 import "./App.css";
 import Role from "./Role";
 import "./StyleHome.css";
-import HomeManager from "./HomeManager";
 import { UserProvider } from "./UserContext";
 import ComPay from "./ComPay";
 import Verify from "./EmailVerify";
