@@ -25,6 +25,8 @@ const AmenityCourt = () => {
   }, []);
 
   const [data, setData] = useState([]);
+  const [amenities, setAmenities] = useState([]);
+  const [courts, setCourts] = useState([]);
   const [show, setShow] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteAmenityCourtId, setDeleteAmenityCourtId] = useState("");
@@ -41,6 +43,8 @@ const AmenityCourt = () => {
 
   useEffect(() => {
     getData();
+    fetchAmenity();
+    fetchCourt();
   }, []);
 
   const getData = async () => {
@@ -53,6 +57,31 @@ const AmenityCourt = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  };
+
+  const fetchAmenity = () => {
+    axios
+      .get("https://localhost:7088/api/Amenities")
+      .then((response) => {
+        console.log(response.data);
+        setAmenities(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const fetchCourt = () => {
+    axios
+      .get("https://localhost:7088/api/Courts?pageNumber=1&pageSize=10")
+      .then((response) => {
+        console.log(response.data);
+        setCourts(Array.isArray(response.data) ? response.data : []);
+        // setCourts(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleClose = () => setShow(false);
@@ -215,11 +244,21 @@ const AmenityCourt = () => {
             <tbody>
               {data && data.length > 0
                 ? data.map((item, index) => {
+                    const amenity = amenities.find(
+                      (amenity) => amenity.amenityId === item.amenityId
+                    );
+                    const court = courts.find(
+                      (court) => court.courtId === item.courtId
+                    );
                     return (
                       <tr key={index}>
                         <td style={{ display: "none" }}>{index + 1}</td>
-                        <td className="center">{item.amenityId}</td>
-                        <td className="center">{item.courtId}</td>
+                        <td className="center">
+                          {amenity ? amenity.description : "Unknown"}
+                        </td>
+                        <td className="center">
+                          {court ? court.courtName : "Unknown"}
+                        </td>
                         <td className="center">
                           {item.status ? "Active" : "Disable"}
                         </td>
