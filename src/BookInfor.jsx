@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, momentLocalizer, Views } from "react-big-calendar";
 import moment from "moment";
+import { useParams } from "react-router-dom";
 import "moment/locale/vi";
+import axios from "axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const styles = `
@@ -89,6 +91,46 @@ const BookInfor = () => {
     setEvents(nextEvents);
   };
 
+  const { courtId } = useParams();
+
+  const [court, setCourt] = useState({
+    courtName: "",
+    openTime: "",
+    closeTime: "",
+    rules: "",
+    image: "",
+    title: "",
+    priceAvr: "",
+    number: "",
+    startTime: "",
+    endTime: "",
+    amenityId: "",
+  });
+
+  useEffect(() => {
+    axios
+      .get(`https://localhost:7088/api/Courts/${courtId}`)
+      .then((response) => {
+        const data = response.data;
+        setCourt({
+          courtName: data.courtName,
+          openTime: data.openTime,
+          closeTime: data.closeTime,
+          rules: data.rules,
+          image: data.image,
+          title: data.title,
+          priceAvr: data.priceAvr,
+          number: data.number,
+          startTime: data.startTime,
+          endTime: data.endTime,
+          amenityId: data.amenityId,
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }, [courtId]);
+
   const handleEventResize = ({ event, start, end, allDay }) => {
     const nextEvents = events.map((existingEvent) => {
       return existingEvent.id === event.id
@@ -108,21 +150,33 @@ const BookInfor = () => {
   };
 
   return (
-    <Calendar
-      localizer={localizer}
-      events={events}
-      onEventDrop={handleEventDrop}
-      onEventResize={handleEventResize}
-      resizable
-      selectable
-      defaultView={Views.WEEK}
-      views={[Views.WEEK]}
-      style={{ height: "600px", width: "600px", margin: "110px" }}
-      eventPropGetter={eventPropGetter}
-      components={{
-        event: Event,
-      }}
-    />
+    <>
+      <div className="court-name">{court.courtName}</div>
+      <Calendar
+        localizer={localizer}
+        events={events}
+        onEventDrop={handleEventDrop}
+        onEventResize={handleEventResize}
+        resizable
+        selectable
+        defaultView={Views.WEEK}
+        views={[Views.WEEK]}
+        style={{ height: "600px", width: "600px", margin: "110px" }}
+        eventPropGetter={eventPropGetter}
+        components={{
+          event: Event,
+        }}
+      />
+      <div className="book-image">
+        <img src={court.image} alt="court" />
+      </div>
+      <div className="full-infor">
+        <div className="time">{court.openTime + " - " + court.closeTime}</div>
+        <div className="priceavr">{court.priceAvr}VND</div>
+      </div>
+      <div className="choose-slot"></div>
+      <div className="amenity"></div>
+    </>
   );
 };
 
