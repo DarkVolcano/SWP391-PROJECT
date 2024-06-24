@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "./StyleDashboardAdmin.css";
-import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -174,24 +173,23 @@ const Role = () => {
       type: "Actions",
       headerName: "Actions",
       cellClassName: "actions",
-      renderCell: (params) => {
-        const { accountId } = params.row;
-        return [
+      renderCell: (params) => (
+        <>
           <GridActionsCellItem
             icon={<EditIcon />}
             label="Edit"
             className="textPrimary"
             color="inherit"
-            onClick={() => handleEdit(accountId)}
-          />,
+            onClick={() => handleEdit(params.row.roleId)}
+          />
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             color="inherit"
-            onClick={() => handleDeleteShow(accountId)}
-          />,
-        ];
-      },
+            onClick={() => handleDeleteShow(params.row.roleId)}
+          />
+        </>
+      ),
     },
   ];
 
