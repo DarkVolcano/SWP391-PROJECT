@@ -106,54 +106,6 @@ const Users = () => {
       });
   };
 
-  const handleEdit = (id) => {
-    handleShow();
-    axios
-      .get(`https://localhost:7088/api/Accounts/id?id=${id}`)
-      .then((result) => {
-        console.log(result.data);
-        setEditAccountname(result.data.accountName);
-        setEditPassword(result.data.password);
-        setEditFullname(result.data.fullName);
-        setEditPhone(result.data.phone);
-        setEditEmail(result.data.email);
-        setEditRoleID(result.data.roleId);
-        setEditStatus(result.data.status);
-        setEditImage(result.data.image);
-        setEditAccountID(id);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Accounts/id?id=${editAccountID}`;
-    const data = {
-      accountId: editAccountID,
-      accountName: editAccountname,
-      password: editPassword,
-      fullName: editFullname,
-      phone: editPhone,
-      email: editEmail,
-      roleId: editRoleID,
-      status: editStatus,
-      image: editImage,
-    };
-
-    axios
-      .put(url, data)
-      .then((result) => {
-        handleClose();
-        getData();
-        clear();
-        toast.success("Account has been update");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
-  };
-
   const handleSave = () => {
     const url = "https://localhost:7088/api/Accounts/CreateAccount";
     const data = {
@@ -238,13 +190,6 @@ const Users = () => {
       renderCell: (params) => {
         const { accountId } = params.row;
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            color="inherit"
-            onClick={() => handleEdit(accountId)}
-          />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
@@ -387,84 +332,6 @@ const Users = () => {
               </Button>
               <Button variant="primary" onClick={handleSave}>
                 Submit
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
-            show={show}
-            onHide={handleClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Account</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter account name"
-                    value={editAccountname}
-                    onChange={(e) => setEditAccountname(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter full name"
-                    value={editFullname}
-                    onChange={(e) => setEditFullname(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter phone"
-                    value={editPhone}
-                    onChange={(e) => setEditPhone(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter email"
-                    value={editEmail}
-                    onChange={(e) => setEditEmail(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter role id"
-                    value={editRoleID}
-                    onChange={(e) => setEditRoleID(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="checkbox"
-                    checked={editStatus}
-                    onChange={(e) => handleEditActiveChange(e)}
-                    value={editStatus}
-                  />
-                  <label>Status</label>
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleUpdate}>
-                Save Changes
               </Button>
             </Modal.Footer>
           </Modal>
