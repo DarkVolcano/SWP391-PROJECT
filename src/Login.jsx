@@ -96,7 +96,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             <label htmlFor="exampleInputEmail1" className="form-label">
-              Email or telephone
+              Email
             </label>
           </div>
           <div className="form-floating mb-3">
