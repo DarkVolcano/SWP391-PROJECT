@@ -612,7 +612,7 @@ td:last-child {
   font-weight: 500;
 }
 .infor {
-  padding-bottom: 10px;
+  padding-bottom: 26px;
   display: flex;
 }
 form {
@@ -688,4 +688,33 @@ button.detail {
 }
 .ck.ck-editor {
   margin-bottom: 1rem !important;
+}
+.MuiDataGrid-cell,
+.MuiDataGrid-columnHeader,
+.MuiDataGrid-root {
+  width: -webkit-fill-available !important;
+  max-width: none !important;
+  background-color: #e3d1af !important;
+  border-right: 1px solid #ffe1a7;
+}
+.MuiDataGrid-cellEmpty {
+  display: none;
+}
+.MuiTablePagination-displayedRows {
+  margin: auto;
+}
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: bold;
+}
+.MuiSvgIcon-root[data-testid="EditIcon"] {
+  color: #f49d1a !important;
+}
+.MuiSvgIcon-root[data-testid="DeleteIcon"] {
+  color: red !important;
+}
+.MuiSvgIcon-root[data-testid="TaskAltIcon"] {
+  color: #3ad626 !important;
+}
+.MuiSvgIcon-root[data-testid="HighlightOffIcon"] {
+  color: red !important;
 }
