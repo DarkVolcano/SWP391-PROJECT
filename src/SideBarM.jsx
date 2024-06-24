@@ -1,4 +1,4 @@
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import "./StyleDashboardManager.css";
 import React, { useContext } from "react";
 import { UserContext } from "./UserContext";
@@ -59,24 +59,6 @@ const SidebarM = () => {
           <NavLink to="/AmenityCourt">
             <i className="bx bx-box"></i>
             <span className="links_name">Amenity Court</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/Court">
-            <i className="bx bx-list-ul"></i>
-            <span className="links_name">Court</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/Area">
-            <i className="bx bx-pie-chart-alt-2"></i>
-            <span className="links_name">Area</span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/BookingType">
-            <i className="bx bx-pie-chart-alt-2"></i>
-            <span className="links_name">Booking Type</span>
           </NavLink>
         </li>
         <li className="log_out">
