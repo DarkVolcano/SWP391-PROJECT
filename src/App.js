@@ -11,7 +11,6 @@ import Home from "./Home";
 import Footer from "./Footer";
 import HomeStaff from "./HomeStaff";
 import BookInStaff from "./BookInfStaff";
-import { USERS } from "./data";
 import Users from "./User";
 import Court from "./Court";
 import Area from "./Area";
@@ -20,7 +19,6 @@ import Payment from "./Payment";
 import "./App.css";
 import Role from "./Role";
 import "./StyleHome.css";
-import HomeManager from "./HomeManager";
 import { UserProvider } from "./UserContext";
 import ComPay from "./ComPay";
 import Verify from "./EmailVerify";
@@ -48,7 +46,7 @@ const App = () => {
               </>
             }
           />
-          <Route path="Login" element={<Login users={USERS} />}></Route>
+          <Route path="Login" element={<Login />}></Route>
           <Route
             path="Dashboard"
             element={
@@ -154,7 +152,7 @@ const App = () => {
             }
           />
           <Route
-            path="BookInfor"
+            path="BookInfor/:courtId"
             element={
               <>
                 <Header />
