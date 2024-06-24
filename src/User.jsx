@@ -280,28 +280,25 @@ const Users = () => {
               </div>
             </div>
           </div>
-          {data.length > 0 && roles.length > 0 ? (
-            <div style={{ width: "100%" }}>
-              <DataGrid
-                getRowId={(data) => data.accountId}
-                columns={columns}
-                rows={data}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 7,
-                    },
+
+          <div style={{ width: "100%" }}>
+            <DataGrid
+              getRowId={(data) => data.accountId}
+              columns={columns}
+              rows={data}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 7,
                   },
-                }}
-                pageSizeOptions={[7]}
-                sx={{
-                  width: "-webkit-fill-available",
-                }}
-              />
-            </div>
-          ) : (
-            <div>Loading...</div>
-          )}
+                },
+              }}
+              pageSizeOptions={[7]}
+              sx={{
+                width: "-webkit-fill-available",
+              }}
+            />
+          </div>
 
           <Modal
             show={showCreateModal}
