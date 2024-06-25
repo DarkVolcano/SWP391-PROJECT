@@ -40,7 +40,6 @@ const Court = () => {
   const [address, setAddress] = useState("");
   const [totalRate, setTotalRate] = useState("");
   const [priceAvr, setPriceAvr] = useState("");
-  const [courtId, setCourtId] = useState("");
 
   const [number, setNumber] = useState("");
   const [subStatus, setSubStatus] = useState(true);
@@ -236,8 +235,45 @@ const Court = () => {
       });
   };
 
-  const handleSave = () => {
+  const handleSave = (userAmenities, userSubCourts, userSlotTimes) => {
     const url = "https://localhost:7088/api/Courts";
+    const amenitiesArray = [];
+    const subCourtsArray = [];
+    const slotTimesArray = [];
+
+    // Check if userAmenities is an array before using forEach
+    if (Array.isArray(userAmenities)) {
+      userAmenities.forEach((amenity) => {
+        amenitiesArray.push({
+          amenityId: amenity.amenityId,
+          amenStatus: amenity.status,
+        });
+      });
+    }
+
+    // Check if userSubCourts is an array before using forEach
+    if (Array.isArray(userSubCourts)) {
+      userSubCourts.forEach((subCourt) => {
+        subCourtsArray.push({
+          number: subCourt.number,
+          subStatus: subCourt.status,
+        });
+      });
+    }
+
+    // Check if userSlotTimes is an array before using forEach
+    if (Array.isArray(userSlotTimes)) {
+      userSlotTimes.forEach((slotTime) => {
+        slotTimesArray.push({
+          startTime: slotTime.startTime,
+          endTime: slotTime.endTime,
+          weekdayPrice: slotTime.weekdayPrice,
+          weekendPrice: slotTime.weekendPrice,
+          slotStatus: slotTime.status,
+        });
+      });
+    }
+
     const data = {
       areaId: areaId,
       courtName: courtName,
@@ -251,15 +287,9 @@ const Court = () => {
       totalRate: totalRate,
       priceAvr: priceAvr,
       status: status,
-      number: number,
-      subStatus: status,
-      amenityId: amenityId,
-      amenStatus: status,
-      startTime: startTime,
-      endTime: endTime,
-      weekdayPrice: weekdayPrice,
-      weekendPrice: weekendPrice,
-      slotStatus: status,
+      subCourts: subCourtsArray,
+      amenities: amenitiesArray,
+      slotTimes: slotTimesArray,
     };
 
     axios
@@ -521,14 +551,14 @@ const Court = () => {
                     onChange={(e) => setCloseTime(e.target.value)}
                   />
                 </Col>
-                {/* <Col sm={12}>
+                <Col sm={12}>
                   <CKEditor
                     editor={ClassicEditor}
                     data={rules}
                     onChange={handleEditorChange}
                   />
-                </Col> */}
-                <Col sm={6}>
+                </Col>
+                {/*<Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
@@ -536,7 +566,7 @@ const Court = () => {
                     value={rules}
                     onChange={(e) => setRules(e.target.value)}
                   />
-                </Col>
+                </Col>*/}
                 <Col sm={6}>
                   <input
                     type="file"
