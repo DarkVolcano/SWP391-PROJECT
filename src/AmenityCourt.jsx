@@ -9,6 +9,11 @@ import Col from "react-bootstrap/Col";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 const AmenityCourt = () => {
   useEffect(() => {
@@ -165,6 +170,42 @@ const AmenityCourt = () => {
     }
   };
 
+  const columns = [
+    { field: "amenityId", headerName: "Amenity" },
+    { field: "courtId", headerName: "Court" },
+    {
+      field: "status",
+      headerName: "Status",
+      renderCell: (params) => {
+        const { status } = params.row;
+        return status ? <TaskAltIcon /> : <HighlightOffIcon />;
+      },
+    },
+    {
+      field: "Action",
+      type: "Actions",
+      headerName: "Actions",
+      cellClassName: "actions",
+      renderCell: (params) => (
+        <>
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            color="inherit"
+            onClick={() => handleEdit(params.row.amenityCourtId)}
+          />
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            color="inherit"
+            onClick={() => handleDeleteShow(params.row.amenityCourtId)}
+          />
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
       <Fragment>
@@ -188,6 +229,25 @@ const AmenityCourt = () => {
                 </Button>
               </div>
             </div>
+          </div>
+
+          <div style={{ width: "100%" }}>
+            <DataGrid
+              getRowId={(data) => data.amenityCourtId}
+              columns={columns}
+              rows={data}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 7,
+                  },
+                },
+              }}
+              pageSizeOptions={[7]}
+              sx={{
+                width: "-webkit-fill-available",
+              }}
+            />
           </div>
 
           <Table
