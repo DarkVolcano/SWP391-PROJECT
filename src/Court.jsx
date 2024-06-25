@@ -272,7 +272,13 @@ const Court = () => {
         toast.success("Court has been added");
       })
       .catch((error) => {
-        toast.error(error);
+        if (error.response) {
+          console.log(error.response.data);
+          toast.error("Validation Error: Please fill in all required fields.");
+        } else {
+          console.log(error);
+          toast.error("An error occurred while adding court.");
+        }
       });
   };
 
@@ -362,6 +368,7 @@ const Court = () => {
   // };
 
   const columns = [
+    { field: "courtId", headerName: "CourtId" },
     { field: "areaId", headerName: "Area" },
     { field: "courtName", headerName: "Court" },
     {
@@ -479,7 +486,7 @@ const Court = () => {
                     value={areaId}
                     onChange={(e) => setAreaId(e.target.value)}
                   >
-                    {/* <option value="">Select Area</option> */}
+                    <option value="">Select Area</option>
                     {areas.map((area) => (
                       <option key={area.areaId} value={area.areaId}>
                         {area.location}
@@ -551,7 +558,7 @@ const Court = () => {
                       .map((manager) => (
                         <option
                           key={manager.managerId}
-                          value={manager.managerId}
+                          value={manager.accountId}
                         >
                           {manager.fullName}
                         </option>
@@ -594,7 +601,7 @@ const Court = () => {
                     onChange={(e) => setPriceAvr(e.target.value)}
                   />
                 </Col>
-                <Col sm={6} style={{ display: "none" }}>
+                <Col sm={6}>
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -616,7 +623,7 @@ const Court = () => {
                     onChange={(e) => setNumber(e.target.value)}
                   />
                 </Col>
-                <Col sm={6} style={{ display: "none" }}>
+                <Col sm={6}>
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -643,7 +650,7 @@ const Court = () => {
                     ))}
                   </select>
                 </Col>
-                <Col sm={6} style={{ display: "none" }}>
+                <Col sm={6}>
                   <Form.Check
                     type="switch"
                     id="custom-switch"
@@ -692,7 +699,7 @@ const Court = () => {
                     onChange={(e) => setWeekendPrice(e.target.value)}
                   />
                 </Col>
-                <Col sm={6} style={{ display: "none" }}>
+                <Col sm={6}>
                   <Form.Check
                     type="switch"
                     id="custom-switch"
