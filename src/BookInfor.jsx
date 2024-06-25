@@ -152,30 +152,44 @@ const BookInfor = () => {
   return (
     <>
       <div className="court-name">{court.courtName}</div>
-      <Calendar
-        localizer={localizer}
-        events={events}
-        onEventDrop={handleEventDrop}
-        onEventResize={handleEventResize}
-        resizable
-        selectable
-        defaultView={Views.WEEK}
-        views={[Views.WEEK]}
-        style={{ height: "600px", width: "600px", margin: "110px" }}
-        eventPropGetter={eventPropGetter}
-        components={{
-          event: Event,
+      <div
+        style={{
+          display: "grid",
+          justifyContent: "center",
+          gridTemplateColumns: "50% 50%",
+          margin: "0 112px",
         }}
-      />
-      <div className="book-image">
-        <img src={court.image} alt="court" />
+      >
+        <div className="book-image">
+          <img src={court.image} alt="court" />
+        </div>
+        <div className="full-infor">
+          <div className="court-con">THÔNG TIN SÂN</div>
+          <div className="time">
+            Thời gian: {court.openTime + " - " + court.closeTime}
+          </div>
+          <div className="priceavr">Giá: {court.priceAvr}VND</div>
+        </div>
+        <div className="choose-slot"></div>
+        <div className="amenity"></div>
       </div>
-      <div className="full-infor">
-        <div className="time">{court.openTime + " - " + court.closeTime}</div>
-        <div className="priceavr">{court.priceAvr}VND</div>
+      <div style={{ display: "flex" }}>
+        <Calendar
+          localizer={localizer}
+          events={events}
+          onEventDrop={handleEventDrop}
+          onEventResize={handleEventResize}
+          resizable
+          selectable
+          defaultView={Views.WEEK}
+          views={[Views.WEEK]}
+          style={{ height: "600px", width: "600px", margin: "30px 110px" }}
+          eventPropGetter={eventPropGetter}
+          components={{
+            event: Event,
+          }}
+        />
       </div>
-      <div className="choose-slot"></div>
-      <div className="amenity"></div>
     </>
   );
 };
