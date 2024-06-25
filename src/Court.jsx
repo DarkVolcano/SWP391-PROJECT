@@ -182,7 +182,7 @@ const Court = () => {
   const handleEdit = (id) => {
     handleShow();
     axios
-      .get(`https://localhost:7088/api/Courts/Update/${id}`)
+      .get(`https://localhost:7088/api/Courts/${id}`)
       .then((result) => {
         console.log(result.data);
         setEditAreaId(result.data.areaId);
@@ -205,7 +205,7 @@ const Court = () => {
   };
 
   const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Courts/Update/${editCourtId}`;
+    const url = `https://localhost:7088/api/Courts/${editCourtId}`;
     const data = {
       courtId: editCourtId,
       areaId: editAreaId,
