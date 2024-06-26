@@ -6,7 +6,10 @@ const About = () => {
       <div className="aboutUS">About US</div>
       <div className="first-row">
         <div className="forImage">
-          <img src="https://i.ibb.co/27zxBtX/28305471-1-1.png" />
+          <img
+            src="https://i.ibb.co/27zxBtX/28305471-1-1.png"
+            alt="introduction"
+          />
         </div>
         <div className="content">
           <strong style={{ fontSize: "33px" }}>Introduce</strong>
@@ -33,12 +36,15 @@ const About = () => {
           </div>
         </div>
         <div className="forImage">
-          <img src="https://unia.vn/wp-content/uploads/2023/03/cau-truc-talk-about-badminton.jpg" />
+          <img
+            src="https://unia.vn/wp-content/uploads/2023/03/cau-truc-talk-about-badminton.jpg"
+            alt="guide"
+          />
         </div>
       </div>
       <div className="third-row">
         <div className="forImage">
-          <img src="https://i.ibb.co/8XWVnSj/Picture1.png" />
+          <img src="https://i.ibb.co/8XWVnSj/Picture1.png" alt="power" />
         </div>
         <div className="content">
           <strong style={{ fontSize: "26px" }}>The Power of Unity</strong>
