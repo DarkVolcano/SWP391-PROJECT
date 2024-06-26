@@ -9,7 +9,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -30,7 +29,6 @@ const Users = () => {
 
   const [data, setData] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [show, setShow] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteAccountId, setDeleteAccountId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -43,16 +41,6 @@ const Users = () => {
   const [roleID, setRoleID] = useState("");
   const [status, setStatus] = useState(true);
   const [image, setImage] = useState("");
-
-  const [editAccountID, setEditAccountID] = useState("");
-  const [editAccountname, setEditAccountname] = useState("");
-  const [editPassword, setEditPassword] = useState("");
-  const [editFullname, setEditFullname] = useState("");
-  const [editPhone, setEditPhone] = useState("");
-  const [editEmail, setEditEmail] = useState("");
-  const [editRoleID, setEditRoleID] = useState("");
-  const [editStatus, setEditStatus] = useState(true);
-  const [editImage, setEditImage] = useState("");
 
   useEffect(() => {
     getData();
@@ -83,8 +71,6 @@ const Users = () => {
       });
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const handleDeleteClose = () => setShowDeleteModal(false);
   const handleDeleteShow = (id) => {
     setDeleteAccountId(id);
@@ -141,15 +127,6 @@ const Users = () => {
     setRoleID("");
     setStatus(true);
     setImage("");
-    setEditAccountname("");
-    setEditPassword("");
-    setEditFullname("");
-    setEditPhone("");
-    setEditEmail("");
-    setEditRoleID("");
-    setEditStatus(false);
-    setEditImage("");
-    setEditAccountID("");
   };
 
   const handleActiveChange = (e) => {
@@ -157,14 +134,6 @@ const Users = () => {
       setStatus(true);
     } else {
       setStatus(false);
-    }
-  };
-
-  const handleEditActiveChange = (e) => {
-    if (e.target.checked) {
-      setEditStatus(true);
-    } else {
-      setEditStatus(false);
     }
   };
 
