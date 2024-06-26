@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "./StyleDashboardManager.css";
-import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
