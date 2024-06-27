@@ -581,26 +581,6 @@ nav .profile-details i {
 .popup .close:hover {
   color: #06d85f;
 }
-table {
-  background-color: #e3d1af;
-  width: -webkit-fill-available;
-  border-radius: 10px;
-}
-tr {
-  border-top: 1px solid !important;
-}
-th,
-td {
-  background-color: #e3d1af !important;
-  width: -webkit-fill-available;
-  padding: 16px;
-  border: 1px solid transparent !important;
-  border-right: 1px solid #ffe1a7 !important;
-}
-th:last-child,
-td:last-child {
-  border-right: none !important;
-}
 .home-content-M .total {
   color: #00c414;
   font-size: 40px;
@@ -647,7 +627,6 @@ button.detail {
   display: flex;
   right: 0;
   position: absolute;
-  /* padding: 12px; */
   height: 61px !important;
 }
 .function button {
