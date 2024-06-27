@@ -11,7 +11,7 @@ const clientId =
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUser, setLoginMessage } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
 
@@ -31,7 +31,7 @@ const Login = () => {
         } else if (user.roleId === 2) {
           navigate("/Home");
         } else if (user.roleId === 3) {
-          navigate("/HomeStaff");
+          navigate("/Home");
         } else {
           navigate("/DashboardManager");
         }
@@ -81,7 +81,7 @@ const Login = () => {
 
       <div className="row justify-content-center">
         <form
-          className="col-md-7 mt-3 pt-3 pb-3"
+          className="col-md-8 mt-3 pt-3 pb-3"
           onSubmit={loginWithUsernameAndPassword}
           style={{ width: "auto", height: "auto" }}
         >
