@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import WrongIcon from "./icons/wrongIcon";
-import CorrectIcon from "./icons/correctIcons";
+// import WrongIcon from "./icons/wrongIcon";
+// import CorrectIcon from "./icons/correctIcons";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -14,27 +14,27 @@ const Signup = () => {
   const [reEnterPass, setReEnterPass] = useState("");
   const [userName, setUserName] = useState("");
 
-  const [errors, setErrors] = useState({
-    minValueValidation: false,
-    numberValidation: false,
-    capitalLetterValidation: false,
-    specialCharacterValidation: false,
-  });
+  // const [errors, setErrors] = useState({
+  //   minValueValidation: false,
+  //   numberValidation: false,
+  //   capitalLetterValidation: false,
+  //   specialCharacterValidation: false,
+  // });
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    validatePassword(newPassword);
-  };
+  // const handlePasswordChange = (event) => {
+  //   const newPassword = event.target.value;
+  //   setPassword(newPassword);
+  //   validatePassword(newPassword);
+  // };
 
-  const validatePassword = (password) => {
-    setErrors({
-      minValueValidation: password.length >= 8,
-      numberValidation: /\d/.test(password),
-      capitalLetterValidation: /[A-Z]/.test(password),
-      specialCharacterValidation: /[^A-Za-z0-9]/.test(password),
-    });
-  };
+  // const validatePassword = (password) => {
+  //   setErrors({
+  //     minValueValidation: password.length >= 8,
+  //     numberValidation: /\d/.test(password),
+  //     capitalLetterValidation: /[A-Z]/.test(password),
+  //     specialCharacterValidation: /[^A-Za-z0-9]/.test(password),
+  //   });
+  // };
 
   const handleRegis = (e) => {
     e.preventDefault();
@@ -97,7 +97,7 @@ const Signup = () => {
 
       <div className="row justify-content-center">
         <form
-          className="col-md-7 mt-3 pt-3 pb-3"
+          className="col-md-8 mt-3 pt-3 pb-3"
           style={{ width: "auto", height: "auto" }}
           onSubmit={handleRegis}
         >
@@ -185,7 +185,7 @@ const Signup = () => {
               Confirm Password
             </label>
           </div>
-          {Object.entries(errors).map(([key, value]) => (
+          {/* {Object.entries(errors).map(([key, value]) => (
             <div
               key={key}
               className="flex items-center gap-4 my-6"
@@ -215,7 +215,7 @@ const Signup = () => {
                   "Password must have at least one special character"}
               </p>
             </div>
-          ))}
+          ))} */}
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button type="submit" className="btn btn-primary pt-3 pb-3">
               Register
