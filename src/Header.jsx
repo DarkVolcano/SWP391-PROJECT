@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 import "https://cdn.lordicon.com/lordicon.js";
 
 const Header = () => {
-  const { user, setUser, logout } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -81,15 +81,19 @@ const Header = () => {
         <li>
           <NavLink to="/AboutUS">ABOUT US</NavLink>
         </li>
-        <li>
-          <NavLink to="/BookPlay">BOOK PLAY</NavLink>
-        </li>
-        <li>
-          <a href="">CHECK IN</a>
-        </li>
-        <li>
+        {user && user.roleId !== 3 /* Assuming roleId 3 is for staff */ && (
+          <li>
+            <NavLink to="/BookPlay">BOOK PLAY</NavLink>
+          </li>
+        )}
+        {user && user.roleId === 3 && (
+          <li>
+            <NavLink to="/BookInStaff">CHECK IN</NavLink>
+          </li>
+        )}
+        {/* <li>
           <a href="">SUPPORT</a>
-        </li>
+        </li> */}
         {user ? (
           <div class="dropdowns">
             <lord-icon
@@ -106,7 +110,7 @@ const Header = () => {
                 style={{ width: "max-content" }}
               >
                 Hello {user.name || user.accountName}
-                <img src={user.picture || user.image} />
+                <img src={user.picture || user.image} alt="pictures" />
               </button>
               <div
                 id="myDropdown"
