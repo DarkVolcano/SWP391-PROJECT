@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import WrongIcon from "./icons/wrongIcon";
+// import WrongIcon from "./icons/wrongIcon";
 import { useNavigate } from "react-router-dom";
-import CorrectIcon from "./icons/correctIcons";
+// import CorrectIcon from "./icons/correctIcons";
 
 const NewPass = () => {
   const navigate = useNavigate();
@@ -10,27 +10,27 @@ const NewPass = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [notice, setNotice] = useState("");
 
-  const [errors, setErrors] = useState({
-    minValueValidation: false,
-    numberValidation: false,
-    capitalLetterValidation: false,
-    specialCharacterValidation: false,
-  });
+  // const [errors, setErrors] = useState({
+  //   minValueValidation: false,
+  //   numberValidation: false,
+  //   capitalLetterValidation: false,
+  //   specialCharacterValidation: false,
+  // });
 
-  const handlePasswordChange = (event) => {
-    const newPassword = event.target.value;
-    setPassword(newPassword);
-    validatePassword(newPassword);
-  };
+  // const handlePasswordChange = (event) => {
+  //   const newPassword = event.target.value;
+  //   setPassword(newPassword);
+  //   validatePassword(newPassword);
+  // };
 
-  const validatePassword = (password) => {
-    setErrors({
-      minValueValidation: password.length >= 8,
-      numberValidation: /\d/.test(password),
-      capitalLetterValidation: /[A-Z]/.test(password),
-      specialCharacterValidation: /[^A-Za-z0-9]/.test(password),
-    });
-  };
+  // const validatePassword = (password) => {
+  //   setErrors({
+  //     minValueValidation: password.length >= 8,
+  //     numberValidation: /\d/.test(password),
+  //     capitalLetterValidation: /[A-Z]/.test(password),
+  //     specialCharacterValidation: /[^A-Za-z0-9]/.test(password),
+  //   });
+  // };
 
   const handleLogout = () => {
     navigate("/Login");
@@ -66,7 +66,7 @@ const NewPass = () => {
               className="form-control"
               placeholder="Password"
               value={password}
-              onChange={handlePasswordChange}
+              // onChange={handlePasswordChange}
             ></input>
             <label htmlFor="signupPassword" className="form-label">
               Password
@@ -85,7 +85,7 @@ const NewPass = () => {
               Confirm Password
             </label>
           </div>
-          {Object.entries(errors).map(([key, value]) => (
+          {/* {Object.entries(errors).map(([key, value]) => (
             <div
               key={key}
               className="flex items-center gap-4 my-6"
@@ -115,7 +115,7 @@ const NewPass = () => {
                   "Password must have at least one Special Character"}
               </p>
             </div>
-          ))}
+          ))} */}
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button
               type="submit"
