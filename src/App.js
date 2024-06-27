@@ -30,6 +30,7 @@ import BookingType from "./BookingType";
 import DashboardManager from "./DashboardManager";
 import Amenity from "./Amenity";
 import AmenityCourt from "./AmenityCourt";
+import "@progress/kendo-theme-default/dist/all.css";
 
 const App = () => {
   return (
