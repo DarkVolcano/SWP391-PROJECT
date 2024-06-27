@@ -41,7 +41,7 @@ const Book = () => {
   };
 
   const handleSearch = (e) => {
-    e.preventDefault(); // Prevent form submission from reloading the page
+    e.preventDefault();
 
     const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}&pageNumber=1&pageSize=10`;
 
@@ -166,7 +166,6 @@ const Book = () => {
       ) : (
         <p>No court available</p>
       )}
-      <NavLink to="/BookInfor">Go to calendar</NavLink>
     </div>
   );
 };
