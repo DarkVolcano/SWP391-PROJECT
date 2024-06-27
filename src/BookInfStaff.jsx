@@ -13,7 +13,7 @@ const BookInStaff = () => {
             placeholder="Court id"
           ></input>
           <label htmlFor="outputCourtid" className="form-label">
-            Court id
+            Booking id
           </label>
         </div>
         <div className="form-floating mb-3">
@@ -24,32 +24,10 @@ const BookInStaff = () => {
             placeholder="Booking id"
           ></input>
           <label htmlFor="outputBookingid" className="form-label">
-            Booking id
+            Subcourt id
           </label>
         </div>
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="outputUserid"
-            placeholder="User id"
-          ></input>
-          <label htmlFor="outputUserid" className="form-label">
-            User id
-          </label>
-        </div>
-        <div className="form-floating mb-3">
-          <input
-            type="time"
-            className="form-control"
-            id="outputTime"
-            placeholder="Time book"
-          ></input>
-          <label htmlFor="outputTime" className="form-label">
-            Time book
-          </label>
-        </div>
-        <button>Search</button>
+        <button className="btn btn-primary">Search</button>
       </form>
     </div>
   );
