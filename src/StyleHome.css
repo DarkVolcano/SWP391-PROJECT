@@ -447,3 +447,40 @@ body:has(.image-container) {
   padding: 26px;
   border-radius: 19px;
 }
+.k-my-8 {
+  display: grid;
+  justify-content: center;
+  text-align: center;
+  margin: 0 145px;
+  padding: 35px;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px,
+    rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+}
+.k-flex.k-display-flex.k-mb-4 {
+  width: 970px;
+}
+.k-calendar.k-calendar-infinite.k-calendar-md {
+  width: 480px;
+}
+.k-calendar-view.k-vstack.k-calendar-monthview {
+  width: -webkit-fill-available;
+  flex: auto;
+}
+table.k-calendar-table.k-calendar-weekdays {
+  width: -webkit-fill-available;
+}
+table.k-calendar-table {
+  width: -webkit-fill-available;
+}
+button.k-button.k-mb-4 {
+  padding: 5px;
+  margin: 0 4px;
+  margin-bottom: 14px;
+  background-color: #ff6358;
+  color: white;
+  border: none;
+}
+button.k-button.k-mb-4:hover {
+  background-color: #ea5a51;
+}
