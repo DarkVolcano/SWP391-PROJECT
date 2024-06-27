@@ -30,7 +30,9 @@ import BookingType from "./BookingType";
 import DashboardManager from "./DashboardManager";
 import Amenity from "./Amenity";
 import AmenityCourt from "./AmenityCourt";
+import UserBooking from "./UserBooking";
 import "@progress/kendo-theme-default/dist/all.css";
+import UserBooking from "./UserBooking";
 
 const App = () => {
   return (
@@ -158,6 +160,16 @@ const App = () => {
               <>
                 <Header />
                 <BookInfor />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="UserBooking"
+            element={
+              <>
+                <Header />
+                <UserBooking />
                 <Footer />
               </>
             }
