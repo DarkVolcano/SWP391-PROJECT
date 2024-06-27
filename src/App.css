@@ -41,7 +41,6 @@
 }
 
 body:has(.justify-content-center) {
-  /* background-image: url("https://i.ibb.co/X8fkXYm/badminton-green-seamless-pattern-vector-3318565.jpg"); */
   background-image: url("https://img.freepik.com/free-vector/green-gradient-background-gradient-3d-design_343694-3667.jpg");
   background-size: cover;
   background-repeat: no-repeat;
@@ -55,28 +54,9 @@ body:has(.justify-content-center) {
   margin: 17px;
   font-size: 20px;
 }
-
-/* button[type="button"]{
-  background-color: #4285f4;
-  display: ruby !important;
-  width: -webkit-fill-available !important;
-  opacity: 1 !important;
-} */
-/* button[type="button"]:hover{
-  opacity: 1 !important;
-} */
 button[type="button"] span {
   color: black;
 }
-
-/* .justify-content-center{
-  position: absolute;
-    top: 80px;
-    bottom: 509px;
-    margin: auto;
-    left: 0;
-    right: 0;
-} */
 .login {
   font-weight: bold !important;
   font-size: 32px !important;
@@ -104,7 +84,6 @@ button[type="button"] span {
   transform: translateY(-50%);
   font-size: 25px;
   color: rgb(255, 73, 89);
-  /* color: rgb(3,71,3); */
 }
 .msg {
   font-size: 25px;
@@ -112,69 +91,14 @@ button[type="button"] span {
   margin: 0 30px;
   user-select: none;
 }
-.crose {
-  padding: 20px 18px;
-  background-color: rgba(255, 166, 174, 255);
-  font-size: 25px;
-  color: rgba(255, 110, 123, 255);
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
-  cursor: pointer;
-  transition: 0.3s;
-}
-.crose:hover {
-  /* background-color: rgb(51,100,51); */
-  background-color: #e3969f;
-}
-.error {
-  animation: show_slide 1s ease forwards;
-}
-@keyframes show_slide {
-  0% {
-    transform: translateX(100%);
-  }
-  40% {
-    transform: translateX(-10%);
-  }
-  80% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-10px);
-  }
-}
-
-.error.hide {
-  animation: hide_slide 1s ease forwards;
-}
-@keyframes hide_slide {
-  0% {
-    transform: translateX(-10px);
-  }
-  40% {
-    transform: translateX(0%);
-  }
-  80% {
-    transform: translateX(-10%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
 .loginN {
   width: max-content;
   margin: 0 auto;
   border-radius: 26px;
   margin-top: 30px;
-  /* padding: 37px; */
   padding: 28px;
   background-color: rgb(255, 255, 255, 66%);
 }
-/* .w-100 input{
-  width: 341.84px;
-} */
 .text-green-500 {
   color: green;
 }
