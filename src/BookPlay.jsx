@@ -66,30 +66,6 @@ const Book = () => {
   return (
     <div className="body-book">
       <ToastContainer />
-      <div className="book-fil">
-        <div className="form-floating mb-3">
-          <input
-            type="date"
-            className="form-control"
-            id="chooseday"
-            placeholder="Choose date"
-          />
-          <label htmlFor="chooseday" className="form-label">
-            Choose day
-          </label>
-        </div>
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="chooseplace"
-            placeholder="Choose place"
-          />
-          <label htmlFor="chooseplace" className="form-label">
-            Choose place
-          </label>
-        </div>
-      </div>
       <form
         className="col-md-4"
         style={{
@@ -98,21 +74,20 @@ const Book = () => {
           display: "flex",
           justifyContent: "center",
           maxWidth: "100%",
+          marginTop: "60px",
         }}
         onSubmit={handleSearch}
       >
-        <div className="form-floating">
+        <div className="form-floating col-md-5">
           <input
             id="searchTerm"
-            type="text"
-            className="form-control"
+            type="search"
+            className="form-search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             required
+            placeholder="Search court name"
           />
-          <label htmlFor="searchTerm" className="form-label">
-            Search court name
-          </label>
         </div>
         <div className="d-grid" style={{ margin: "0 12px" }}>
           <button type="submit" className="btn btn-primary">
@@ -122,9 +97,10 @@ const Book = () => {
       </form>
       <div className="tooltip-container">
         <span className="tooltip">
-          <span className="reject">Reject; Not Check In/Out Yet</span>
+          {/* <span className="reject">Reject; Not Check In/Out Yet</span>
           <span>Main Task :</span>
-          <span>Extra Work/Change Location</span>
+          <span>Extra Work/Change Location</span> */}
+          <span>Search court name</span>
         </span>
         <span className="text">?</span>
       </div>
