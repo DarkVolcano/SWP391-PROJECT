@@ -93,7 +93,6 @@ body:has(.image-container) {
   background-position: 0px -232px;
   padding: 62px 67px;
   background-color: black;
-  /* opacity: 0.7; */
 }
 .comment1 h3 {
   font-size: 20px;
