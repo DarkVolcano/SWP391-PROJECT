@@ -32,7 +32,6 @@ import Amenity from "./Amenity";
 import AmenityCourt from "./AmenityCourt";
 import UserBooking from "./UserBooking";
 import "@progress/kendo-theme-default/dist/all.css";
-import UserBooking from "./UserBooking";
 
 const App = () => {
   return (
