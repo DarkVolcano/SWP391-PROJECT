@@ -81,7 +81,7 @@ const Header = () => {
         <li>
           <NavLink to="/AboutUS">ABOUT US</NavLink>
         </li>
-        {user && user.roleId !== 3 /* Assuming roleId 3 is for staff */ && (
+        {user && user.roleId !== 3 && (
           <li>
             <NavLink to="/BookPlay">BOOK PLAY</NavLink>
           </li>
