@@ -1,96 +1,220 @@
-import { useState, useEffect } from "react";
-import { Calendar, momentLocalizer, Views } from "react-big-calendar";
-import moment from "moment";
+// import { useState, useEffect, useRef } from "react";
+// import { useParams } from "react-router-dom";
+// import axios from "axios";
+// import { Calendar } from "@progress/kendo-react-dateinputs";
+
+// const times = [
+//   "08:00 - 10:00",
+//   "10:00 - 12:00",
+//   "12:00 - 14:00",
+//   "14:00 - 16:00",
+//   "16:00 - 18:00",
+//   "18:00 - 20:00",
+// ];
+
+// const getRandomNumInRange = (min, max) => {
+//   return Math.floor(Math.random() * (max - min) + min);
+// };
+
+// const pickSlotTimes = (times) => {
+//   // Get a random number that will indicate how many time slots we pick
+//   const timesToPick = getRandomNumInRange(0, times.length);
+
+//   // If the random picked is the maximum possible then return all times
+//   if (timesToPick === times.length - 1) {
+//     return times;
+//   }
+
+//   let timesPicked = [];
+
+//   // Loop until we have picked specified number of times
+//   while (timesToPick !== timesPicked.length - 1) {
+//     // Get a new index and time
+//     const index = getRandomNumInRange(0, times.length);
+//     const selectedTime = times[index];
+//     // If we already picked that time we continue
+//     // as we don't want duplicated
+//     if (timesPicked.includes(selectedTime)) continue;
+//     // Keep the time
+//     timesPicked.push(selectedTime);
+//   }
+
+//   // We need to sort the times, as they may not be in a correct order
+//   return timesPicked.sort();
+// };
+
+// const BookInfor = (props) => {
+//   const [bookingDate, setBookingDate] = useState(null);
+//   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+//   const [bookingTimes, setBookingTimes] = useState([]);
+//   const timeSlotCacheRef = useRef(new Map());
+
+//   useEffect(() => {
+//     // Bail out if there is no date selected
+//     if (!bookingDate) return;
+
+//     // Get time slots from cache
+//     let newBookingTimes = timeSlotCacheRef.current.get(
+//       bookingDate.toDateString()
+//     );
+
+//     // If we have no cached time slots then pick new ones
+//     if (!newBookingTimes) {
+//       newBookingTimes = pickSlotTimes(times);
+//       // Update cache with new time slots for the selected date
+//       timeSlotCacheRef.current.set(bookingDate.toDateString(), newBookingTimes);
+//     }
+
+//     setBookingTimes(newBookingTimes);
+//   }, [bookingDate]);
+
+//   const onDateChange = (e) => {
+//     setSelectedTimeSlot(null);
+//     setBookingDate(e.value);
+//   };
+
+//   const { courtId } = useParams();
+
+//   const [court, setCourt] = useState({
+//     courtName: "",
+//     openTime: "",
+//     closeTime: "",
+//     rules: "",
+//     image: "",
+//     title: "",
+//     priceAvr: "",
+//     number: "",
+//     startTime: "",
+//     endTime: "",
+//     amenityId: "",
+//   });
+
+//   useEffect(() => {
+//     axios
+//       .get(`https://localhost:7088/api/Courts/${courtId}`)
+//       .then((response) => {
+//         const data = response.data;
+//         setCourt({
+//           courtName: data.courtName,
+//           openTime: data.openTime,
+//           closeTime: data.closeTime,
+//           rules: data.rules,
+//           image: data.image,
+//           title: data.title,
+//           priceAvr: data.priceAvr,
+//           number: data.number,
+//           startTime: data.startTime,
+//           endTime: data.endTime,
+//           amenityId: data.amenityId,
+//         });
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching user data:", error);
+//       });
+//   }, [courtId]);
+
+//   return (
+//     <>
+//       <div className="court-name">{court.courtName}</div>
+//       <div
+//         style={{
+//           display: "grid",
+//           justifyContent: "center",
+//           gridTemplateColumns: "50% 50%",
+//           margin: "0 112px",
+//         }}
+//       >
+//         <div className="book-image">
+//           <img src={court.image} alt="court" />
+//         </div>
+//         <div className="full-infor">
+//           <div className="court-con">THÔNG TIN SÂN</div>
+//           <div className="time">
+//             Thời gian: {court.openTime + " - " + court.closeTime}
+//           </div>
+//           <div className="priceavr">Giá: {court.priceAvr}VND</div>
+//         </div>
+//         <div className="choose-slot"></div>
+//         <div className="amenity"></div>
+//       </div>
+//       <div>
+//         <div className="k-my-8">
+//           <div className="k-mb-4 k-font-weight-bold">Choose slot</div>
+
+//           <div className="k-flex k-display-flex k-mb-4">
+//             <Calendar value={bookingDate} onChange={onDateChange} />
+//             <div
+//               className="k-ml-4 k-display-flex k-flex-col"
+//               style={{ display: "block" }}
+//             >
+//               {bookingTimes.map((time) => {
+//                 return (
+//                   <button
+//                     key={time}
+//                     className="k-button k-mb-4"
+//                     onClick={(e) => setSelectedTimeSlot(time)}
+//                   >
+//                     {time}
+//                   </button>
+//                 );
+//               })}
+//             </div>
+//           </div>
+
+//           {bookingDate && selectedTimeSlot ? (
+//             <div>
+//               Selected slot: {bookingDate.toDateString()} at {selectedTimeSlot}
+//             </div>
+//           ) : null}
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default BookInfor;
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import "moment/locale/vi";
 import axios from "axios";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Calendar } from "@progress/kendo-react-dateinputs";
 
-const styles = `
-  .start {
-    background-color: rgb(86, 202, 112) !important;
-    color: white;
-  }
-  .end {
-    background-color: rgb(187, 0, 0) !important;
-    color: white;
-  }
-  .start-time {
-    display: inline-block;
-    font-weight: bold;
-  }
-  .end-time {
-    display: inline-block;
-    font-weight: bold;
-  }
-  .rbc-event .rbc-event-label {
-    display: none;
-  }
-  .rbc-event{
-    background-color: rgb(0, 170, 187);
-  }
-`;
-const styleSheet = document.createElement("style");
-styleSheet.type = "text/css";
-styleSheet.innerText = styles;
-document.head.appendChild(styleSheet);
-
-const generateEvents = () => {
-  const events = [];
-  const startHour = 7; // start at 7:00 AM
-  const endHour = 21; // end at 9:00 PM
-  const interval = 2; // every 2 hours
-
-  for (let dayOffset = 0; dayOffset < 7; dayOffset++) {
-    const dayStart = moment().startOf("week").add(dayOffset, "days"); // start from the beginning of the week
-    for (let hour = startHour; hour < endHour; hour += interval) {
-      const start = moment(dayStart).add(hour, "hours").toDate();
-      const end = moment(start).add(1, "hour").toDate();
-
-      events.push({
-        id: dayOffset * 100 + hour,
-        title: `Event ${hour}:00`,
-        start,
-        end,
-      });
-    }
-  }
-
-  return events;
-};
-const Event = ({ event }) => {
-  const startTime = moment(event.start).format("HH:mm");
-  const endTime = moment(event.end).format("HH:mm");
-  return (
-    <div>
-      <div className="rbc-event-label-time">
-        <div className="start-time" style={{ display: "none" }}>
-          {startTime}
-        </div>
-        <div className="end-time" style={{ display: "none" }}>
-          {endTime}
-        </div>
-      </div>
-      <div className="rbc-event-content">{event.title}</div>
-    </div>
-  );
+const getRandomNumInRange = (min, max) => {
+  return Math.floor(Math.random() * (max - min) + min);
 };
 
-const BookInfor = () => {
-  moment.locale("vi");
-  const localizer = momentLocalizer(moment);
-  const [events, setEvents] = useState(generateEvents());
+const pickSlotTimes = (times) => {
+  // Get a random number that will indicate how many time slots we pick
+  const timesToPick = getRandomNumInRange(0, times.length);
 
-  const handleEventDrop = ({ event, start, end, allDay }) => {
-    const idx = events.indexOf(event);
-    const updatedEvent = { ...event, start, end };
+  // If the random picked is the maximum possible then return all times
+  if (timesToPick === times.length - 1) {
+    return times;
+  }
 
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
+  let timesPicked = [];
 
-    setEvents(nextEvents);
-  };
+  // Loop until we have picked specified number of times
+  while (timesToPick !== timesPicked.length - 1) {
+    // Get a new index and time
+    const index = getRandomNumInRange(0, times.length);
+    const selectedTime = times[index];
+    // If we already picked that time we continue
+    // as we don't want duplicated
+    if (timesPicked.includes(selectedTime)) continue;
+    // Keep the time
+    timesPicked.push(selectedTime);
+  }
 
+  // We need to sort the times, as they may not be in a correct order
+  return timesPicked.sort();
+};
+
+const BookInfor = (props) => {
+  const [bookingDate, setBookingDate] = useState(null);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [bookingTimes, setBookingTimes] = useState([]);
+  const timeSlotCacheRef = useRef(new Map());
+  const [slotTimes, setSlotTimes] = useState([]);
   const { courtId } = useParams();
 
   const [court, setCourt] = useState({
@@ -125,28 +249,44 @@ const BookInfor = () => {
           endTime: data.endTime,
           amenityId: data.amenityId,
         });
+        // Extract slot times for the sub courts
+        const subCourtSlotTimes = data.subCourts.flatMap((subCourt) =>
+          subCourt.slotTimes.map((slot) => ({
+            startTime: slot.startTime.trim(),
+            endTime: slot.endTime.trim(),
+          }))
+        );
+        setSlotTimes(subCourtSlotTimes);
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
+        console.error("Error fetching court data:", error);
       });
   }, [courtId]);
 
-  const handleEventResize = ({ event, start, end, allDay }) => {
-    const nextEvents = events.map((existingEvent) => {
-      return existingEvent.id === event.id
-        ? { ...existingEvent, start, end }
-        : existingEvent;
-    });
-    setEvents(nextEvents);
-  };
+  useEffect(() => {
+    // Bail out if there is no date selected
+    if (!bookingDate) return;
 
-  const eventPropGetter = (event, start, end, isSelected) => {
-    const className = `${moment(start).hour() === 7 ? "start" : ""} ${
-      moment(end).hour() === 20 ? "end" : ""
-    }`.trim();
-    return {
-      className,
-    };
+    // Get time slots from cache
+    let newBookingTimes = timeSlotCacheRef.current.get(
+      bookingDate.toDateString()
+    );
+
+    // If we have no cached time slots then pick new ones
+    if (!newBookingTimes) {
+      newBookingTimes = slotTimes.map(
+        (slot) => `${slot.startTime} - ${slot.endTime}`
+      );
+      // Update cache with new time slots for the selected date
+      timeSlotCacheRef.current.set(bookingDate.toDateString(), newBookingTimes);
+    }
+
+    setBookingTimes(newBookingTimes);
+  }, [bookingDate, slotTimes]);
+
+  const onDateChange = (e) => {
+    setSelectedTimeSlot(null);
+    setBookingDate(e.value);
   };
 
   return (
@@ -173,22 +313,42 @@ const BookInfor = () => {
         <div className="choose-slot"></div>
         <div className="amenity"></div>
       </div>
-      <div style={{ display: "flex" }}>
-        <Calendar
-          localizer={localizer}
-          events={events}
-          onEventDrop={handleEventDrop}
-          onEventResize={handleEventResize}
-          resizable
-          selectable
-          defaultView={Views.WEEK}
-          views={[Views.WEEK]}
-          style={{ height: "600px", width: "600px", margin: "30px 110px" }}
-          eventPropGetter={eventPropGetter}
-          components={{
-            event: Event,
-          }}
-        />
+      <div>
+        <div className="k-my-8">
+          <div className="k-mb-4 k-font-weight-bold">Choose slot</div>
+
+          <div className="k-flex k-display-flex k-mb-4">
+            <Calendar value={bookingDate} onChange={onDateChange} />
+            <div
+              className="k-ml-4 k-display-flex k-flex-col"
+              style={{ display: "block", width: "475px" }}
+            >
+              {bookingTimes.map((time) => {
+                return (
+                  <button
+                    key={time}
+                    className="k-button k-mb-4"
+                    onClick={(e) => setSelectedTimeSlot(time)}
+                  >
+                    {time}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {bookingDate && selectedTimeSlot ? (
+            <div>
+              Selected slot: {bookingDate.toDateString()} at {selectedTimeSlot}
+            </div>
+          ) : null}
+        </div>
+      </div>
+      <div className="full-infor" style={{ margin: "63px 138px" }}>
+        <div className="court-con">Quy định</div>
+        <div className="rule" style={{ marginTop: "11px" }}>
+          {court.rules}
+        </div>
       </div>
     </>
   );
