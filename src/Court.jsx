@@ -240,7 +240,6 @@ const Court = () => {
     const amenitiesArray = [];
     const subCourtsArray = [];
     const slotTimesArray = [];
-
     // Check if userAmenities is an array before using forEach
     if (Array.isArray(userAmenities)) {
       userAmenities.forEach((amenity) => {
@@ -250,7 +249,6 @@ const Court = () => {
         });
       });
     }
-
     // Check if userSubCourts is an array before using forEach
     if (Array.isArray(userSubCourts)) {
       userSubCourts.forEach((subCourt) => {
@@ -260,7 +258,6 @@ const Court = () => {
         });
       });
     }
-
     // Check if userSlotTimes is an array before using forEach
     if (Array.isArray(userSlotTimes)) {
       userSlotTimes.forEach((slotTime) => {
