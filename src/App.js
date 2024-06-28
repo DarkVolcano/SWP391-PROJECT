@@ -32,6 +32,7 @@ import Amenity from "./Amenity";
 import AmenityCourt from "./AmenityCourt";
 import UserBooking from "./UserBooking";
 import "@progress/kendo-theme-default/dist/all.css";
+import FixedSchedule from "./FixedSchedule";
 
 const App = () => {
   return (
@@ -169,6 +170,16 @@ const App = () => {
               <>
                 <Header />
                 <UserBooking />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="FixedSchedule"
+            element={
+              <>
+                <Header />
+                <FixedSchedule />
                 <Footer />
               </>
             }
