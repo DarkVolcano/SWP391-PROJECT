@@ -89,10 +89,10 @@ const Court = () => {
 
   const getData = () => {
     axios
-      .get("https://localhost:7088/api/Courts?pageNumber=1&pageSize=10")
+      .get("https://localhost:7088/api/Courts")
       .then((result) => {
         console.log(result.data);
-        setData(result.data.items);
+        setData(result.data);
       })
       .catch((error) => {
         console.log(error);
@@ -113,10 +113,10 @@ const Court = () => {
 
   const fetchManager = () => {
     axios
-      .get("https://localhost:7088/api/Accounts?pageNumber=1&pageSize=10")
+      .get("https://localhost:7088/api/Accounts")
       .then((respond) => {
         console.log(respond.data);
-        setManagers(respond.data.items);
+        setManagers(respond.data);
       })
       .catch((error) => {
         console.log(error);
