@@ -18,10 +18,10 @@ const Book = () => {
 
   const getData = () => {
     axios
-      .get("https://localhost:7088/api/Courts?pageNumber=1&pageSize=10")
+      .get("https://localhost:7088/api/Courts")
       .then((result) => {
         console.log(result.data);
-        setData(result.data.items);
+        setData(result.data);
       })
       .catch((error) => {
         console.log(error);
@@ -43,7 +43,7 @@ const Book = () => {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}&pageNumber=1&pageSize=10`;
+    const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}`;
 
     axios
       .get(url)
