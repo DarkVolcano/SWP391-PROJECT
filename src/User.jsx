@@ -49,10 +49,10 @@ const Users = () => {
 
   const getData = () => {
     axios
-      .get("https://localhost:7088/api/Accounts?pageNumber=1&pageSize=10")
+      .get("https://localhost:7088/api/Accounts")
       .then((result) => {
         console.log(result.data);
-        setData(result.data.items);
+        setData(result.data);
       })
       .catch((error) => {
         console.log(error);
