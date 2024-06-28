@@ -33,6 +33,8 @@ import AmenityCourt from "./AmenityCourt";
 import UserBooking from "./UserBooking";
 import "@progress/kendo-theme-default/dist/all.css";
 import FixedSchedule from "./FixedSchedule";
+import OneTimeSchedule from "./OneTimeSchedule";
+import FlexibleSchedule from "./FlexibleSchedule";
 
 const App = () => {
   return (
@@ -180,6 +182,26 @@ const App = () => {
               <>
                 <Header />
                 <FixedSchedule />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="OneTimeSchedule"
+            element={
+              <>
+                <Header />
+                <OneTimeSchedule />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="FlexibleSchedule"
+            element={
+              <>
+                <Header />
+                <FlexibleSchedule />
                 <Footer />
               </>
             }
