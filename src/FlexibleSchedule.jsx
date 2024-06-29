@@ -11,7 +11,7 @@ const FlexibleSchedule = () => {
   const [userId, setUserId] = useState("");
   const [courtId, setCourtId] = useState("");
   const [totalHours, setTotalHours] = useState("");
-  const { user } = useContext(UserContext);
+  const { user, court } = useContext(UserContext);
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/Flexible";
@@ -29,6 +29,7 @@ const FlexibleSchedule = () => {
       })
       .catch((error) => {
         toast.error(error);
+        console.log(error);
       });
   };
 
@@ -44,7 +45,7 @@ const FlexibleSchedule = () => {
         <ToastContainer />
         <div className="check-in">VUI LÒNG NHẬP THÔNG TIN</div>
         <form className="check-input">
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3" style={{ display: "none" }}>
             <input
               type="text"
               className="form-control mb-3"
@@ -52,21 +53,19 @@ const FlexibleSchedule = () => {
               id="userid"
               value={user.accountId}
               onChange={(e) => setUserId(e.target.value)}
-              style={{ display: "none" }}
             />
             <label htmlFor="userid" className="form-label">
               Nhập userId
             </label>
           </div>
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3" style={{ display: "none" }}>
             <input
               type="text"
               className="form-control mb-3"
               placeholder="Enter courtid"
               id="courtid"
-              value={courtId}
+              value={court.courtId}
               onChange={(e) => setCourtId(e.target.value)}
-              style={{ display: "none" }}
             />
             <label htmlFor="courtid" className="form-label">
               Nhập courtid

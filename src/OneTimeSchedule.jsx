@@ -1,5 +1,6 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment, useEffect } from "react";
 import "./StyleDashboardAdmin.css";
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
@@ -15,6 +16,14 @@ const OneTimeSchedule = () => {
   const [note, setNote] = useState("");
   const [date, setDate] = useState("");
   const { user } = useContext(UserContext);
+  const location = useLocation();
+  const { slotId } = location.state || {};
+
+  useEffect(() => {
+    if (slotId) {
+      setSlotTimeId(slotId);
+    }
+  }, [slotId]);
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/OneTime";
@@ -22,7 +31,7 @@ const OneTimeSchedule = () => {
       userId: userId,
       playerQuantity: playerQuantity,
       totalPrice: totalPrice,
-      slotTimeId: slotTimeId,
+      slotId: slotTimeId,
       note: note,
       date: date,
     };
@@ -53,7 +62,7 @@ const OneTimeSchedule = () => {
         <ToastContainer />
         <div className="check-in">VUI LÒNG NHẬP THÔNG TIN</div>
         <form className="check-input">
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3" style={{ display: "none" }}>
             <input
               type="text"
               className="form-control mb-3"
@@ -61,13 +70,12 @@ const OneTimeSchedule = () => {
               id="userid"
               value={user.accountId}
               onChange={(e) => setUserId(e.target.value)}
-              style={{ display: "none" }}
             />
             <label htmlFor="userid" className="form-label">
               Nhập userId
             </label>
           </div>
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3" style={{ display: "none" }}>
             <input
               type="text"
               className="form-control mb-3"
@@ -75,7 +83,6 @@ const OneTimeSchedule = () => {
               id="slotTimeId"
               value={slotTimeId}
               onChange={(e) => setSlotTimeId(e.target.value)}
-              style={{ display: "none" }}
             />
             <label htmlFor="slotTimeId" className="form-label">
               Nhập slottimeid
