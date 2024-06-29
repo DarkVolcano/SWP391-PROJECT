@@ -1,14 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import { UserContext } from "./UserContext";
 
 const UserBooking = () => {
   const [data, setData] = useState([]);
-  const { user } = useContext(UserContext);
   const location = useLocation();
   const navigate = useNavigate();
-  const { courtId, accountId } = location.state || {};
+  const { slotId } = location.state || {};
   const [bookingTypeId, setBookingTypeId] = useState("");
 
   useEffect(() => {
@@ -27,9 +25,17 @@ const UserBooking = () => {
 
   const handleContinue = () => {
     if (bookingTypeId === "1") {
-      navigate("/FixedSchedule");
+      navigate("/FixedSchedule", {
+        state: {
+          slotId: slotId,
+        },
+      });
     } else if (bookingTypeId === "2") {
-      navigate("/OneTimeSchedule");
+      navigate("/OneTimeSchedule", {
+        state: {
+          slotId: slotId,
+        },
+      });
     } else {
       navigate("/FlexibleSchedule");
     }
@@ -46,6 +52,7 @@ const UserBooking = () => {
         <div className="form-floating mb-3">
           <select
             className="form-control mb-3"
+            id="selectType"
             value={bookingTypeId}
             onChange={(e) => setBookingTypeId(e.target.value)}
           >
@@ -59,6 +66,9 @@ const UserBooking = () => {
               </option>
             ))}
           </select>
+          <label htmlFor="selectType" className="form-label">
+            Loại hình đặt lịch
+          </label>
         </div>
         <button
           type="button"
