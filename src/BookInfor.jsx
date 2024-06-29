@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Calendar } from "@progress/kendo-react-dateinputs";
+import { UserContext } from "./UserContext";
 
 const BookInfor = (props) => {
   const [bookingDate, setBookingDate] = useState(null);
@@ -10,6 +11,8 @@ const BookInfor = (props) => {
   const timeSlotCacheRef = useRef(new Map());
   const [slotTimes, setSlotTimes] = useState([]);
   const { courtId } = useParams();
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   const [court, setCourt] = useState({
     courtName: "",
@@ -46,6 +49,7 @@ const BookInfor = (props) => {
         // Extract slot times for the sub courts
         const subCourtSlotTimes = data.subCourts.flatMap((subCourt) =>
           subCourt.slotTimes.map((slot) => ({
+            slotId: slot.slotId,
             startTime: slot.startTime.trim(),
             endTime: slot.endTime.trim(),
           }))
@@ -68,9 +72,10 @@ const BookInfor = (props) => {
 
     // If we have no cached time slots then pick new ones
     if (!newBookingTimes) {
-      newBookingTimes = slotTimes.map(
-        (slot) => `${slot.startTime} - ${slot.endTime}`
-      );
+      newBookingTimes = slotTimes.map((slot) => ({
+        slotId: slot.slotId,
+        time: `${slot.startTime} - ${slot.endTime}`,
+      }));
       // Update cache with new time slots for the selected date
       timeSlotCacheRef.current.set(bookingDate.toDateString(), newBookingTimes);
     }
@@ -81,6 +86,30 @@ const BookInfor = (props) => {
   const onDateChange = (e) => {
     setSelectedTimeSlot(null);
     setBookingDate(e.value);
+  };
+
+  const handleTimeSlotClick = (timeSlot) => {
+    setSelectedTimeSlot(timeSlot);
+    handleUserBooking(timeSlot);
+  };
+
+  const handleUserBooking = (timeSlot) => {
+    if (user && timeSlot) {
+      console.log("courtId:", courtId);
+      console.log("accountId:", user.accountId);
+      console.log("selectedTimeSlot:", timeSlot.time);
+      console.log("slotId:", timeSlot.slotId);
+
+      navigate(`/UserBooking`, {
+        state: {
+          courtId,
+          accountId: user.accountId,
+          bookingDate: bookingDate.toDateString(),
+          selectedTimeSlot: timeSlot.time,
+          slotId: timeSlot.slotId,
+        },
+      });
+    }
   };
 
   return (
@@ -117,23 +146,22 @@ const BookInfor = (props) => {
               className="k-ml-4 k-display-flex k-flex-col"
               style={{ display: "block", width: "475px" }}
             >
-              {bookingTimes.map((time) => {
-                return (
-                  <button
-                    key={time}
-                    className="k-button k-mb-4 col-md-3"
-                    onClick={(e) => setSelectedTimeSlot(time)}
-                  >
-                    {time}
-                  </button>
-                );
-              })}
+              {bookingTimes.map((timeSlot) => (
+                <button
+                  key={timeSlot.slotId}
+                  className="k-button k-mb-4 col-md-3"
+                  onClick={() => handleTimeSlotClick(timeSlot)}
+                >
+                  {timeSlot.time}
+                </button>
+              ))}
             </div>
           </div>
 
           {bookingDate && selectedTimeSlot ? (
             <div>
-              Selected slot: {bookingDate.toDateString()} at {selectedTimeSlot}
+              Selected slot: {bookingDate.toDateString()} at{" "}
+              {selectedTimeSlot.time}
             </div>
           ) : null}
         </div>
