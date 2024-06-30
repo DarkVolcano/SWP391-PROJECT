@@ -159,6 +159,7 @@ const BookingType = () => {
   };
 
   const columns = [
+    { field: "bookingTypeId", headerName: "BookingTypeID" },
     { field: "description", headerName: "Description" },
     {
       field: "status",

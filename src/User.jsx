@@ -138,6 +138,7 @@ const Users = () => {
   };
 
   const columns = [
+    { field: "accountId", headerName: "AccountID" },
     { field: "accountName", headerName: "Account Name" },
     { field: "fullName", headerName: "Full Name" },
     { field: "phone", headerName: "Phone" },

@@ -159,6 +159,7 @@ const Area = () => {
   };
 
   const columns = [
+    { field: "areaId", headerName: "AreaID" },
     { field: "location", headerName: "Location" },
     {
       field: "status",

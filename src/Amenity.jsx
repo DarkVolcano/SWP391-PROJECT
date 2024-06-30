@@ -159,6 +159,7 @@ const Amenity = () => {
   };
 
   const columns = [
+    { field: "amenityId", headerName: "AmenityID" },
     { field: "description", headerName: "Description" },
     {
       field: "status",
