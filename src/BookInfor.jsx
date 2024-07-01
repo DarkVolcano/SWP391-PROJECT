@@ -140,6 +140,15 @@ const BookInfor = (props) => {
         <div className="choose-slot"></div>
         <div className="amenity"></div>
       </div>
+      <div className="tooltip-container">
+        <span className="tooltip">
+          <span style={{ display: "flex", margin: "3px" }}>
+            <strong className="available"></strong> : Available
+            <strong className="unavailable"></strong> : Unavailable
+          </span>
+        </span>
+        <span className="text">?</span>
+      </div>
       <div>
         <div className="k-my-8">
           <div className="k-mb-4 k-font-weight-bold">Choose slot</div>
