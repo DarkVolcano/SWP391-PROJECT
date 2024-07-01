@@ -97,9 +97,6 @@ const Book = () => {
       </form>
       <div className="tooltip-container">
         <span className="tooltip">
-          {/* <span className="reject">Reject; Not Check In/Out Yet</span>
-          <span>Main Task :</span>
-          <span>Extra Work/Change Location</span> */}
           <span>Search court name</span>
         </span>
         <span className="text">?</span>
