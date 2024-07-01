@@ -506,3 +506,15 @@ button.k-button.k-mb-4:hover {
 input#searchTerm:focus {
   outline: none;
 }
+.available {
+  background-color: #ff6358;
+  width: 20px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+.unavailable {
+  background-color: black;
+  width: 20px;
+  border-radius: 50%;
+  margin: 0 5px;
+}
