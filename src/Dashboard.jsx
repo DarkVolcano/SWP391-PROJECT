@@ -35,6 +35,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Admin Dashboard";
   }, []);
 
   const getData = () => {

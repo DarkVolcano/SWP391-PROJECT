@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./StyleHome.css";
 
 const Home = () => {
+  useEffect(() => {
+    document.title = "Trang chủ";
+  }, []);
+
   return (
     <div className="allBody">
       <div className="body">

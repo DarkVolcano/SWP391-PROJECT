@@ -45,6 +45,7 @@ const AmenityCourt = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Amenity Court Manahement";
   }, []);
 
   const getData = async () => {

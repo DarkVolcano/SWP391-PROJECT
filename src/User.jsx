@@ -45,6 +45,7 @@ const Users = () => {
   useEffect(() => {
     getData();
     fetchRoles();
+    document.title = "User Management";
   }, []);
 
   const getData = () => {

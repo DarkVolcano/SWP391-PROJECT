@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -37,6 +37,10 @@ const Verify = () => {
   const clear = () => {
     setEmail("");
   };
+
+  useEffect(() => {
+    document.title = "Xác thưc email";
+  }, []);
 
   return (
     <div className="loginN">

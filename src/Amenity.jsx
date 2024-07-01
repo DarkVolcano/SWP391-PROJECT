@@ -43,6 +43,7 @@ const Amenity = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Amenity Management";
   }, []);
 
   const getData = async () => {

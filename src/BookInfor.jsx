@@ -112,6 +112,10 @@ const BookInfor = (props) => {
     }
   };
 
+  useEffect(() => {
+    document.title = "Thông tin sân chi tiết";
+  }, []);
+
   return (
     <>
       <div className="court-name">{court.courtName}</div>

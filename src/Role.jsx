@@ -43,6 +43,7 @@ const Role = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Role Management";
   }, []);
 
   const getData = async () => {

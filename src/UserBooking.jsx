@@ -12,6 +12,7 @@ const UserBooking = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Loại hình đặt lịch";
   }, []);
 
   const getData = async () => {

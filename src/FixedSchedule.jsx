@@ -54,6 +54,10 @@ const FixedSchedule = () => {
     setDate("");
   };
 
+  useEffect(() => {
+    document.title = "Fixed Schedule";
+  }, []);
+
   return (
     <>
       <Fragment>

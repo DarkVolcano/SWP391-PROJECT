@@ -14,6 +14,7 @@ const Book = () => {
   useEffect(() => {
     getData();
     fetchArea();
+    document.title = "Đặt lịch";
   }, []);
 
   const getData = () => {

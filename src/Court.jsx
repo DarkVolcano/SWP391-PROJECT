@@ -85,6 +85,7 @@ const Court = () => {
     fetchArea();
     fetchManager();
     fetchAmenity();
+    document.title = "Court Management";
   }, []);
 
   const getData = () => {

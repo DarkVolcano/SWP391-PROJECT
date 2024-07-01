@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -30,6 +30,10 @@ const BookInStaff = () => {
     setBookingDetailId("");
     setSubCourtId("");
   };
+
+  useEffect(() => {
+    document.title = "Check In";
+  }, []);
 
   return (
     <div className="body-staff">

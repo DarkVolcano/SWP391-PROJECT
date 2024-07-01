@@ -43,6 +43,7 @@ const BookingType = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Booking Type Management";
   }, []);
 
   const getData = async () => {

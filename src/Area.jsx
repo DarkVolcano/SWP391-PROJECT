@@ -43,6 +43,7 @@ const Area = () => {
 
   useEffect(() => {
     getData();
+    document.title = "Area Management";
   }, []);
 
   const getData = async () => {

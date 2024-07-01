@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import WrongIcon from "./icons/wrongIcon";
-// import CorrectIcon from "./icons/correctIcons";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -78,6 +76,10 @@ const Signup = () => {
     setReEnterPass("");
     setUserName("");
   };
+
+  useEffect(() => {
+    document.title = "Đăng ký";
+  }, []);
 
   return (
     <div className="loginN">

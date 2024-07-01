@@ -36,6 +36,10 @@ export const Profile = () => {
       });
   }, [accountId]);
 
+  useEffect(() => {
+    document.title = "Profile";
+  }, []);
+
   const readURL = (input) => {
     if (input.target.files && input.target.files[0]) {
       const reader = new FileReader();

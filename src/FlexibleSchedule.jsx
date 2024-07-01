@@ -1,4 +1,4 @@
-import React, { useState, useContext, Fragment } from "react";
+import React, { useState, useContext, Fragment, useEffect } from "react";
 import "./StyleDashboardAdmin.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
@@ -38,6 +38,10 @@ const FlexibleSchedule = () => {
     setCourtId("");
     setTotalHours("");
   };
+
+  useEffect(() => {
+    document.title = "Flexible Schedule";
+  }, []);
 
   return (
     <>

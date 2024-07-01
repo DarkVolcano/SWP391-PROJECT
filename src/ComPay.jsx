@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 const ComPay = () => {
+  useEffect(() => {
+    document.title = "Payment Complete";
+  }, []);
+
   return (
     <div className="boPay">
       <div className="pay-infor">

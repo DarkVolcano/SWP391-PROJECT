@@ -65,6 +65,10 @@ const Login = () => {
     google.accounts.id.prompt();
   }, []);
 
+  useEffect(() => {
+    document.title = "Đăng nhập";
+  }, []);
+
   return (
     <div className="loginN">
       <ToastContainer />
