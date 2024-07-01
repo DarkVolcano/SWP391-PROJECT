@@ -1,6 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 const UserBooking = () => {
   const [data, setData] = useState([]);
@@ -70,21 +71,16 @@ const UserBooking = () => {
             Loại hình đặt lịch
           </label>
         </div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={handleGoBack}
-        >
+        <Button variant="primary" onClick={handleGoBack}>
           Quay lại
-        </button>
-        <button
-          type="button"
-          className="btn btn-primary"
+        </Button>
+        <Button
+          variant="primary"
           onClick={handleContinue}
           style={{ float: "right" }}
         >
           Tiếp tục
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -125,13 +125,9 @@ const FixedSchedule = () => {
               Ngày chơi
             </label>
           </div>
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleSave}
-          >
+          <Button variant="primary" onClick={handleSave}>
             Tiếp tục
-          </button>
+          </Button>
         </form>
       </Fragment>
     </>
