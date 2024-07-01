@@ -43,7 +43,6 @@ const Book = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-
     const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}`;
 
     axios
@@ -96,12 +95,6 @@ const Book = () => {
           </button>
         </div>
       </form>
-      <div className="tooltip-container">
-        <span className="tooltip">
-          <span>Search court name</span>
-        </span>
-        <span className="text">?</span>
-      </div>
       {data && data.length > 0 ? (
         data.map((item, index) => {
           const area = areas.find((area) => area.areaId === item.areaId);
