@@ -1,40 +1,102 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./StyleHome.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
+  const [data, setData] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [search, setSearch] = useState("");
+  const [areaId, setAreaId] = useState("");
+
   useEffect(() => {
+    getData();
+    fetchArea();
     document.title = "Trang chủ";
   }, []);
 
+  const getData = () => {
+    axios
+      .get("https://localhost:7088/api/Courts")
+      .then((result) => {
+        console.log(result.data);
+        setData(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const fetchArea = () => {
+    axios
+      .get("https://localhost:7088/api/Areas")
+      .then((response) => {
+        console.log(response.data);
+        setAreas(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}&areaId=${areaId}`;
+
+    axios
+      .get(url)
+      .then((response) => {
+        console.log("Search result:", response.data.items);
+        setData(response.data.items);
+        toast.success("Search successfully");
+      })
+      .catch((error) => {
+        console.error("Error searching:", error);
+        toast.error("Failed to search courts");
+        setData([]);
+      });
+  };
+
   return (
     <div className="allBody">
+      <ToastContainer />
       <div className="body">
         <h1>Hello !</h1>
-        <h3>Book a badminton court schedule with...</h3>
-        <form style={{ display: "flex" }}>
+        <h3>Book a badminton court schedule with RacketUp</h3>
+        <form style={{ display: "flex" }} onSubmit={handleSearch}>
           <div className="form-floating">
             <input
               type="text"
               className="form-control"
               id="inputPlace"
-              placeholder="Choose place book court"
+              placeholder="Tìm sân"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             ></input>
             <label htmlFor="inputPlace" className="form-label">
-              Place book court
+              Tìm sân
             </label>
           </div>
           <div className="form-floating">
-            <input
-              type="date"
-              className="form-control"
-              id="inputDate"
-              placeholder="Choose date"
-            ></input>
-            <label htmlFor="inputDate" className="form-label">
-              Date play
+            <select
+              className="form-control mb-3"
+              id="selectType"
+              value={areaId}
+              onChange={(e) => setAreaId(e.target.value)}
+            >
+              <option value="">Select area</option>
+              {areas.map((area) => (
+                <option key={area.areaId} value={area.areaId}>
+                  {area.location}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="selectType" className="form-label">
+              Tìm khu vực
             </label>
           </div>
-          <button style={{ width: "58px" }}>
+          <button style={{ width: "58px" }} type="submit">
             <svg
               width="24"
               height="24"
@@ -60,6 +122,39 @@ const Home = () => {
           </button>
         </form>
       </div>
+
+      {data && data.length > 0 ? (
+        data.map((item, index) => {
+          const area = areas.find((area) => area.areaId === item.areaId);
+          return (
+            <div className="book-box" key={index}>
+              <div className="book-infor">
+                <div className="book-text">
+                  <div className="book-place">{item.courtName}</div>
+                  <div className="book-slot">
+                    {item.openTime} - {item.closeTime}
+                  </div>
+                  <div className="book-price">
+                    Giá tham khảo: {item.priceAvr} VND
+                  </div>
+                  <div className="book-con">
+                    Khu vực: {area ? area.location : "Unknown"}
+                  </div>
+                  <div className="book-con">Địa chỉ: {item.address}</div>
+                  <div className="book-con">
+                    Tiêu chuẩn sân: Tiêu chuẩn quốc tế
+                  </div>
+                </div>
+                <div className="book-image">
+                  <img src={item.image} alt={item.courtName} />
+                </div>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <p>No court available</p>
+      )}
 
       <div className="comment">
         <h1
