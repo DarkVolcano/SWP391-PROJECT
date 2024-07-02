@@ -8,6 +8,8 @@ In the project directory, you can run:
 
 ### `npm i --legacy-peer-deps`
 
+### `npm install react-scripts --legacy-peer-deps`
+
 react-scripts exists inside node_modules, but it also installs many other dependencies required to run a project with create-react-app.
 
 ### `npm start`
