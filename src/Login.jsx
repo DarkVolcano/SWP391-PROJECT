@@ -28,12 +28,10 @@ const Login = () => {
         setUser(user);
         if (user.roleId === 1) {
           navigate("/Dashboard");
-        } else if (user.roleId === 2) {
-          navigate("/Home");
-        } else if (user.roleId === 3) {
-          navigate("/Home");
-        } else {
+        } else if (user.roleId === 4) {
           navigate("/DashboardManager");
+        } else {
+          navigate("/Home");
         }
       } else {
         toast.error("Invalid email or password");

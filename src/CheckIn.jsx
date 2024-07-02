@@ -23,7 +23,7 @@ const CheckIn = () => {
         clear();
         toast.success("Check in successfully");
         setBookingDetails(result.data);
-        setShowInputForm(false); // Hide the input form upon successful check-in
+        setShowInputForm(false);
       })
       .catch((error) => {
         toast.error("Error checking in");
@@ -43,8 +43,8 @@ const CheckIn = () => {
   return (
     <div className="body-staff">
       <ToastContainer />
-      <div className="check-in">THÔNG TIN KHÁCH HÀNG</div>
-      {showInputForm && ( // Show the input form only if showInputForm state is true
+      <div className="check-in">THỦ TỤC CHECK IN</div>
+      {showInputForm && (
         <form className="check-input" onSubmit={handleSave}>
           <div className="form-floating mb-3">
             <input
@@ -77,63 +77,62 @@ const CheckIn = () => {
           </button>
         </form>
       )}
-      {bookingDetails &&
-        !showInputForm && ( // Show booking details form only if bookingDetails is not null and showInputForm is false
-          <form className="check-input">
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="outputCourtid"
-                placeholder="Court id"
-                value={bookingDetails.courtName.trim()}
-                disabled // Disable input fields for booking details
-              ></input>
-              <label htmlFor="outputCourtid" className="form-label">
-                Sân
-              </label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="outputBookingid"
-                placeholder="Booking id"
-                value={bookingDetails.subCourtName.trim()}
-                disabled
-              ></input>
-              <label htmlFor="outputBookingid" className="form-label">
-                Sân nhỏ
-              </label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="outputBookingid"
-                placeholder="Booking id"
-                value={bookingDetails.slotTimeStart.trim()}
-                disabled
-              ></input>
-              <label htmlFor="outputBookingid" className="form-label">
-                Thời gian bắt đầu
-              </label>
-            </div>
-            <div className="form-floating mb-3">
-              <input
-                type="text"
-                className="form-control"
-                id="outputBookingid"
-                placeholder="Booking id"
-                value={bookingDetails.slotTimeEnd.trim()}
-                disabled
-              ></input>
-              <label htmlFor="outputBookingid" className="form-label">
-                Thời gian kết thúc
-              </label>
-            </div>
-          </form>
-        )}
+      {bookingDetails && !showInputForm && (
+        <form className="check-input">
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputCourtid"
+              placeholder="Court id"
+              value={bookingDetails.courtName.trim()}
+              disabled
+            ></input>
+            <label htmlFor="outputCourtid" className="form-label">
+              Sân
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputBookingid"
+              placeholder="Booking id"
+              value={bookingDetails.subCourtName.trim()}
+              disabled
+            ></input>
+            <label htmlFor="outputBookingid" className="form-label">
+              Sân nhỏ
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputBookingid"
+              placeholder="Booking id"
+              value={bookingDetails.slotTimeStart.trim()}
+              disabled
+            ></input>
+            <label htmlFor="outputBookingid" className="form-label">
+              Thời gian bắt đầu
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputBookingid"
+              placeholder="Booking id"
+              value={bookingDetails.slotTimeEnd.trim()}
+              disabled
+            ></input>
+            <label htmlFor="outputBookingid" className="form-label">
+              Thời gian kết thúc
+            </label>
+          </div>
+        </form>
+      )}
     </div>
   );
 };
