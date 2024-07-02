@@ -20,12 +20,6 @@ const FixedSchedule = () => {
   const { slotId, bookingDate } = location.state || {};
   const [data, setData] = useState("");
 
-  // useEffect(() => {
-  //   if (slotId) {
-  //     setSlotTimeId(slotId);
-  //   }
-  // }, [slotId]);
-
   useEffect(() => {
     if (slotId) {
       setSlotTimeId(slotId);

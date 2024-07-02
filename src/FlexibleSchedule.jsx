@@ -16,8 +16,8 @@ const FlexibleSchedule = () => {
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/Flexible";
     const data = {
-      userId: userId,
-      courtId: courtId,
+      userId: userId.accountId,
+      courtId: court.courtId,
       totalHours: totalHours,
     };
 

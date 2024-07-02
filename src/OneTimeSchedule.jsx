@@ -17,18 +17,21 @@ const OneTimeSchedule = () => {
   const [date, setDate] = useState("");
   const { user } = useContext(UserContext);
   const location = useLocation();
-  const { slotId } = location.state || {};
+  const { slotId, priceAvr } = location.state || {};
 
   useEffect(() => {
     if (slotId) {
       setSlotTimeId(slotId);
     }
-  }, [slotId]);
+    if (priceAvr) {
+      setTotalPrice(priceAvr);
+    }
+  }, [slotId, priceAvr]);
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/OneTime";
     const data = {
-      userId: userId,
+      userId: user.accountId,
       playerQuantity: playerQuantity,
       totalPrice: totalPrice,
       slotId: slotTimeId,
@@ -44,6 +47,7 @@ const OneTimeSchedule = () => {
       })
       .catch((error) => {
         toast.error(error);
+        console.log(error);
       });
   };
 
@@ -129,7 +133,7 @@ const OneTimeSchedule = () => {
           </div>
           <div className="form-floating mb-3">
             <input
-              type="text"
+              type="date"
               className="form-control mb-3"
               placeholder="Enter date"
               id="date"

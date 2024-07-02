@@ -108,6 +108,7 @@ const BookInfor = (props) => {
           accountId: user.accountId,
           bookingDate: format(bookingDate, "dd/MM/yyyy"),
           selectedTimeSlot: timeSlot.time,
+          priceAvr: court.priceAvr,
           slotId: timeSlot.slotId,
         },
       });

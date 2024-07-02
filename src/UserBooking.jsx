@@ -8,7 +8,7 @@ const UserBooking = () => {
   const [data, setData] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
-  const { slotId, bookingDate } = location.state || {};
+  const { slotId, bookingDate, priceAvr } = location.state || {};
   const [bookingTypeId, setBookingTypeId] = useState("");
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const UserBooking = () => {
       navigate("/OneTimeSchedule", {
         state: {
           slotId: slotId,
+          priceAvr: priceAvr,
         },
       });
     } else {
