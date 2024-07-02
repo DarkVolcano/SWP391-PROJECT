@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Calendar } from "@progress/kendo-react-dateinputs";
 import { UserContext } from "./UserContext";
+import { format } from "date-fns";
 
 const BookInfor = (props) => {
   const [bookingDate, setBookingDate] = useState(null);
@@ -99,12 +100,13 @@ const BookInfor = (props) => {
       console.log("accountId:", user.accountId);
       console.log("selectedTimeSlot:", timeSlot.time);
       console.log("slotId:", timeSlot.slotId);
+      console.log("bookingDate:", format(bookingDate, "dd/MM/yyyy"));
 
       navigate(`/UserBooking`, {
         state: {
           courtId,
           accountId: user.accountId,
-          bookingDate: bookingDate.toDateString(),
+          bookingDate: format(bookingDate, "dd/MM/yyyy"),
           selectedTimeSlot: timeSlot.time,
           slotId: timeSlot.slotId,
         },
@@ -115,6 +117,10 @@ const BookInfor = (props) => {
   useEffect(() => {
     document.title = "Thông tin sân chi tiết";
   }, []);
+
+  const formattedBookingDate = bookingDate
+    ? format(bookingDate, "dd/MM/yyyy")
+    : "";
 
   return (
     <>
@@ -173,8 +179,7 @@ const BookInfor = (props) => {
 
           {bookingDate && selectedTimeSlot ? (
             <div>
-              Selected slot: {bookingDate.toDateString()} at{" "}
-              {selectedTimeSlot.time}
+              Selected slot: {formattedBookingDate} at {selectedTimeSlot.time}
             </div>
           ) : null}
         </div>
