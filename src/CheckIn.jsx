@@ -37,7 +37,7 @@ const CheckIn = () => {
   };
 
   useEffect(() => {
-    document.title = "Check In";
+    document.title = "Thủ tục Check In";
   }, []);
 
   return (
