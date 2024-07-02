@@ -28,6 +28,10 @@ const OneTimeSchedule = () => {
     }
   }, [slotId, priceAvr]);
 
+  useEffect(() => {
+    document.title = "Đặt 1 lần chơi";
+  }, []);
+
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/OneTime";
     const data = {
@@ -43,6 +47,9 @@ const OneTimeSchedule = () => {
       .post(url, data)
       .then((result) => {
         clear();
+        // const bookingId = result.data.bookingId;
+        // toast.success("Booking type successfully");
+        // handlePayment(bookingId);
         toast.success("Booking type successfully");
       })
       .catch((error) => {
@@ -59,6 +66,24 @@ const OneTimeSchedule = () => {
     setNote("");
     setDate("");
   };
+
+  // const handlePayment = (bookingId) => {
+
+  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
+
+  //   axios
+  //     .post(url)
+  //     .then((response) => {
+  //       console.log("Payment result:", response.data.uri);
+  //       toast.success("Search successfully");
+  //       navigate(response.data.uri);
+  //       window.open(response.data.uri, '_blank');
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error searching:", error);
+  //       toast.error("Failed to search courts");
+  //     });
+  // };
 
   return (
     <>

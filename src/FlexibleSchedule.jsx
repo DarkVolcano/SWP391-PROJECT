@@ -25,6 +25,9 @@ const FlexibleSchedule = () => {
       .post(url, data)
       .then((result) => {
         clear();
+        // const bookingId = result.data.bookingId;
+        // toast.success("Booking type successfully");
+        // handlePayment(bookingId);
         toast.success("Booking type successfully");
       })
       .catch((error) => {
@@ -39,8 +42,26 @@ const FlexibleSchedule = () => {
     setTotalHours("");
   };
 
+  // const handlePayment = (bookingId) => {
+
+  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
+
+  //   axios
+  //     .post(url)
+  //     .then((response) => {
+  //       console.log("Payment result:", response.data.uri);
+  //       toast.success("Search successfully");
+  //       navigate(response.data.uri);
+  //       window.open(response.data.uri, '_blank');
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error searching:", error);
+  //       toast.error("Failed to search courts");
+  //     });
+  // };
+
   useEffect(() => {
-    document.title = "Flexible Schedule";
+    document.title = "Đặt số lượng giờ";
   }, []);
 
   return (

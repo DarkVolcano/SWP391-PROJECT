@@ -70,7 +70,7 @@ const FixedSchedule = () => {
   };
 
   useEffect(() => {
-    document.title = "Fixed Schedule";
+    document.title = "Đặt lịch cố định";
   }, []);
 
   // const handlePayment = (bookingId) => {
