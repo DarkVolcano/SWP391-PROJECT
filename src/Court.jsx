@@ -236,41 +236,31 @@ const Court = () => {
       });
   };
 
-  const handleSave = (userAmenities, userSubCourts, userSlotTimes) => {
+  const handleSave = () => {
     const url = "https://localhost:7088/api/Courts";
-    const amenitiesArray = [];
-    const subCourtsArray = [];
-    const slotTimesArray = [];
-    // Check if userAmenities is an array before using forEach
-    if (Array.isArray(userAmenities)) {
-      userAmenities.forEach((amenity) => {
-        amenitiesArray.push({
-          amenityId: amenity.amenityId,
-          amenStatus: amenity.status,
-        });
-      });
-    }
-    // Check if userSubCourts is an array before using forEach
-    if (Array.isArray(userSubCourts)) {
-      userSubCourts.forEach((subCourt) => {
-        subCourtsArray.push({
-          number: subCourt.number,
-          subStatus: subCourt.status,
-        });
-      });
-    }
-    // Check if userSlotTimes is an array before using forEach
-    if (Array.isArray(userSlotTimes)) {
-      userSlotTimes.forEach((slotTime) => {
-        slotTimesArray.push({
-          startTime: slotTime.startTime,
-          endTime: slotTime.endTime,
-          weekdayPrice: slotTime.weekdayPrice,
-          weekendPrice: slotTime.weekendPrice,
-          slotStatus: slotTime.status,
-        });
-      });
-    }
+    const subCourtsArray = [
+      {
+        number,
+        status: subStatus,
+      },
+    ];
+
+    const amenitiesArray = [
+      {
+        amenityId,
+        status: amenStatus,
+      },
+    ];
+
+    const slotTimesArray = [
+      {
+        startTime,
+        endTime,
+        weekdayPrice,
+        weekendPrice,
+        status: slotStatus,
+      },
+    ];
 
     const data = {
       areaId: areaId,

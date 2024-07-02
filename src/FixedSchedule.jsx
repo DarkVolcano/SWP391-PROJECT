@@ -1,12 +1,13 @@
 import React, { useState, useContext, Fragment, useEffect } from "react";
 import "./StyleDashboardAdmin.css";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "./UserContext";
+import { format } from "date-fns";
 
 const FixedSchedule = () => {
   const [userId, setUserId] = useState("");
@@ -17,7 +18,8 @@ const FixedSchedule = () => {
   const { user } = useContext(UserContext);
   const location = useLocation();
   const { slotId, bookingDate } = location.state || {};
-  const [data, setData] = useState("");
+  const [url, setUrl] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (slotId) {
@@ -48,6 +50,9 @@ const FixedSchedule = () => {
       .post(url, data)
       .then((result) => {
         clear();
+        // const bookingId = result.data.bookingId;
+        // toast.success("Booking type successfully");
+        // handlePayment(bookingId);
         toast.success("Booking type successfully");
       })
       .catch((error) => {
@@ -68,22 +73,21 @@ const FixedSchedule = () => {
     document.title = "Fixed Schedule";
   }, []);
 
-  // const handleURL = (e) => {
-  //   e.preventDefault();
+  // const handlePayment = (bookingId) => {
 
-  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${search}`;
+  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
 
   //   axios
   //     .post(url)
   //     .then((response) => {
-  //       console.log("Search result:", response.data.items);
-  //       setData(response.data.items);
+  //       console.log("Payment result:", response.data.uri);
   //       toast.success("Search successfully");
+  //       navigate(response.data.uri);
+  //       window.open(response.data.uri, '_blank');
   //     })
   //     .catch((error) => {
   //       console.error("Error searching:", error);
   //       toast.error("Failed to search courts");
-  //       setData([]);
   //     });
   // };
 
@@ -164,6 +168,7 @@ const FixedSchedule = () => {
           </Button>
         </form>
       </Fragment>
+      {url && <NavLink to={url.uri}></NavLink>}
     </>
   );
 };
