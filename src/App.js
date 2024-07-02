@@ -9,7 +9,6 @@ import Dashboard from "./Dashboard";
 import Header from "./Header";
 import Home from "./Home";
 import Footer from "./Footer";
-import HomeStaff from "./HomeStaff";
 import CheckIn from "./CheckIn";
 import Users from "./User";
 import Court from "./Court";
@@ -202,16 +201,6 @@ const App = () => {
               <>
                 <Header />
                 <FlexibleSchedule />
-                <Footer />
-              </>
-            }
-          />
-          <Route
-            path="HomeStaff"
-            element={
-              <>
-                <Header />
-                <HomeStaff />
                 <Footer />
               </>
             }
