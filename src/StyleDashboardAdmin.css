@@ -694,3 +694,6 @@ button.detail {
 .MuiSvgIcon-root[data-testid="HighlightOffIcon"] {
   color: red !important;
 }
+.MuiSvgIcon-root[data-testid="ImageIcon"] {
+  color: rgb(0, 8, 255) !important;
+}

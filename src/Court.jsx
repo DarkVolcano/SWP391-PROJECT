@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import ImageIcon from "@mui/icons-material/Image";
 
 const Court = () => {
   const [data, setData] = useState([]);
@@ -24,6 +25,7 @@ const Court = () => {
   const [managers, setManagers] = useState([]);
   const [amenities, setAmenities] = useState([]);
   const [show, setShow] = useState(false);
+  const [showImage, setShowImage] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCourtId, setDeleteCourtId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -159,6 +161,8 @@ const Court = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const handleCloseImage = () => setShowImage(false);
+  const handleShowImage = () => setShowImage(true);
   const handleDeleteClose = () => setShowDeleteModal(false);
   const handleDeleteShow = (id) => {
     setDeleteCourtId(id);
@@ -211,7 +215,7 @@ const Court = () => {
       courtId: editCourtId,
       areaId: editAreaId,
       courtName: editCourtName,
-      openTime: editOpenTime,
+      openTime: editOpenTime.trim(),
       closeTime: editCloseTime,
       rules: editRules,
       image: editImage,
@@ -230,6 +234,40 @@ const Court = () => {
         getData();
         clear();
         toast.success("Court has been update");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  const handleEditImage = (id) => {
+    handleShowImage();
+    axios
+      .get(`https://localhost:7088/api/Courts/UploadCourtImage/${id}`)
+      .then((result) => {
+        console.log(result.data);
+        setEditImage(result.data.image);
+        setEditCourtId(id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdateImage = (id) => {
+    const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
+    const data = {
+      courtId: editCourtId,
+      image: editImage,
+    };
+
+    axios
+      .put(url, data)
+      .then((result) => {
+        handleClose();
+        getData();
+        clear();
+        toast.success("Court Image has been update");
       })
       .catch((error) => {
         toast.error(error);
@@ -435,6 +473,12 @@ const Court = () => {
             label="Delete"
             color="inherit"
             onClick={() => handleDeleteShow(params.row.courtId)}
+          />
+          <GridActionsCellItem
+            icon={<ImageIcon />}
+            label="Image"
+            color="inherit"
+            onClick={() => handleEditImage(params.row.courtId)}
           />
         </>
       ),
@@ -812,6 +856,39 @@ const Court = () => {
                 Close
               </Button>
               <Button variant="primary" onClick={handleUpdate}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal
+            show={showImage}
+            onHide={handleCloseImage}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Modify / Update Court Image</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Row>
+                <Col sm={12}>
+                  <input
+                    type="file"
+                    className="form-control mb-3"
+                    placeholder="Enter address"
+                    value={editImage}
+                    onChange={(e) => setEditImage(e.target.value)}
+                  />
+                </Col>
+              </Row>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseImage}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleUpdateImage}>
                 Save Changes
               </Button>
             </Modal.Footer>
