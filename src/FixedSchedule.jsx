@@ -30,6 +30,12 @@ const FixedSchedule = () => {
   }, [slotId, bookingDate]);
 
   const handleSave = () => {
+    console.log("userId: ", user.accountId);
+    console.log("slotTimeId: ", slotTimeId);
+    console.log("months: ", months);
+    console.log("note: ", note);
+    console.log("date: ", date);
+
     const url = "https://localhost:7088/api/Bookings/Fixed";
     const data = {
       userId: user.accountId,
@@ -124,7 +130,7 @@ const FixedSchedule = () => {
               onChange={(e) => setMonths(e.target.value)}
             />
             <label htmlFor="month" className="form-label">
-              Tháng
+              Số tháng chơi
             </label>
           </div>
           <div className="form-floating mb-3">
