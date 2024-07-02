@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BookInStaff = () => {
+const CheckIn = () => {
   const [bookingDetailId, setBookingDetailId] = useState("");
   const [subCourtId, setSubCourtId] = useState("");
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -138,4 +138,4 @@ const BookInStaff = () => {
   );
 };
 
-export default BookInStaff;
+export default CheckIn;

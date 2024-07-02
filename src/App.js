@@ -10,7 +10,7 @@ import Header from "./Header";
 import Home from "./Home";
 import Footer from "./Footer";
 import HomeStaff from "./HomeStaff";
-import BookInStaff from "./BookInfStaff";
+import CheckIn from "./CheckIn";
 import Users from "./User";
 import Court from "./Court";
 import Area from "./Area";
@@ -217,11 +217,11 @@ const App = () => {
             }
           />
           <Route
-            path="BookInStaff"
+            path="CheckIn"
             element={
               <>
                 <Header />
-                <BookInStaff />
+                <CheckIn />
                 <Footer />
               </>
             }

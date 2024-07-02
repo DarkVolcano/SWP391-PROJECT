@@ -7,7 +7,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "./UserContext";
-import { format } from "date-fns";
 
 const FixedSchedule = () => {
   const [userId, setUserId] = useState("");
