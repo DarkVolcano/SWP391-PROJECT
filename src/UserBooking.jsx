@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import { format } from "date-fns";
 
 const UserBooking = () => {
   const [data, setData] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
-  const { slotId } = location.state || {};
+  const { slotId, bookingDate } = location.state || {};
   const [bookingTypeId, setBookingTypeId] = useState("");
 
   useEffect(() => {
@@ -30,6 +31,7 @@ const UserBooking = () => {
       navigate("/FixedSchedule", {
         state: {
           slotId: slotId,
+          bookingDate: format(bookingDate, "dd/MM/yyyy"),
         },
       });
     } else if (bookingTypeId === "2") {

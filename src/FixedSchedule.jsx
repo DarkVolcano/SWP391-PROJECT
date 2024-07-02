@@ -7,6 +7,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "./UserContext";
+import { format } from "date-fns";
 
 const FixedSchedule = () => {
   const [userId, setUserId] = useState("");
@@ -16,13 +17,23 @@ const FixedSchedule = () => {
   const [date, setDate] = useState("");
   const { user } = useContext(UserContext);
   const location = useLocation();
-  const { slotId } = location.state || {};
+  const { slotId, bookingDate } = location.state || {};
+  const [data, setData] = useState("");
+
+  // useEffect(() => {
+  //   if (slotId) {
+  //     setSlotTimeId(slotId);
+  //   }
+  // }, [slotId]);
 
   useEffect(() => {
     if (slotId) {
       setSlotTimeId(slotId);
     }
-  }, [slotId]);
+    if (bookingDate) {
+      setDate(bookingDate); // Set bookingDate to date state
+    }
+  }, [slotId, bookingDate]);
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Bookings/Fixed";
@@ -57,6 +68,25 @@ const FixedSchedule = () => {
   useEffect(() => {
     document.title = "Fixed Schedule";
   }, []);
+
+  // const handleURL = (e) => {
+  //   e.preventDefault();
+
+  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${search}`;
+
+  //   axios
+  //     .post(url)
+  //     .then((response) => {
+  //       console.log("Search result:", response.data.items);
+  //       setData(response.data.items);
+  //       toast.success("Search successfully");
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error searching:", error);
+  //       toast.error("Failed to search courts");
+  //       setData([]);
+  //     });
+  // };
 
   return (
     <>
@@ -118,10 +148,11 @@ const FixedSchedule = () => {
           </div>
           <div className="form-floating mb-3">
             <input
-              type="text"
+              type="date"
               className="form-control mb-3"
-              placeholder="Enter date"
+              placeholder="dd/mm/yyyy"
               id="date"
+              dateformat="dd/mm/yyyy"
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
