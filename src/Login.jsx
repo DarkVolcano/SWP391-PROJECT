@@ -4,6 +4,9 @@ import { UserContext } from "./UserContext";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { Icon } from "react-icons-kit";
+import { eyeOff } from "react-icons-kit/feather/eyeOff";
+import { eye } from "react-icons-kit/feather/eye";
 
 const clientId =
   "242000824863-hdrd5enmg6b0hg1pbn1pe0asvset9r14.apps.googleusercontent.com";
@@ -12,6 +15,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setUser } = useContext(UserContext);
+  const [type, setType] = useState("password");
+  const [icon, setIcon] = useState(eyeOff);
 
   const navigate = useNavigate();
 
@@ -67,6 +72,16 @@ const Login = () => {
     document.title = "Đăng nhập";
   }, []);
 
+  const handleToggle = () => {
+    if (type === "password") {
+      setIcon(eye);
+      setType("text");
+    } else {
+      setIcon(eyeOff);
+      setType("password");
+    }
+  };
+
   return (
     <div className="loginN">
       <ToastContainer />
@@ -101,15 +116,23 @@ const Login = () => {
               Email
             </label>
           </div>
-          <div className="form-floating mb-3">
+          <div className="form-floating mb-3 flex" style={{ display: "flex" }}>
             <input
-              type="password"
+              type={type}
               className="form-control"
               id="exampleInputPassword1"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
+            <span
+              class="flex justify-around items-center"
+              onClick={handleToggle}
+              style={{ position: "absolute", right: 0, margin: "16px" }}
+            >
+              <Icon class="absolute mr-10" icon={icon} size={25} />
+            </span>
             <label htmlFor="exampleInputPassword1" className="form-label">
               Password
             </label>
