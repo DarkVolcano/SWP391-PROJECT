@@ -116,7 +116,9 @@ const Header = () => {
                 id="myDropdown"
                 className={`dropdown-content ${dropdownOpen ? "show" : ""}`}
               >
-                <NavLink to={`/Profile/${user.accountId}`}>Profile</NavLink>
+                <NavLink to={`/Profile/${user.accountId}`}>
+                  Thông tin cá nhân
+                </NavLink>
                 <Link to="/Login">Đăng xuất</Link>
                 <>
                   <button onClick={handleSignOut}>Sign Out</button>

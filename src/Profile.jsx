@@ -98,7 +98,7 @@ export const Profile = () => {
       <ToastContainer />
       <div className="row">
         <div className="col-sm-12">
-          <h1 style={{ visibility: "hidden" }}>User name</h1>
+          <h1 style={{ visibility: "hidden" }}>Tên khách hàng</h1>
         </div>
       </div>
       <div className="row">
@@ -126,7 +126,7 @@ export const Profile = () => {
                 <div className="form-group">
                   <div className="col-xs-6">
                     <label htmlFor="account-name">
-                      <h4>Account name</h4>
+                      <h4>Tên người dùng</h4>
                     </label>
                     <input
                       type="text"
@@ -144,7 +144,7 @@ export const Profile = () => {
                 <div className="form-group">
                   <div className="col-xs-6">
                     <label htmlFor="full-name">
-                      <h4>Full name</h4>
+                      <h4>Họ & Tên</h4>
                     </label>
                     <input
                       type="text"
@@ -162,7 +162,7 @@ export const Profile = () => {
                 <div className="form-group">
                   <div className="col-xs-6">
                     <label htmlFor="phone">
-                      <h4>Phone</h4>
+                      <h4>Số điện thoại</h4>
                     </label>
                     <input
                       type="text"
@@ -203,14 +203,14 @@ export const Profile = () => {
                       type="button"
                       onClick={handleBack}
                     >
-                      <i className="glyphicon glyphicon-repeat"></i> Back
+                      <i className="glyphicon glyphicon-repeat"></i> Quay lại
                     </button>
                     <button
                       className="btn btn-lg btn-success"
                       type="submit"
                       style={{ float: "right", marginRight: "0" }}
                     >
-                      <i className="glyphicon glyphicon-ok-sign"></i> Save
+                      <i className="glyphicon glyphicon-ok-sign"></i> Lưu
                     </button>
                     <button
                       className="btn btn-lg btn-primary"
