@@ -88,10 +88,10 @@ const Login = () => {
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
-            <p className="lead login">Login</p>
+            <p className="lead login">Đăng nhập</p>
           </div>
           <div className="text-center" style={{ width: "auto" }}>
-            <p className="lead re">Please enter your email and password</p>
+            <p className="lead re">Vui lòng nhập email và mật khẩu</p>
           </div>
         </div>
       </div>
@@ -134,26 +134,26 @@ const Login = () => {
               <Icon class="absolute mr-10" icon={icon} size={25} />
             </span>
             <label htmlFor="exampleInputPassword1" className="form-label">
-              Password
+              Mật khẩu
             </label>
           </div>
           <div className="mt-3" style={{ textAlign: "right" }}>
             <span>
               <Link to="/EmailVerify" className="forgot">
-                Forgot your password?
+                Quên mật khẩu?
               </Link>
             </span>
           </div>
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button type="submit" className="btn btn-primary pt-3 pb-3">
-              Login
+              Đăng nhập
             </button>
           </div>
-          <div className="or">OR</div>
+          <div className="or">Hoặc</div>
           <div id="signInDiv"></div>
           <div className="mt-3 text-center">
             <span>
-              Sign up for an account? <Link to="/Register">Sign up</Link>
+              Đăng ký tài khoản? <Link to="/Register">Đăng ký</Link>
             </span>
           </div>
         </form>

@@ -9,7 +9,7 @@ const Verify = () => {
   const navigate = useNavigate();
 
   const handleSubEmail = (e) => {
-    e.preventDefault(); // Prevent form submission from reloading the page
+    e.preventDefault();
 
     const url = `https://localhost:7088/api/Accounts/SendMail?toEmail=${email}`;
     const data = { email: email };
@@ -48,10 +48,10 @@ const Verify = () => {
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
-            <p className="lead login">Verify email</p>
+            <p className="lead login">Xác thực email</p>
           </div>
           <div className="text-center" style={{ width: "auto" }}>
-            <p className="lead re">Please enter your email</p>
+            <p className="lead re">Vui lòng nhập email</p>
           </div>
         </div>
       </div>
@@ -72,12 +72,12 @@ const Verify = () => {
               required
             />
             <label htmlFor="signupEmail" className="form-label">
-              Enter email
+              Email
             </label>
           </div>
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button type="submit" className="btn btn-primary pt-3 pb-3">
-              Continue
+              Tiếp tục
             </button>
           </div>
         </form>

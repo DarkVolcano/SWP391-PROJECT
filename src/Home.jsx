@@ -62,8 +62,8 @@ const Home = () => {
     <div className="allBody">
       <ToastContainer />
       <div className="body">
-        <h1>Hello !</h1>
-        <h3>Book a badminton court schedule with RacketUp</h3>
+        <h1>Xin chào !</h1>
+        <h3>Đặt lịch thi đấu cầu lông với RacketUp</h3>
         <form style={{ display: "flex" }} onSubmit={handleSearch}>
           <div className="form-floating">
             <input
@@ -85,7 +85,7 @@ const Home = () => {
               value={areaId}
               onChange={(e) => setAreaId(e.target.value)}
             >
-              <option value="">Select area</option>
+              <option value="">Chọn khu vực</option>
               {areas.map((area) => (
                 <option key={area.areaId} value={area.areaId}>
                   {area.location}
@@ -165,7 +165,7 @@ const Home = () => {
             fontSize: "34px",
           }}
         >
-          Customer experience
+          Trải nghiệm khách hàng
         </h1>
         <div className="commentbox" style={{ display: "flex" }}>
           <div className="comment1">

@@ -87,12 +87,10 @@ const Signup = () => {
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
-            <p className="lead login">Register</p>
+            <p className="lead login">Đăng ký</p>
           </div>
           <div className="text-center" style={{ width: "auto" }}>
-            <p className="lead re">
-              Please enter your email, telephone and password
-            </p>
+            <p className="lead re">Vui lòng nhập thông tin</p>
           </div>
         </div>
       </div>
@@ -114,7 +112,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="signupFullName" className="form-label">
-              Enter full name
+              Nhập họ tên
             </label>
           </div>
           <div className="form-floating mb-3">
@@ -128,7 +126,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="signupUserName" className="form-label">
-              Enter username
+              Nhập tên người dùng
             </label>
           </div>
           <div className="form-floating mb-3">
@@ -142,7 +140,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="signupEmail" className="form-label">
-              Enter email
+              Nhập email
             </label>
           </div>
           <div className="form-floating mb-3">
@@ -156,7 +154,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="signupTel" className="form-label">
-              Enter telephone
+              Nhập số điện thoại
             </label>
           </div>
           <div className="form-floating mb-3">
@@ -170,7 +168,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="signupPassword" className="form-label">
-              Password
+              Nhập password
             </label>
           </div>
           <div className="form-floating mb-3">
@@ -184,7 +182,7 @@ const Signup = () => {
               required
             />
             <label htmlFor="reEnterPass" className="form-label">
-              Confirm Password
+              Xác nhận mật khẩu
             </label>
           </div>
           {/* {Object.entries(errors).map(([key, value]) => (
@@ -220,12 +218,12 @@ const Signup = () => {
           ))} */}
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button type="submit" className="btn btn-primary pt-3 pb-3">
-              Register
+              Đăng ký
             </button>
           </div>
           <div className="mt-3 text-center">
             <span>
-              Already have an account? <Link to="/Login">Sign in</Link>
+              Đã có tài khoản? <Link to="/Login">Đăng nhập</Link>
             </span>
           </div>
         </form>

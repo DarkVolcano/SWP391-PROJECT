@@ -74,10 +74,10 @@ function OtpInputWithValidation({ numberOfDigits, email }) {
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
-            <p className="lead login">Verify OTP</p>
+            <p className="lead login">Xác thưc OTP</p>
           </div>
           <div className="text-center" style={{ width: "auto" }}>
-            <p className="lead re">Input OTP sent to your email</p>
+            <p className="lead re">Nhập OTP đã gửi đến điện thoại</p>
           </div>
         </div>
       </div>

@@ -76,19 +76,19 @@ const Header = () => {
         </li>
         <li style={{ width: "-webkit-fill-available" }}></li>
         <li>
-          <NavLink to="/Home">HOME</NavLink>
+          <NavLink to="/Home">Trang chủ</NavLink>
         </li>
         <li>
-          <NavLink to="/AboutUS">ABOUT US</NavLink>
+          <NavLink to="/AboutUS">Về chúng tôi</NavLink>
         </li>
         {user && user.roleId !== 3 && (
           <li>
-            <NavLink to="/BookPlay">BOOK PLAY</NavLink>
+            <NavLink to="/BookPlay">Đặt lịch</NavLink>
           </li>
         )}
         {user && user.roleId === 3 && (
           <li>
-            <NavLink to="/BookInStaff">CHECK IN</NavLink>
+            <NavLink to="/BookInStaff">Thủ tục</NavLink>
           </li>
         )}
         {/* <li>
@@ -117,7 +117,7 @@ const Header = () => {
                 className={`dropdown-content ${dropdownOpen ? "show" : ""}`}
               >
                 <NavLink to={`/Profile/${user.accountId}`}>Profile</NavLink>
-                <Link to="/Login">Logout</Link>
+                <Link to="/Login">Đăng xuất</Link>
                 <>
                   <button onClick={handleSignOut}>Sign Out</button>
                 </>
@@ -127,7 +127,7 @@ const Header = () => {
         ) : (
           <>
             <button className="in">
-              <NavLink to="/Login">Sign in</NavLink>
+              <NavLink to="/Login">Đăng nhập</NavLink>
             </button>
           </>
         )}

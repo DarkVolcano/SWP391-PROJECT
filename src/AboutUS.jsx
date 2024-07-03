@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 
 const About = () => {
   useEffect(() => {
-    document.title = "About US";
+    document.title = "Về chúng tôi";
   }, []);
 
   return (
     <div className="about">
-      <div className="aboutUS">About US</div>
+      <div className="aboutUS">Về chúng tôi</div>
       <div className="first-row">
         <div className="forImage">
           <img
@@ -16,27 +16,29 @@ const About = () => {
           />
         </div>
         <div className="content">
-          <strong style={{ fontSize: "33px" }}>Introduce</strong>
+          <strong style={{ fontSize: "33px" }}>Giới thiệu</strong>
           <div className="detail">
-            Welcome to Badminton Playground, where passion and precision
-            converge, promising exhilarating rallies with every shuttlecock. Our
-            dedication to celebrating the dynamic sport of badminton makes our
-            book the ultimate companion for both seasoned players refining
-            skills and beginners embarking on this thrilling journey.
+            Chào mừng đến với Sân chơi cầu lông, nơi đam mê và chính xác hội tụ,
+            hứa hẹn những trận cầu sôi động với từng quả cầu. Của chúng tôi sự
+            cống hiến để tôn vinh môn thể thao cầu lông năng động làm cho chúng
+            tôi đặt người bạn đồng hành cuối cùng cho cả những người chơi dày
+            dạn kinh nghiệm kỹ năng và người mới bắt đầu tham gia vào cuộc hành
+            trình ly kỳ này.
           </div>
         </div>
       </div>
       <div className="second-row">
         <div className="content">
           <strong style={{ fontSize: "26px", color: "#28C67A" }}>
-            Expertise and Guidance
+            Chuyên môn và hướng dẫn
           </strong>
           <div className="detail">
-            Our team of badminton enthusiasts, coaches, and experts have pooled
-            their knowledge and experience to create a comprehensive guide that
-            caters to players of all levels. From mastering the fundamental
-            techniques to exploring advanced strategies, our book offers
-            invaluable insights and practical tips to elevate your game.
+            Đội ngũ những người đam mê cầu lông, huấn luyện viên và chuyên gia
+            của chúng tôi đã tập hợp lại kiến thức và kinh nghiệm của họ để tạo
+            ra một hướng dẫn toàn diện phục vụ người chơi ở mọi cấp độ. Từ việc
+            nắm vững nền tảng kỹ thuật để khám phá các chiến lược nâng cao, cuốn
+            sách của chúng tôi cung cấp những hiểu biết sâu sắc vô giá và những
+            lời khuyên thiết thực để nâng cao trò chơi của bạn.
           </div>
         </div>
         <div className="forImage">
@@ -51,15 +53,15 @@ const About = () => {
           <img src="https://i.ibb.co/8XWVnSj/Picture1.png" alt="power" />
         </div>
         <div className="content">
-          <strong style={{ fontSize: "26px" }}>The Power of Unity</strong>
+          <strong style={{ fontSize: "26px" }}>Sức mạnh của sự đoàn kết</strong>
           <div className="detail">
-            But Badminton Playground is more than just a guidebook – it's a
-            celebration of the joy and camaraderie that badminton fosters. We
-            believe in the power of this sport to bring people together,
-            transcending boundaries of age, gender, and background. Whether
-            you're competing on the court or cheering from the sidelines,
-            badminton unites us in a shared passion for excellence and
-            sportsmanship.
+            Nhưng Sân cầu lông không chỉ là một cuốn sách hướng dẫn – nó là một
+            kỷ niệm niềm vui và tình bạn mà môn cầu lông nuôi dưỡng. Chúng tôi
+            tin vào sức mạnh của môn thể thao này trong việc gắn kết mọi người
+            lại với nhau, vượt qua ranh giới về tuổi tác, giới tính và hoàn
+            cảnh. Liệu bạn đang thi đấu trên sân hoặc cổ vũ từ bên lề, cầu lông
+            gắn kết chúng ta với niềm đam mê chung về sự xuất sắc và tinh thần
+            thể thao.
           </div>
         </div>
       </div>

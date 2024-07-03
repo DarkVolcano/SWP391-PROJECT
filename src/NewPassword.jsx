@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-// import WrongIcon from "./icons/wrongIcon";
 import { useNavigate } from "react-router-dom";
-// import CorrectIcon from "./icons/correctIcons";
 
 const NewPass = () => {
   const navigate = useNavigate();
