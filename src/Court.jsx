@@ -20,7 +20,6 @@ import ImageIcon from "@mui/icons-material/Image";
 
 const Court = () => {
   const [data, setData] = useState([]);
-  const [roles, setRoles] = useState([]);
   const [areas, setAreas] = useState([]);
   const [managers, setManagers] = useState([]);
   const [amenities, setAmenities] = useState([]);
@@ -123,22 +122,6 @@ const Court = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    fetchRoles();
-  }, []);
-
-  const fetchRoles = () => {
-    axios
-      .get("https://localhost:7088/api/Roles")
-      .then((response) => {
-        console.log(response.data);
-        setRoles(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
       });
   };
 
@@ -590,15 +573,6 @@ const Court = () => {
                     onChange={handleEditorChange}
                   />
                 </Col>
-                {/*<Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter rule"
-                    value={rules}
-                    onChange={(e) => setRules(e.target.value)}
-                  />
-                </Col>*/}
                 <Col sm={6}>
                   <input
                     type="file"
