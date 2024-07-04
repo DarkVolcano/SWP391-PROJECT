@@ -12,61 +12,61 @@ const Footer = () => {
           style={{ display: "inline-flex", width: "-webkit-fill-available" }}
         >
           <div className="support col-sm-3">
-            <h3>Support</h3>
+            <h3>Hỗ trợ</h3>
             <div className="link">
               <a href="index.html" className="sp">
-                Support Center
+                Trung tâm hỗ trợ
               </a>
               <br></br>
               <a href="index.html" className="sp">
-                Support Booking
+                Hỗ trợ đặt lịch
               </a>
               <br></br>
               <a href="index.html" className="sp">
-                Support Cancellation
+                Hỗ trợ hủy lịch
               </a>
               <br></br>
             </div>
           </div>
 
           <div className="company col-sm-3">
-            <h3>Company</h3>
+            <h3>Công ty</h3>
             <div className="link">
               <a href="index.html" className="cp">
-                Introduction
+                Giới thiệu
               </a>
               <br></br>
               <a href="index.html" className="cp">
-                Policy
+                Chính sách
               </a>
               <br></br>
               <a href="index.html" className="cp">
-                Service
+                Dịch vụ
               </a>
               <br></br>
             </div>
           </div>
 
           <div className="contact col-sm-3">
-            <h3>Contact</h3>
+            <h3>Liên hệ</h3>
             <div className="link">
               <a href="index.html" className="ct">
                 FAQ
               </a>
               <br></br>
               <a href="index.html" className="ct">
-                Get in touch
+                Liên lạc
               </a>
               <br></br>
               <a href="index.html" className="ct">
-                Partnership
+                Đối tác
               </a>
               <br></br>
             </div>
           </div>
 
           <div className="social col-sm-3">
-            <h3>Social</h3>
+            <h3>Xã hội</h3>
             <div className="">
               <svg
                 width="25"
