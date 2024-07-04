@@ -166,6 +166,7 @@ const BookInfor = (props) => {
               className="k-ml-4 k-display-flex k-flex-col"
               style={{ display: "block", width: "475px" }}
             >
+              {/* can you help me fix in here that it will show all subCourtName which have courtId = courtId in here after that when i click to that subCourtName have subCourtId of table slottime = subCourtId of table subCourt */}
               {bookingTimes.map((timeSlot) => (
                 <button
                   key={timeSlot.slotId}

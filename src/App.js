@@ -14,7 +14,6 @@ import Users from "./User";
 import Court from "./Court";
 import Area from "./Area";
 import About from "./AboutUS";
-import Payment from "./Payment";
 import "./App.css";
 import Role from "./Role";
 import "./StyleHome.css";
@@ -121,16 +120,6 @@ const App = () => {
               <>
                 <Header />
                 <About />
-                <Footer />
-              </>
-            }
-          />
-          <Route
-            path="Payment"
-            element={
-              <>
-                <Header />
-                <Payment />
                 <Footer />
               </>
             }

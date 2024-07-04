@@ -38,7 +38,7 @@ const OneTimeSchedule = () => {
       userId: user.accountId,
       playerQuantity: playerQuantity,
       totalPrice: totalPrice,
-      slotId: slotTimeId,
+      slotTimeId: slotTimeId,
       note: note,
       date: date,
     };
@@ -46,11 +46,10 @@ const OneTimeSchedule = () => {
     axios
       .post(url, data)
       .then((result) => {
+        const bookingId = result.data.bookingId;
+        toast.success("Booking successfully");
+        handlePayment(bookingId);
         clear();
-        // const bookingId = result.data.bookingId;
-        // toast.success("Booking type successfully");
-        // handlePayment(bookingId);
-        toast.success("Booking type successfully");
       })
       .catch((error) => {
         toast.error(error);
@@ -67,23 +66,27 @@ const OneTimeSchedule = () => {
     setDate("");
   };
 
-  // const handlePayment = (bookingId) => {
+  const handlePayment = (bookingId) => {
+    const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
 
-  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
-
-  //   axios
-  //     .post(url)
-  //     .then((response) => {
-  //       console.log("Payment result:", response.data.uri);
-  //       toast.success("Search successfully");
-  //       navigate(response.data.uri);
-  //       window.open(response.data.uri, '_blank');
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error searching:", error);
-  //       toast.error("Failed to search courts");
-  //     });
-  // };
+    axios
+      .post(url)
+      .then((response) => {
+        const paymentUri = response.data.data.uri;
+        console.log("Payment result:", paymentUri);
+        toast.success("Payment initiated successfully");
+        if (paymentUri) {
+          window.open(paymentUri, "_blank");
+        } else {
+          console.error("Payment URI not found in the response");
+          toast.error("Payment URI not found");
+        }
+      })
+      .catch((error) => {
+        console.error("Error initiating payment:", error);
+        toast.error("Failed to initiate payment");
+      });
+  };
 
   return (
     <>

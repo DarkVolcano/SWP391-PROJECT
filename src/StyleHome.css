@@ -282,41 +282,6 @@ body:has(.image-container) {
   width: 435px;
   max-width: 100%;
 }
-.intro-pay {
-  background-color: #0dc088;
-  padding: 30px;
-}
-.pay-process {
-  font-size: 33px;
-  padding: 22px;
-  font-weight: 600;
-}
-.pay-row {
-  display: flex;
-}
-.pay-step {
-  display: flex;
-  width: -webkit-fill-available;
-  justify-content: center;
-}
-.pay-step h3 {
-  background-color: #ec1f7e;
-  width: 33px;
-  height: 33px;
-  text-align: center;
-  border-radius: 19px;
-  color: white;
-}
-.font-pay {
-  font-size: 23px;
-}
-.pay-qr {
-  position: absolute;
-  right: 16%;
-  bottom: 5%;
-  font-size: 21px;
-  font-weight: 600;
-}
 .pay-infor {
   margin-bottom: 60px;
 }
@@ -517,4 +482,7 @@ input#searchTerm:focus {
   width: 20px;
   border-radius: 50%;
   margin: 0 5px;
+}
+body:has(.boPay) {
+  background-color: white !important;
 }

@@ -1,13 +1,12 @@
 import React, { useState, useContext, Fragment, useEffect } from "react";
 import "./StyleDashboardAdmin.css";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "./UserContext";
-import { format } from "date-fns";
 
 const FixedSchedule = () => {
   const [userId, setUserId] = useState("");
@@ -18,8 +17,6 @@ const FixedSchedule = () => {
   const { user } = useContext(UserContext);
   const location = useLocation();
   const { slotId, bookingDate } = location.state || {};
-  const [url, setUrl] = useState("");
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (slotId) {
@@ -40,8 +37,8 @@ const FixedSchedule = () => {
     const url = "https://localhost:7088/api/Bookings/Fixed";
     const data = {
       userId: user.accountId,
-      slotId: slotTimeId,
-      months: months,
+      slotTimeId: slotTimeId,
+      months: parseInt(months),
       note: note,
       date: date,
     };
@@ -49,15 +46,19 @@ const FixedSchedule = () => {
     axios
       .post(url, data)
       .then((result) => {
+        const bookingId = result.data.bookingId;
+        toast.success("Booking successfully");
+        handlePayment(bookingId);
         clear();
-        // const bookingId = result.data.bookingId;
-        // toast.success("Booking type successfully");
-        // handlePayment(bookingId);
-        toast.success("Booking type successfully");
       })
       .catch((error) => {
-        toast.error(error);
-        console.log(error);
+        if (error.response) {
+          toast.error(error.response.data.message); // Display backend error message
+          console.log(error.response.data); // Log detailed error response from backend
+        } else {
+          toast.error("Failed to make booking"); // Fallback error message
+          console.log(error);
+        }
       });
   };
 
@@ -70,26 +71,30 @@ const FixedSchedule = () => {
   };
 
   useEffect(() => {
-    document.title = "Đặt lịch cố định";
+    document.title = "Fixed Schedule";
   }, []);
 
-  // const handlePayment = (bookingId) => {
+  const handlePayment = (bookingId) => {
+    const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
 
-  //   const url = `https://localhost:7088/api/Payments/create-payment?bookingId=${bookingId}`;
-
-  //   axios
-  //     .post(url)
-  //     .then((response) => {
-  //       console.log("Payment result:", response.data.uri);
-  //       toast.success("Search successfully");
-  //       navigate(response.data.uri);
-  //       window.open(response.data.uri, '_blank');
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error searching:", error);
-  //       toast.error("Failed to search courts");
-  //     });
-  // };
+    axios
+      .post(url)
+      .then((response) => {
+        const paymentUri = response.data.data.uri;
+        console.log("Payment result:", paymentUri);
+        toast.success("Payment initiated successfully");
+        if (paymentUri) {
+          window.open(paymentUri, "_blank");
+        } else {
+          console.error("Payment URI not found in the response");
+          toast.error("Payment URI not found");
+        }
+      })
+      .catch((error) => {
+        console.error("Error initiating payment:", error);
+        toast.error("Failed to initiate payment");
+      });
+  };
 
   return (
     <>
@@ -153,9 +158,9 @@ const FixedSchedule = () => {
             <input
               type="date"
               className="form-control mb-3"
-              placeholder="dd/mm/yyyy"
+              placeholder="yyyy-MM-dd"
               id="date"
-              dateformat="dd/mm/yyyy"
+              dateformat="yyyy-MM-dd"
               value={date}
               onChange={(e) => setDate(e.target.value)}
             />
@@ -168,7 +173,6 @@ const FixedSchedule = () => {
           </Button>
         </form>
       </Fragment>
-      {url && <NavLink to={url.uri}></NavLink>}
     </>
   );
 };

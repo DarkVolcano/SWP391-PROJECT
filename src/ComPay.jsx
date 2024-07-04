@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 const ComPay = () => {
   useEffect(() => {
-    document.title = "Payment Complete";
+    document.title = "Thanh toán thành công";
   }, []);
 
   return (
