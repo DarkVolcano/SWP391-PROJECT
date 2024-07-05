@@ -5,13 +5,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import { Note } from "@mui/icons-material";
 import "./Profile.css";
+import { Button } from "react-bootstrap";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const { accountId } = useParams();
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   const [user, setUser] = useState({
     accountName: "",
@@ -22,6 +22,8 @@ export const Profile = () => {
   });
 
   const [userHistory, setUserHistory] = useState([]);
+  const [filteredHistory, setFilteredHistory] = useState([]);
+  const [filterStatus, setFilterStatus] = useState(null);
 
   useEffect(() => {
     axios
@@ -48,7 +50,8 @@ export const Profile = () => {
       .get(`https://localhost:7088/api/Bookings/ByCustomer/${accountId}`)
       .then((response) => {
         const data = response.data;
-        setUserHistory(data); // Assuming the response data is an array of booking objects
+        setUserHistory(data);
+        setFilteredHistory(data); // Initialize filtered history
       })
       .catch((error) => {
         console.error("Error fetching user booking history:", error);
@@ -84,7 +87,7 @@ export const Profile = () => {
       accountName: user.accountName,
       fullName: user.fullName,
       phone: user.phone,
-      email: user.email,
+      email: user.email.trim(),
       image: user.image,
     };
 
@@ -123,6 +126,11 @@ export const Profile = () => {
     });
   };
 
+  const filterHistory = (status) => {
+    setFilterStatus(status);
+    setFilteredHistory(userHistory.filter((item) => item.status === status));
+  };
+
   return (
     <div className="container bootstrap snippet">
       <ToastContainer />
@@ -156,7 +164,7 @@ export const Profile = () => {
             id="noanim-tab-example"
             className="mb-3"
           >
-            <Tab eventKey="home" title="Home">
+            <Tab eventKey="home" title="Thông tin cá nhân">
               <div className="col-sm-9">
                 <div className="tab-content">
                   <div className="tab-pane active" id="home">
@@ -266,14 +274,31 @@ export const Profile = () => {
                 </div>
               </div>
             </Tab>
-            <Tab eventKey="profile" title="Profile">
-              {userHistory.length > 0 ? (
-                userHistory.map((item, index) => {
+            <Tab eventKey="profile" title="Lịch sử đặt lịch">
+              <div>
+                <Button
+                  className="btn btn-success"
+                  onClick={() => filterHistory(true)}
+                >
+                  Lịch đặt thành công
+                </Button>
+                <Button
+                  className="btn btn-danger"
+                  onClick={() => filterHistory(false)}
+                >
+                  Lịch đặt đã hủy
+                </Button>
+              </div>
+              {filteredHistory.length > 0 ? (
+                filteredHistory.map((item, index) => {
                   const datas = data.find(
                     (data) => data.bookingTypeId === item.bookingId
                   );
                   return (
-                    <div key={index} className="history">
+                    <div
+                      key={index}
+                      className={item.status ? "history" : "cancelled"}
+                    >
                       <div>BookingId: {item.bookingId}</div>
                       <div>Booking Type: {datas ? datas.description : ""}</div>
                       <div>Total Hours: {item.totalHours}</div>
@@ -288,9 +313,9 @@ export const Profile = () => {
                 <p>No court available</p>
               )}
             </Tab>
-            <Tab eventKey="contact" title="Contact" disabled>
+            {/* <Tab eventKey="contact" title="Contact" disabled>
               Tab content for Contact
-            </Tab>
+            </Tab> */}
           </Tabs>
         </div>
       </div>

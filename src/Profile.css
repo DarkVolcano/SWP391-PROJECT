@@ -5,3 +5,13 @@
   padding: 25px;
   color: white;
 }
+.cancelled {
+  background-color: red;
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 25px;
+  color: white;
+}
+.tab-content button {
+  margin-right: 13px;
+}
