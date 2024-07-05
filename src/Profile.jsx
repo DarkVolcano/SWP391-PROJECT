@@ -3,10 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import { Note } from "@mui/icons-material";
+import "./Profile.css";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const { accountId } = useParams();
+  const [data, setData] = useState();
 
   const [user, setUser] = useState({
     accountName: "",
@@ -15,6 +20,8 @@ export const Profile = () => {
     email: "",
     image: "http://ssl.gstatic.com/accounts/ui/avatar_2x.png",
   });
+
+  const [userHistory, setUserHistory] = useState([]);
 
   useEffect(() => {
     axios
@@ -37,7 +44,20 @@ export const Profile = () => {
   }, [accountId]);
 
   useEffect(() => {
-    document.title = "Profile";
+    axios
+      .get(`https://localhost:7088/api/Bookings/ByCustomer/${accountId}`)
+      .then((response) => {
+        const data = response.data;
+        setUserHistory(data); // Assuming the response data is an array of booking objects
+      })
+      .catch((error) => {
+        console.error("Error fetching user booking history:", error);
+      });
+  }, [accountId]);
+
+  useEffect(() => {
+    getData();
+    document.title = "Thông tin cá nhân";
   }, []);
 
   const readURL = (input) => {
@@ -83,6 +103,16 @@ export const Profile = () => {
       });
   };
 
+  const getData = async () => {
+    try {
+      const result = await axios.get("https://localhost:7088/api/BookingTypes");
+      console.log(result.data);
+      setData(result.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   const handleReset = () => {
     setUser({
       accountName: "",
@@ -120,111 +150,148 @@ export const Profile = () => {
           <br />
         </div>
         <div className="col-sm-9">
-          <div className="tab-content">
-            <div className="tab-pane active" id="home">
-              <form className="form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <div className="col-xs-6">
-                    <label htmlFor="account-name">
-                      <h4>Tên người dùng</h4>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="accountName"
-                      id="account-name"
-                      placeholder="Account name"
-                      value={user.accountName}
-                      onChange={(e) =>
-                        setUser({ ...user, accountName: e.target.value })
-                      }
-                    />
+          <Tabs
+            defaultActiveKey="home"
+            transition={false}
+            id="noanim-tab-example"
+            className="mb-3"
+          >
+            <Tab eventKey="home" title="Home">
+              <div className="col-sm-9">
+                <div className="tab-content">
+                  <div className="tab-pane active" id="home">
+                    <form className="form" onSubmit={handleSubmit}>
+                      <div className="form-group">
+                        <div className="col-xs-6">
+                          <label htmlFor="account-name">
+                            <h4>Tên người dùng</h4>
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="accountName"
+                            id="account-name"
+                            placeholder="Account name"
+                            value={user.accountName}
+                            onChange={(e) =>
+                              setUser({ ...user, accountName: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="col-xs-6">
+                          <label htmlFor="full-name">
+                            <h4>Họ & Tên</h4>
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="fullName"
+                            id="full-name"
+                            placeholder="Full name"
+                            value={user.fullName}
+                            onChange={(e) =>
+                              setUser({ ...user, fullName: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="col-xs-6">
+                          <label htmlFor="phone">
+                            <h4>Số điện thoại</h4>
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="phone"
+                            id="phone"
+                            placeholder="Phone"
+                            value={user.phone}
+                            onChange={(e) =>
+                              setUser({ ...user, phone: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="col-xs-6">
+                          <label htmlFor="email">
+                            <h4>Email</h4>
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            name="email"
+                            id="email"
+                            placeholder="Email"
+                            value={user.email}
+                            onChange={(e) =>
+                              setUser({ ...user, email: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <div className="col-xs-12">
+                          <br />
+                          <button
+                            className="btn btn-lg btn-primary"
+                            type="button"
+                            onClick={handleBack}
+                          >
+                            <i className="glyphicon glyphicon-repeat"></i> Quay
+                            lại
+                          </button>
+                          <button
+                            className="btn btn-lg btn-success"
+                            type="submit"
+                            style={{ float: "right", marginRight: "0" }}
+                          >
+                            <i className="glyphicon glyphicon-ok-sign"></i> Lưu
+                          </button>
+                          <button
+                            className="btn btn-lg btn-primary"
+                            type="button"
+                            onClick={handleReset}
+                            style={{ float: "right" }}
+                          >
+                            <i className="glyphicon glyphicon-repeat"></i> Reset
+                          </button>
+                        </div>
+                      </div>
+                    </form>
                   </div>
                 </div>
-                <div className="form-group">
-                  <div className="col-xs-6">
-                    <label htmlFor="full-name">
-                      <h4>Họ & Tên</h4>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="fullName"
-                      id="full-name"
-                      placeholder="Full name"
-                      value={user.fullName}
-                      onChange={(e) =>
-                        setUser({ ...user, fullName: e.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <div className="col-xs-6">
-                    <label htmlFor="phone">
-                      <h4>Số điện thoại</h4>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      name="phone"
-                      id="phone"
-                      placeholder="Phone"
-                      value={user.phone}
-                      onChange={(e) =>
-                        setUser({ ...user, phone: e.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <div className="col-xs-6">
-                    <label htmlFor="email">
-                      <h4>Email</h4>
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      id="email"
-                      placeholder="Email"
-                      value={user.email}
-                      onChange={(e) =>
-                        setUser({ ...user, email: e.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <div className="col-xs-12">
-                    <br />
-                    <button
-                      className="btn btn-lg btn-primary"
-                      type="button"
-                      onClick={handleBack}
-                    >
-                      <i className="glyphicon glyphicon-repeat"></i> Quay lại
-                    </button>
-                    <button
-                      className="btn btn-lg btn-success"
-                      type="submit"
-                      style={{ float: "right", marginRight: "0" }}
-                    >
-                      <i className="glyphicon glyphicon-ok-sign"></i> Lưu
-                    </button>
-                    <button
-                      className="btn btn-lg btn-primary"
-                      type="button"
-                      onClick={handleReset}
-                      style={{ float: "right" }}
-                    >
-                      <i className="glyphicon glyphicon-repeat"></i> Reset
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+              </div>
+            </Tab>
+            <Tab eventKey="profile" title="Profile">
+              {userHistory.length > 0 ? (
+                userHistory.map((item, index) => {
+                  const datas = data.find(
+                    (data) => data.bookingTypeId === item.bookingId
+                  );
+                  return (
+                    <div key={index} className="history">
+                      <div>BookingId: {item.bookingId}</div>
+                      <div>Booking Type: {datas ? datas.description : ""}</div>
+                      <div>Total Hours: {item.totalHours}</div>
+                      <div>Total Price: {item.totalPrice}</div>
+                      <div>Start Date: {item.startDate}</div>
+                      <div>End Date: {item.endDate}</div>
+                      <div>Note: {item.note}</div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No court available</p>
+              )}
+            </Tab>
+            <Tab eventKey="contact" title="Contact" disabled>
+              Tab content for Contact
+            </Tab>
+          </Tabs>
         </div>
       </div>
     </div>
