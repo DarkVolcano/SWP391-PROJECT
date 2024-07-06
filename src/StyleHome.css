@@ -486,3 +486,7 @@ input#searchTerm:focus {
 body:has(.boPay) {
   background-color: white !important;
 }
+.input-group-text {
+  background-color: transparent;
+  border: none;
+}

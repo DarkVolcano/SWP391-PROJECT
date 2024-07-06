@@ -4,6 +4,8 @@ import axios from "axios";
 import { Calendar } from "@progress/kendo-react-dateinputs";
 import { UserContext } from "./UserContext";
 import { format } from "date-fns";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 
 const BookInfor = (props) => {
   const [bookingDate, setBookingDate] = useState(null);
@@ -192,6 +194,22 @@ const BookInfor = (props) => {
           {court.rules}
         </div>
       </div>
+      <InputGroup style={{ margin: "0 138px" }}>
+        <InputGroup.Text>
+          {user.image ? (
+            <img
+              src={user.image}
+              alt="User"
+              style={{ width: "30px", height: "30px" }}
+            />
+          ) : (
+            <div
+              style={{ width: "30px", height: "30px", backgroundColor: "gray" }}
+            ></div>
+          )}
+        </InputGroup.Text>
+        <Form.Control as="textarea" aria-label="With textarea" rows={4} />
+      </InputGroup>
     </>
   );
 };
