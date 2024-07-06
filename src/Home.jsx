@@ -9,6 +9,7 @@ const Home = () => {
   const [areas, setAreas] = useState([]);
   const [search, setSearch] = useState("");
   const [areaId, setAreaId] = useState("");
+  const [courtImages, setCourtImages] = useState({});
 
   useEffect(() => {
     getData();
@@ -22,9 +23,29 @@ const Home = () => {
       .then((result) => {
         console.log(result.data);
         setData(result.data);
+        result.data.forEach((court) => {
+          fetchCourtImage(court.courtId);
+        });
       })
       .catch((error) => {
         console.log(error);
+      });
+  };
+
+  const fetchCourtImage = (courtId) => {
+    axios
+      .get(`https://localhost:7088/api/Courts/${courtId}/Image`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = URL.createObjectURL(response.data);
+        setCourtImages((prevImages) => ({
+          ...prevImages,
+          [courtId]: url,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching court image:", error);
       });
   };
 
@@ -50,6 +71,9 @@ const Home = () => {
         console.log("Search result:", response.data.items);
         setData(response.data.items);
         toast.success("Search successfully");
+        response.data.items.forEach((court) => {
+          fetchCourtImage(court.courtId);
+        });
       })
       .catch((error) => {
         console.error("Error searching:", error);
@@ -146,7 +170,11 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="book-image">
-                  <img src={item.image} alt={item.courtName} />
+                  {courtImages[item.courtId] ? (
+                    <img src={courtImages[item.courtId]} alt="court" />
+                  ) : (
+                    <div>Loading image...</div>
+                  )}
                 </div>
               </div>
             </div>

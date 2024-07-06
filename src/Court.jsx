@@ -41,6 +41,7 @@ const Court = () => {
   const [address, setAddress] = useState("");
   const [totalRate, setTotalRate] = useState("");
   const [priceAvr, setPriceAvr] = useState("");
+  const [courtImages, setCourtImages] = useState("");
 
   const [number, setNumber] = useState("");
   const [subStatus, setSubStatus] = useState(true);
@@ -67,6 +68,7 @@ const Court = () => {
   const [editTotalRate, setEditTotalRate] = useState("");
   const [editPriceAvr, setEditPriceAvr] = useState("");
   const [editCourtId, setEditCourtId] = useState("");
+  const [editCourtImages, setEditCourtImages] = useState({});
 
   useEffect(() => {
     let sidebar = document.querySelector(".sidebarA");
@@ -134,6 +136,25 @@ const Court = () => {
       })
       .catch((error) => {
         console.error(error);
+      });
+  };
+
+  const fetchCourtImage = (courtId) => {
+    if (courtImages[courtId]) return;
+
+    axios
+      .get(`https://localhost:7088/api/Courts/${courtId}/Image`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = URL.createObjectURL(response.data);
+        setCourtImages((prevImages) => ({
+          ...prevImages,
+          [courtId]: url,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching court image:", error);
       });
   };
 
@@ -229,7 +250,7 @@ const Court = () => {
       .get(`https://localhost:7088/api/Courts/UploadCourtImage/${id}`)
       .then((result) => {
         console.log(result.data);
-        setEditImage(result.data.image);
+        setEditCourtImages(result.data.image); // Make sure this updates correctly
         setEditCourtId(id);
       })
       .catch((error) => {
@@ -237,25 +258,63 @@ const Court = () => {
       });
   };
 
+  // const handleUpdateImage = (id) => {
+  //   const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
+  //   const data = {
+  //     courtId: editCourtId,
+  //     image: editCourtImages,
+  //   };
+
+  //   axios
+  //     .put(url, data)
+  //     .then((result) => {
+  //       handleClose();
+  //       getData();
+  //       clear();
+  //       toast.success("Court Image has been update");
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error);
+  //     });
+  // };
+
   const handleUpdateImage = (id) => {
     const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
-    const data = {
-      courtId: editCourtId,
-      image: editImage,
-    };
+    const formData = new FormData();
+    formData.append("courtImage", editCourtImages); // Update to use FormData
 
     axios
-      .put(url, data)
+      .put(url, formData)
       .then((result) => {
-        handleClose();
+        handleCloseImage();
         getData();
         clear();
-        toast.success("Court Image has been update");
+        toast.success("Court Image has been updated");
       })
       .catch((error) => {
-        toast.error(error);
+        toast.error("Error updating court image: " + error.message);
       });
   };
+
+  // const handleUpdateImage = (id) => {
+  //   const formData = new FormData();
+  //   formData.append("courtImage", editImage);
+
+  //   const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
+
+  //   axios
+  //     .put(url, formData)
+  //     .then((result) => {
+  //       handleCloseImage();
+  //       getData();
+  //       clear();
+  //       toast.success("Court Image has been updated");
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error);
+  //       console.log("Error save image", error);
+  //     });
+  // };
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Courts";
@@ -422,8 +481,18 @@ const Court = () => {
       field: "image",
       headerName: "Image",
       renderCell: (params) => {
-        const { image } = params.row;
-        return <img src={image} alt="court" style={{ width: 70 }} />;
+        const courtId = params.row.courtId;
+        if (!courtImages[courtId]) {
+          fetchCourtImage(courtId);
+          return null;
+        }
+        return (
+          <img
+            src={courtImages[courtId]}
+            alt="court"
+            style={{ width: "100%", height: "auto" }}
+          />
+        );
       },
     },
     { field: "managerId", headerName: "Manager" },
@@ -852,8 +921,8 @@ const Court = () => {
                     type="file"
                     className="form-control mb-3"
                     placeholder="Enter address"
-                    value={editImage}
-                    onChange={(e) => setEditImage(e.target.value)}
+                    // value={editCourtImages}
+                    onChange={(e) => setEditCourtImages(e.target.files[0])} // Update the image state correctly
                   />
                 </Col>
               </Row>

@@ -31,6 +31,8 @@ const BookInfor = (props) => {
     amenityId: "",
   });
 
+  const [courtImage, setCourtImage] = useState("");
+
   useEffect(() => {
     axios
       .get(`https://localhost:7088/api/Courts/${courtId}`)
@@ -61,6 +63,20 @@ const BookInfor = (props) => {
       })
       .catch((error) => {
         console.error("Error fetching court data:", error);
+      });
+  }, [courtId]);
+
+  useEffect(() => {
+    axios
+      .get(`https://localhost:7088/api/Courts/${courtId}/Image`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = URL.createObjectURL(response.data);
+        setCourtImage(url);
+      })
+      .catch((error) => {
+        console.error("Error fetching court image:", error);
       });
   }, [courtId]);
 
@@ -137,7 +153,11 @@ const BookInfor = (props) => {
         }}
       >
         <div className="book-image">
-          <img src={court.image} alt="court" />
+          {courtImage ? (
+            <img src={courtImage} alt="court" />
+          ) : (
+            <div>Loading image...</div>
+          )}
         </div>
         <div className="full-infor">
           <div className="court-con">THÔNG TIN SÂN</div>
@@ -168,7 +188,6 @@ const BookInfor = (props) => {
               className="k-ml-4 k-display-flex k-flex-col"
               style={{ display: "block", width: "475px" }}
             >
-              {/* can you help me fix in here that it will show all subCourtName which have courtId = courtId in here after that when i click to that subCourtName have subCourtId of table slottime = subCourtId of table subCourt */}
               {bookingTimes.map((timeSlot) => (
                 <button
                   key={timeSlot.slotId}
