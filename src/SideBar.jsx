@@ -79,6 +79,12 @@ const Sidebar = () => {
             <span className="links_name">Booking Type</span>
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/Post">
+            <i className="bx bx-pie-chart-alt-2"></i>
+            <span className="links_name">Post</span>
+          </NavLink>
+        </li>
         <li className="log_out">
           <Link to="/Login" onClick={logout}>
             <i className="bx bx-log-out"></i>

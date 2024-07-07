@@ -61,6 +61,12 @@ const SidebarM = () => {
             <span className="links_name">Amenity Court</span>
           </NavLink>
         </li>
+        <li>
+          <NavLink to="/Post">
+            <i className="bx bx-box"></i>
+            <span className="links_name">Post</span>
+          </NavLink>
+        </li>
         <li className="log_out">
           <Link to="/Login" onClick={logout}>
             <i className="bx bx-log-out"></i>

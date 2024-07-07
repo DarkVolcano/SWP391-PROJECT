@@ -32,6 +32,7 @@ const BookInfor = (props) => {
   });
 
   const [courtImage, setCourtImage] = useState("");
+  const [userImage, setUserImage] = useState("");
 
   useEffect(() => {
     axios
@@ -51,7 +52,6 @@ const BookInfor = (props) => {
           endTime: data.endTime,
           amenityId: data.amenityId,
         });
-        // Extract slot times for the sub courts
         const subCourtSlotTimes = data.subCourts.flatMap((subCourt) =>
           subCourt.slotTimes.map((slot) => ({
             slotId: slot.slotId,
@@ -79,6 +79,20 @@ const BookInfor = (props) => {
         console.error("Error fetching court image:", error);
       });
   }, [courtId]);
+
+  useEffect(() => {
+    axios
+      .get(`https://localhost:7088/api/Accounts/${user.accountId}/Image`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = URL.createObjectURL(response.data);
+        setUserImage(url);
+      })
+      .catch((error) => {
+        console.error("Error fetching court image:", error);
+      });
+  }, [user.accountId]);
 
   useEffect(() => {
     // Bail out if there is no date selected
@@ -213,11 +227,11 @@ const BookInfor = (props) => {
           {court.rules}
         </div>
       </div>
-      <InputGroup style={{ margin: "0 138px" }}>
+      <InputGroup style={{ justifyContent: "center", marginBottom: "40px" }}>
         <InputGroup.Text>
-          {user.image ? (
+          {userImage ? (
             <img
-              src={user.image}
+              src={userImage}
               alt="User"
               style={{ width: "30px", height: "30px" }}
             />
@@ -227,7 +241,12 @@ const BookInfor = (props) => {
             ></div>
           )}
         </InputGroup.Text>
-        <Form.Control as="textarea" aria-label="With textarea" rows={4} />
+        <Form.Control
+          as="textarea"
+          aria-label="With textarea"
+          rows={4}
+          className="col-sm-10"
+        />
       </InputGroup>
     </>
   );

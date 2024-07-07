@@ -43,6 +43,24 @@ const Court = () => {
   const [priceAvr, setPriceAvr] = useState("");
   const [courtImages, setCourtImages] = useState("");
 
+  const [subCourts, setSubCourts] = useState([
+    {
+      number: "",
+      status: true,
+      amenities: [],
+      slotTimes: [],
+    },
+  ]);
+
+  // State for managing amenities and slotTimes
+  const [slotTimes, setSlotTimes] = useState([]);
+  const addSubCourt = () => {
+    setSubCourts([
+      ...subCourts,
+      { number: "", status: true, amenities: [], slotTimes: [] },
+    ]);
+  };
+
   const [number, setNumber] = useState("");
   const [subStatus, setSubStatus] = useState(true);
 
@@ -196,8 +214,8 @@ const Court = () => {
         console.log(result.data);
         setEditAreaId(result.data.areaId);
         setEditCourtName(result.data.courtName);
-        setEditOpenTime(result.data.openTime);
-        setEditCloseTime(result.data.closeTime);
+        setEditOpenTime(result.data.openTime.trim());
+        setEditCloseTime(result.data.closeTime.trim());
         setEditRules(result.data.rules);
         setEditImage(result.data.image);
         setEditManagerId(result.data.managerId);
@@ -278,24 +296,6 @@ const Court = () => {
   //     });
   // };
 
-  const handleUpdateImage = (id) => {
-    const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
-    const formData = new FormData();
-    formData.append("courtImage", editCourtImages); // Update to use FormData
-
-    axios
-      .put(url, formData)
-      .then((result) => {
-        handleCloseImage();
-        getData();
-        clear();
-        toast.success("Court Image has been updated");
-      })
-      .catch((error) => {
-        toast.error("Error updating court image: " + error.message);
-      });
-  };
-
   // const handleUpdateImage = (id) => {
   //   const formData = new FormData();
   //   formData.append("courtImage", editImage);
@@ -315,6 +315,29 @@ const Court = () => {
   //       console.log("Error save image", error);
   //     });
   // };
+
+  const handleUpdateImage = () => {
+    const formData = new FormData();
+    formData.append("courtImage", editCourtImages);
+
+    const url = `https://localhost:7088/api/Courts/UploadCourtImage/${editCourtId}`;
+
+    axios
+      .put(url, formData)
+      .then((result) => {
+        handleCloseImage();
+        getData();
+        clear();
+        toast.success("Court Image has been updated");
+      })
+      .catch((error) => {
+        toast.error(
+          error.response?.data ??
+            "An error occurred while updating court image."
+        );
+        console.log("Error saving image", error);
+      });
+  };
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Courts";
@@ -537,6 +560,90 @@ const Court = () => {
     },
   ];
 
+  // const handleAddSubCourt = () => {
+  //   if (number === "") {
+  //     toast.error("Please enter a number for subcourt.");
+  //     return;
+  //   }
+
+  //   const newSubCourt = {
+  //     number: number,
+  //     status: subStatus,
+  //   };
+
+  //   setSubCourts([...subCourts, newSubCourt]);
+  //   setNumber("");
+  //   setSubStatus(true);
+  // };
+
+  // const handleDeleteSubCourt = (index) => {
+  //   const updatedSubCourts = [...subCourts];
+  //   updatedSubCourts.splice(index, 1);
+  //   setSubCourts(updatedSubCourts);
+  // };
+
+  // const handleSelectAmenity = (e) => {
+  //   const id = e.target.value;
+  //   const isChecked = e.target.checked;
+
+  //   if (isChecked) {
+  //     const amenity = amenities.find((amenity) => amenity.amenityId === id);
+  //     setSelectedAmenities([...selectedAmenities, amenity]);
+  //   } else {
+  //     const filteredAmenities = selectedAmenities.filter(
+  //       (amenity) => amenity.amenityId !== id
+  //     );
+  //     setSelectedAmenities(filteredAmenities);
+  //   }
+  // };
+
+  // const handleAddSlotTime = () => {
+  //   if (
+  //     startTime === "" ||
+  //     endTime === "" ||
+  //     weekdayPrice === "" ||
+  //     weekendPrice === ""
+  //   ) {
+  //     toast.error("Please fill in all fields for slot time.");
+  //     return;
+  //   }
+
+  //   const newSlotTime = {
+  //     startTime: startTime,
+  //     endTime: endTime,
+  //     weekdayPrice: weekdayPrice,
+  //     weekendPrice: weekendPrice,
+  //     status: slotStatus,
+  //   };
+
+  //   setSlotTimes([...slotTimes, newSlotTime]);
+  //   setStartTime("");
+  //   setEndTime("");
+  //   setWeekdayPrice("");
+  //   setWeekendPrice("");
+  //   setSlotStatus(true);
+  // };
+
+  // const handleDeleteSlotTime = (index) => {
+  //   const updatedSlotTimes = [...slotTimes];
+  //   updatedSlotTimes.splice(index, 1);
+  //   setSlotTimes(updatedSlotTimes);
+  // };
+
+  // Function to add Amenities for a specific SubCourt
+  const addAmenity = (subCourtIndex, amenity) => {
+    const updatedSubCourts = [...subCourts];
+    updatedSubCourts[subCourtIndex].amenities.push(amenity);
+    setSubCourts(updatedSubCourts);
+  };
+
+  // Function to add SlotTimes for a specific SubCourt
+  const addSlotTime = (subCourtIndex, slotTime) => {
+    const updatedSubCourts = [...subCourts];
+    updatedSubCourts[subCourtIndex].slotTimes.push(slotTime);
+    setSubCourts(updatedSubCourts);
+  };
+
   return (
     <>
       <Fragment>
@@ -717,6 +824,189 @@ const Court = () => {
                   />
                 </Col>
               </Row>
+              {/* <h5>SubCourts</h5>
+              <Form.Group className="mb-3">
+                <Form.Control
+                  type="text"
+                  placeholder="Enter SubCourt Number"
+                  value={number}
+                  onChange={(e) => setNumber(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="Active"
+                  checked={subStatus}
+                  onChange={handleSubActive}
+                />
+              </Form.Group>
+              <Button variant="success" onClick={handleAddSubCourt}>
+                Add SubCourt
+              </Button>
+              <br />
+              <br />
+              {subCourts.length > 0 && (
+                <Fragment>
+                  <h6>SubCourts List:</h6>
+                  {subCourts.map((subCourt, index) => (
+                    <Row key={index}>
+                      <Col>
+                        <p>{subCourt.number}</p>
+                      </Col>
+                      <Col>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDeleteSubCourt(index)}
+                        >
+                          <HighlightOffIcon />
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))}
+                </Fragment>
+              )}
+              <hr />
+              <h5>Amenities</h5>
+              {amenities.map((amenity) => (
+                <Form.Check
+                  key={amenity.amenityId}
+                  type="checkbox"
+                  id={amenity.amenityId}
+                  label={amenity.name}
+                  value={amenity.amenityId}
+                  checked={selectedAmenities.some(
+                    (selected) => selected.amenityId === amenity.amenityId
+                  )}
+                  onChange={handleSelectAmenity}
+                />
+              ))}
+              <hr />
+              <h5>SlotTimes</h5>
+              <Form.Group className="mb-3">
+                <Form.Label>Start Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>End Time</Form.Label>
+                <Form.Control
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Weekday Price</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Weekday Price"
+                  value={weekdayPrice}
+                  onChange={(e) => setWeekdayPrice(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label>Weekend Price</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Weekend Price"
+                  value={weekendPrice}
+                  onChange={(e) => setWeekendPrice(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Check
+                  type="checkbox"
+                  label="Active"
+                  checked={slotStatus}
+                  onChange={handleSlotActive}
+                />
+              </Form.Group>
+
+              <Button variant="success" onClick={handleAddSlotTime}>
+                Add SlotTime
+              </Button>
+              <br />
+              <br />
+              {slotTimes.length > 0 && (
+                <Fragment>
+                  <h6>SlotTimes List:</h6>
+                  {slotTimes.map((slotTime, index) => (
+                    <Row key={index}>
+                      <Col>
+                        <p>
+                          {slotTime.startTime} - {slotTime.endTime}
+                        </p>
+                      </Col>
+                      <Col>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDeleteSlotTime(index)}
+                        >
+                          <HighlightOffIcon />
+                        </Button>
+                      </Col>
+                    </Row>
+                  ))}
+                </Fragment>
+              )} */}
+
+              {/* {subCourts.map((subCourt, index) => (
+                <div key={index}>
+                  <input
+                    type="text"
+                    value={subCourt.number}
+                    onChange={(e) => {
+                      const updatedSubCourts = [...subCourts];
+                      updatedSubCourts[index].number = e.target.value;
+                      setSubCourts(updatedSubCourts);
+                    }}
+                  />
+                  {subCourt.amenities.map((amenity, amenityIndex) => (
+                    <input
+                      key={amenityIndex}
+                      type="text"
+                      value={amenity}
+                      onChange={(e) => {
+                        const updatedSubCourts = [...subCourts];
+                        updatedSubCourts[index].amenities[amenityIndex] =
+                          e.target.value;
+                        setSubCourts(updatedSubCourts);
+                      }}
+                    />
+                  ))}
+                  <button onClick={() => addAmenity(index, "")}>
+                    Add Amenity
+                  </button>
+
+                  {subCourt.slotTimes.map((slotTime, slotTimeIndex) => (
+                    <input
+                      key={slotTimeIndex}
+                      type="text"
+                      value={slotTime}
+                      onChange={(e) => {
+                        const updatedSubCourts = [...subCourts];
+                        updatedSubCourts[index].slotTimes[slotTimeIndex] =
+                          e.target.value;
+                        setSubCourts(updatedSubCourts);
+                      }}
+                    />
+                  ))}
+                  <button onClick={() => addSlotTime(index, "")}>
+                    Add SlotTime
+                  </button>
+                </div>
+              ))}
+
+              <button onClick={addSubCourt}>Add SubCourt</button> */}
+
               <h3>Sub</h3>
               <Row>
                 <Col sm={6}>

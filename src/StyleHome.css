@@ -487,6 +487,8 @@ body:has(.boPay) {
   background-color: white !important;
 }
 .input-group-text {
-  background-color: transparent;
-  border: none;
+  background-color: transparent !important;
+  border: none !important;
+  align-items: flex-start !important;
+  padding-top: 0 !important;
 }

@@ -16,6 +16,7 @@ import Area from "./Area";
 import About from "./AboutUS";
 import "./App.css";
 import Role from "./Role";
+import Post from "./Post";
 import "./StyleHome.css";
 import { UserProvider } from "./UserContext";
 import ComPay from "./ComPay";
@@ -74,6 +75,15 @@ const App = () => {
               <>
                 <Sidebar />
                 <Role />
+              </>
+            }
+          />
+          <Route
+            path="Post"
+            element={
+              <>
+                <SidebarM />
+                <Post />
               </>
             }
           />
