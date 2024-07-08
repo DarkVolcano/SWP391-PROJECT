@@ -4,11 +4,13 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../UserContext";
+import { Rating } from "@aws-amplify/ui-react";
 
 const News = () => {
   const [data, setData] = useState([]);
   const { setCourt } = useContext(UserContext);
   const [courtImages, setCourtImages] = useState({});
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getData();
@@ -21,31 +23,31 @@ const News = () => {
       .then((result) => {
         console.log(result.data);
         setData(result.data);
-        result.data.forEach((court) => {
-          fetchCourtImage(court.courtId);
-        });
+        // result.data.forEach((court) => {
+        //   fetchCourtImage(court.courtId);
+        // });
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const fetchCourtImage = (courtId) => {
-    axios
-      .get(`https://localhost:7088/api/Courts/${courtId}/Image`, {
-        responseType: "blob",
-      })
-      .then((response) => {
-        const url = URL.createObjectURL(response.data);
-        setCourtImages((prevImages) => ({
-          ...prevImages,
-          [courtId]: url,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error fetching court image:", error);
-      });
-  };
+  //   const fetchCourtImage = (courtId) => {
+  //     axios
+  //       .get(`https://localhost:7088/api/Courts/${courtId}/Image`, {
+  //         responseType: "blob",
+  //       })
+  //       .then((response) => {
+  //         const url = URL.createObjectURL(response.data);
+  //         setCourtImages((prevImages) => ({
+  //           ...prevImages,
+  //           [courtId]: url,
+  //         }));
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching court image:", error);
+  //       });
+  //   };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -57,9 +59,9 @@ const News = () => {
         console.log("Search result:", response.data.items);
         setData(response.data.items);
         toast.success("Search successfully");
-        response.data.items.forEach((court) => {
-          fetchCourtImage(court.courtId);
-        });
+        // response.data.items.forEach((court) => {
+        //   fetchCourtImage(court.courtId);
+        // });
       })
       .catch((error) => {
         console.error("Error searching:", error);
@@ -68,9 +70,9 @@ const News = () => {
       });
   };
 
-  const handleBookingClick = (court) => {
-    setCourt(court);
-  };
+  //   const handleBookingClick = (court) => {
+  //     setCourt(court);
+  //   };
 
   return (
     <div className="body-book">
@@ -95,12 +97,12 @@ const News = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             required
-            placeholder="Search post"
+            placeholder="Tìm tin tức"
           />
         </div>
         <div className="d-grid" style={{ margin: "0 12px" }}>
           <button type="submit" className="btn btn-primary">
-            Search
+            Tìm
           </button>
         </div>
       </form>
@@ -111,22 +113,29 @@ const News = () => {
               <div className="book-infor">
                 <div className="book-text">
                   <div className="book-image">
-                    {courtImages[item.courtId] ? (
+                    {/* {courtImages[item.courtId] ? (
                       <img src={courtImages[item.courtId]} alt="court" />
                     ) : (
                       <div>Loading image...</div>
-                    )}
+                    )} */}
                   </div>
-                  <div className="book-place">{item.courtName}</div>
+                  <div className="book-place">{item.context}</div>
                   <div className="book-slot">
-                    <NavLink
+                    {/* <NavLink
                       to={`/BookInfor/${item.courtId}`}
                       onClick={() => handleBookingClick(item)}
                     >
                       Đặt ngay
-                    </NavLink>
+                    </NavLink> */}
                   </div>
-                  <div className="book-con">Địa chỉ: {item.address}</div>
+                  <Rating
+                    value={item.totalRate}
+                    maxValue={5}
+                    readOnly
+                    fillColor="#FFCE00"
+                    emptyColor="hsl(210, 5%, 94%)"
+                  />
+                  <div className="book-con">Nội dung: {item.title}</div>
                 </div>
               </div>
             </div>

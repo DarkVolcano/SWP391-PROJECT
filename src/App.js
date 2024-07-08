@@ -126,6 +126,16 @@ const App = () => {
             }
           />
           <Route
+            path="New"
+            element={
+              <>
+                <Header />
+                <News />
+                <Footer />
+              </>
+            }
+          />
+          <Route
             path="AboutUS"
             element={
               <>
