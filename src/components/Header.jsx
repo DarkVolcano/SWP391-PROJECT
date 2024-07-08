@@ -3,10 +3,12 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import "../css/StyleHome.css";
 import { UserContext } from "../UserContext";
 import "https://cdn.lordicon.com/lordicon.js";
+import axios from "axios";
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
   const navigate = useNavigate();
+  const [userImage, setUserImage] = useState("");
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -32,10 +34,19 @@ const Header = () => {
     };
   }, [dropdownOpen]);
 
-  const handleSignOut = () => {
-    logout();
-    navigate("/");
-  };
+  useEffect(() => {
+    axios
+      .get(`https://localhost:7088/api/Accounts/${user.accountId}/Image`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = URL.createObjectURL(response.data);
+        setUserImage(url);
+      })
+      .catch((error) => {
+        console.error("Error fetching user image:", error);
+      });
+  }, [user.accountId]);
 
   return (
     <div className="image-container">
@@ -110,7 +121,26 @@ const Header = () => {
                 style={{ width: "max-content" }}
               >
                 Hello {user.name || user.accountName}
-                <img src={user.picture || user.image} alt="pictures" />
+                {/* <img src={user.picture || user.image} alt="pictures" /> */}
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt="User"
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "20px",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      backgroundColor: "gray",
+                    }}
+                  ></div>
+                )}
               </button>
               <div
                 id="myDropdown"
@@ -120,9 +150,9 @@ const Header = () => {
                   Thông tin cá nhân
                 </NavLink>
                 <Link to="/Login">Đăng xuất</Link>
-                <>
+                {/* <>
                   <button onClick={handleSignOut}>Sign Out</button>
-                </>
+                </> */}
               </div>
             </div>
           </div>
