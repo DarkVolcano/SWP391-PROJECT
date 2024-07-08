@@ -4,6 +4,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../UserContext";
+import { Rating } from "@aws-amplify/ui-react";
 
 const Book = () => {
   const [data, setData] = useState([]);
@@ -146,6 +147,13 @@ const Book = () => {
                   <div className="book-con">
                     Tiêu chuẩn sân: Tiêu chuẩn quốc tế
                   </div>
+                  <Rating
+                    value={item.totalRate}
+                    maxValue={5}
+                    readOnly
+                    fillColor="#FFCE00"
+                    emptyColor="hsl(210, 5%, 94%)"
+                  />
                 </div>
                 <div className="book-image">
                   {courtImages[item.courtId] ? (
