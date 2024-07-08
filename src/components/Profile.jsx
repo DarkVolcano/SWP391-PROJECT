@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import "./Profile.css";
+import "../css/Profile.css";
 import { Button } from "react-bootstrap";
 
 export const Profile = () => {

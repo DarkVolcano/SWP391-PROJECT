@@ -3,24 +3,21 @@ import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserContext } from "./UserContext";
+import { UserContext } from "../UserContext";
 
 const Book = () => {
   const [data, setData] = useState([]);
-  const [areas, setAreas] = useState([]);
-  const [search, setSearch] = useState("");
   const { setCourt } = useContext(UserContext);
   const [courtImages, setCourtImages] = useState({});
 
   useEffect(() => {
     getData();
-    fetchArea();
-    document.title = "Đặt lịch";
+    document.title = "Tin tức";
   }, []);
 
   const getData = () => {
     axios
-      .get("https://localhost:7088/api/Courts")
+      .get("https://localhost:7088/api/Posts")
       .then((result) => {
         console.log(result.data);
         setData(result.data);
@@ -50,21 +47,9 @@ const Book = () => {
       });
   };
 
-  const fetchArea = () => {
-    axios
-      .get("https://localhost:7088/api/Areas")
-      .then((response) => {
-        console.log(response.data);
-        setAreas(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   const handleSearch = (e) => {
     e.preventDefault();
-    const url = `https://localhost:7088/api/Courts/Search-Court?searchTerm=${search}`;
+    const url = `https://localhost:7088/api/Posts/Search-Post?searchTerm=${search}`;
 
     axios
       .get(url)
@@ -110,7 +95,7 @@ const Book = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             required
-            placeholder="Search court name"
+            placeholder="Search post"
           />
         </div>
         <div className="d-grid" style={{ margin: "0 12px" }}>
@@ -121,14 +106,19 @@ const Book = () => {
       </form>
       {data && data.length > 0 ? (
         data.map((item, index) => {
-          const area = areas.find((area) => area.areaId === item.areaId);
           return (
             <div className="book-box" key={index}>
               <div className="book-infor">
                 <div className="book-text">
+                  <div className="book-image">
+                    {courtImages[item.courtId] ? (
+                      <img src={courtImages[item.courtId]} alt="court" />
+                    ) : (
+                      <div>Loading image...</div>
+                    )}
+                  </div>
                   <div className="book-place">{item.courtName}</div>
                   <div className="book-slot">
-                    {item.openTime} - {item.closeTime}
                     <NavLink
                       to={`/BookInfor/${item.courtId}`}
                       onClick={() => handleBookingClick(item)}
@@ -136,23 +126,7 @@ const Book = () => {
                       Đặt ngay
                     </NavLink>
                   </div>
-                  <div className="book-price">
-                    Giá tham khảo: {item.priceAvr} VND
-                  </div>
-                  <div className="book-con">
-                    Khu vực: {area ? area.location : "Unknown"}
-                  </div>
                   <div className="book-con">Địa chỉ: {item.address}</div>
-                  <div className="book-con">
-                    Tiêu chuẩn sân: Tiêu chuẩn quốc tế
-                  </div>
-                </div>
-                <div className="book-image">
-                  {courtImages[item.courtId] ? (
-                    <img src={courtImages[item.courtId]} alt="court" />
-                  ) : (
-                    <div>Loading image...</div>
-                  )}
                 </div>
               </div>
             </div>

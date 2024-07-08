@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
-import "./StyleDashboardManager.css";
-import { UserContext } from "./UserContext";
+import "../css/StyleDashboardAdmin.css";
+import { UserContext } from "../UserContext";
 import axios from "axios";
 
-const DashboardManager = () => {
+const Dashboard = () => {
   const [user, setUser] = useState(0);
   const [court, setCourt] = useState(0);
   const [post, setPost] = useState(0);
@@ -12,7 +12,7 @@ const DashboardManager = () => {
   const [noticeVisible, setNoticeVisible] = useState(false);
 
   React.useEffect(() => {
-    let sidebar = document.querySelector(".sidebarM");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
@@ -35,7 +35,7 @@ const DashboardManager = () => {
 
   useEffect(() => {
     getData();
-    document.title = "Manager Dashboard";
+    document.title = "Admin Dashboard";
   }, []);
 
   const getData = () => {
@@ -99,7 +99,7 @@ const DashboardManager = () => {
   };
 
   return (
-    <section className="home-section-M">
+    <section className="home-section">
       <nav>
         <div className="sidebar-button">
           <i className="bx bx-menu sidebarBtn"></i>
@@ -107,7 +107,7 @@ const DashboardManager = () => {
         </div>
       </nav>
 
-      <div className="home-content-M">
+      <div className="home-content">
         <div className="overview-boxes">
           <div className="box">
             <div className="right-side">
@@ -154,4 +154,4 @@ const DashboardManager = () => {
   );
 };
 
-export default DashboardManager;
+export default Dashboard;

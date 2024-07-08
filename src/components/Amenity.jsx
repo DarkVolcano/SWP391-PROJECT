@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Fragment, useContext } from "react";
-import "./StyleDashboardAdmin.css";
+import React, { useState, useEffect, Fragment } from "react";
+import "../css/StyleDashboardManager.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -11,17 +11,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { UserContext } from "./UserContext";
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
-const Post = () => {
+const Amenity = () => {
   useEffect(() => {
-    let sidebar, sidebarBtn;
-    if (user.roleId === 1) {
-      sidebar = document.querySelector(".sidebarA");
-    } else if (user.roleId === 3) {
-      sidebar = document.querySelector(".sidebarM");
-    }
-    sidebarBtn = document.querySelector(".sidebarBtn");
+    let sidebar = document.querySelector(".sidebarM");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
       if (sidebar.classList.contains("active")) {
@@ -35,30 +31,24 @@ const Post = () => {
   const [data, setData] = useState([]);
   const [show, setShow] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deletePostId, setDeletePostId] = useState("");
+  const [deleteAmenityId, setDeleteAmenityId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const { user } = useContext(UserContext);
 
-  const [account, setAccount] = useState("");
-  const [context, setContext] = useState("");
-  const [totalRate, setTotalRate] = useState("");
-  const [image, setImage] = useState("");
-  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState(true);
 
-  const [editPostId, setEditPostId] = useState("");
-  const [editContext, setEditContext] = useState("");
-  const [editTotalRate, setEditTotalRate] = useState("");
-  const [editImage, setEditImage] = useState("");
-  const [editTitle, setEditTitle] = useState("");
+  const [editAmenityId, setEditAmenityId] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [editStatus, setEditStatus] = useState(true);
 
   useEffect(() => {
     getData();
-    document.title = "Post Management";
+    document.title = "Amenity Management";
   }, []);
 
   const getData = async () => {
     try {
-      const result = await axios.get("https://localhost:7088/api/Posts");
+      const result = await axios.get("https://localhost:7088/api/Amenities");
       console.log(result.data);
       setData(result.data);
     } catch (error) {
@@ -70,7 +60,7 @@ const Post = () => {
   const handleShow = () => setShow(true);
   const handleDeleteClose = () => setShowDeleteModal(false);
   const handleDeleteShow = (id) => {
-    setDeletePostId(id);
+    setDeleteAmenityId(id);
     setShowDeleteModal(true);
   };
   const handleCreateClose = () => setShowCreateModal(false);
@@ -78,11 +68,11 @@ const Post = () => {
 
   const handleDelete = () => {
     axios
-      .delete(`https://localhost:7088/api/Posts/${deletePostId}`)
+      .delete(`https://localhost:7088/api/Amenities/${deleteAmenityId}`)
       .then((result) => {
         handleDeleteClose();
         getData();
-        toast.success("Post has been delete");
+        toast.success("Amenity has been delete");
       })
       .catch((error) => {
         toast.error(error);
@@ -92,14 +82,12 @@ const Post = () => {
   const handleEdit = (id) => {
     handleShow();
     axios
-      .get(`https://localhost:7088/api/Posts/${id}`)
+      .get(`https://localhost:7088/api/Amenities/${id}`)
       .then((result) => {
         console.log(result.data);
-        setEditContext(result.data.context);
-        setEditTotalRate(result.data.totalRate);
-        setEditImage(result.data.image);
-        setEditTitle(result.data.title.trim());
-        setEditPostId(result.data.postId);
+        setEditDescription(result.data.description);
+        setEditStatus(result.data.status);
+        setEditAmenityId(result.data.amenityId);
       })
       .catch((error) => {
         console.log(error);
@@ -107,13 +95,11 @@ const Post = () => {
   };
 
   const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Posts/${editPostId}`;
+    const url = `https://localhost:7088/api/Amenities/${editAmenityId}`;
     const data = {
-      postId: editPostId,
-      context: editContext,
-      totalRate: editTotalRate,
-      image: editImage,
-      title: editTitle,
+      amenityId: editAmenityId,
+      description: editDescription,
+      status: editStatus,
     };
 
     axios
@@ -122,7 +108,7 @@ const Post = () => {
         handleClose();
         getData();
         clear();
-        toast.success("Post has been update");
+        toast.success("Amenity has been update");
       })
       .catch((error) => {
         toast.error(error);
@@ -130,13 +116,10 @@ const Post = () => {
   };
 
   const handleSave = () => {
-    const url = "https://localhost:7088/api/Posts";
+    const url = "https://localhost:7088/api/Amenities";
     const data = {
-      accountId: user.accountId,
-      context: context,
-      totalRate: totalRate,
-      image: image,
-      title: title,
+      description: description,
+      status: status,
     };
 
     axios
@@ -145,7 +128,7 @@ const Post = () => {
         getData();
         clear();
         handleCreateClose();
-        toast.success("Post has been added");
+        toast.success("Amenity has been added");
       })
       .catch((error) => {
         toast.error(error);
@@ -153,24 +136,40 @@ const Post = () => {
   };
 
   const clear = () => {
-    setContext("");
-    setTotalRate(0);
-    setImage("");
-    setTitle("");
-    setEditContext("");
-    setEditTotalRate("");
-    setEditImage("");
-    setEditTitle("");
-    setEditPostId("");
+    setDescription("");
+    setStatus(true);
+    setEditDescription("");
+    setEditStatus(false);
+    setEditAmenityId("");
+  };
+
+  const handleActiveChange = (e) => {
+    if (e.target.checked) {
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
+  };
+
+  const handleEditActiveChange = (e) => {
+    if (e.target.checked) {
+      setEditStatus(true);
+    } else {
+      setEditStatus(false);
+    }
   };
 
   const columns = [
-    { field: "postId", headerName: "PostID" },
-    { field: "accountId", headerName: "Account" },
-    { field: "context", headerName: "Context" },
-    { field: "totalRate", headerName: "Total Rate" },
-    { field: "image", headerName: "Image" },
-    { field: "title", headerName: "Title" },
+    { field: "amenityId", headerName: "AmenityID" },
+    { field: "description", headerName: "Description" },
+    {
+      field: "status",
+      headerName: "Status",
+      renderCell: (params) => {
+        const { status } = params.row;
+        return status ? <TaskAltIcon /> : <HighlightOffIcon />;
+      },
+    },
     {
       field: "Action",
       type: "Actions",
@@ -183,13 +182,13 @@ const Post = () => {
             label="Edit"
             className="textPrimary"
             color="inherit"
-            onClick={() => handleEdit(params.row.postId)}
+            onClick={() => handleEdit(params.row.amenityId)}
           />
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             color="inherit"
-            onClick={() => handleDeleteShow(params.row.postId)}
+            onClick={() => handleDeleteShow(params.row.amenityId)}
           />
         </>
       ),
@@ -200,19 +199,14 @@ const Post = () => {
     <>
       <Fragment>
         <ToastContainer />
-        <section
-          className={user.roleId === 1 ? "home-section" : "home-section-M"}
-          style={{ padding: "0 27px" }}
-        >
+        <section className="home-section-M" style={{ padding: "0 27px" }}>
           <nav>
             <div className="sidebar-button">
               <i className="bx bx-menu sidebarBtn"></i>
-              <span className="dashboard">Post</span>
+              <span className="dashboard">Amenity</span>
             </div>
           </nav>
-          <div
-            className={user.roleId === 1 ? "home-content" : "home-content-M"}
-          >
+          <div className="home-content-M">
             <div className="infor">
               <div className="total">{data.length} total</div>
               <div className="function">
@@ -228,7 +222,7 @@ const Post = () => {
 
           <div style={{ width: "100%" }}>
             <DataGrid
-              getRowId={(data) => data.postId}
+              getRowId={(data) => data.amenityId}
               columns={columns}
               rows={data}
               initialState={{
@@ -253,7 +247,7 @@ const Post = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Create Post</Modal.Title>
+              <Modal.Title>Create Amenity</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -261,46 +255,18 @@ const Post = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter account"
-                    value={user.accountId}
-                    onChange={(e) => setAccount(e.target.value)}
+                    placeholder="Enter location"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter context"
-                    value={context}
-                    onChange={(e) => setContext(e.target.value)}
+                    type="checkbox"
+                    checked={status}
+                    onChange={handleActiveChange}
                   />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter rating"
-                    value={totalRate}
-                    onChange={(e) => setTotalRate(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter image"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
+                  <label>Status</label>
                 </Col>
               </Row>
             </Modal.Body>
@@ -322,7 +288,7 @@ const Post = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Post</Modal.Title>
+              <Modal.Title>Modify / Update Amenity</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -330,37 +296,19 @@ const Post = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter context"
-                    value={editContext}
-                    onChange={(e) => setEditContext(e.target.value)}
+                    placeholder="Enter location"
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
                   />
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter total rate"
-                    value={editTotalRate}
-                    onChange={(e) => setEditTotalRate(e.target.value)}
+                    type="checkbox"
+                    checked={editStatus}
+                    onChange={(e) => handleEditActiveChange(e)}
+                    value={editStatus}
                   />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter image"
-                    value={editImage}
-                    onChange={(e) => setEditImage(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter title"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                  />
+                  <label>Status</label>
                 </Col>
               </Row>
             </Modal.Body>
@@ -378,7 +326,9 @@ const Post = () => {
             <Modal.Header closeButton>
               <Modal.Title>Delete Confirmation</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Are you sure you want to delete this role?</Modal.Body>
+            <Modal.Body>
+              Are you sure you want to delete this amenity?
+            </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleDeleteClose}>
                 Cancel
@@ -394,4 +344,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default Amenity;

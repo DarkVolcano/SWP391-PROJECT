@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import "./StyleDashboardAdmin.css";
+import "../css/StyleDashboardAdmin.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -9,11 +9,12 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
-const Users = () => {
+const Area = () => {
   useEffect(() => {
     let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
@@ -28,53 +29,38 @@ const Users = () => {
   }, []);
 
   const [data, setData] = useState([]);
-  const [roles, setRoles] = useState([]);
+  const [show, setShow] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteAccountId, setDeleteAccountId] = useState("");
+  const [deleteAreaId, setDeleteAreaId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const [accountName, setAccountName] = useState("");
-  const [password, setPassword] = useState("password123");
-  const [fullname, setFullname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [roleID, setRoleID] = useState("");
+  const [location, setLocation] = useState("");
   const [status, setStatus] = useState(true);
-  const [image, setImage] = useState("");
+
+  const [editAreaId, setEditAreaId] = useState("");
+  const [editLocation, setEditLocation] = useState("");
+  const [editStatus, setEditStatus] = useState(true);
 
   useEffect(() => {
     getData();
-    fetchRoles();
-    document.title = "User Management";
+    document.title = "Area Management";
   }, []);
 
-  const getData = () => {
-    axios
-      .get("https://localhost:7088/api/Accounts")
-      .then((result) => {
-        console.log(result.data);
-        setData(result.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const getData = async () => {
+    try {
+      const result = await axios.get("https://localhost:7088/api/Areas");
+      console.log(result.data);
+      setData(result.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
-  const fetchRoles = () => {
-    axios
-      .get("https://localhost:7088/api/Roles")
-      .then((response) => {
-        console.log(response.data);
-        setRoles(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const handleDeleteClose = () => setShowDeleteModal(false);
   const handleDeleteShow = (id) => {
-    setDeleteAccountId(id);
+    setDeleteAreaId(id);
     setShowDeleteModal(true);
   };
   const handleCreateClose = () => setShowCreateModal(false);
@@ -82,11 +68,47 @@ const Users = () => {
 
   const handleDelete = () => {
     axios
-      .delete(`https://localhost:7088/api/Accounts/id?id=${deleteAccountId}`)
+      .delete(`https://localhost:7088/api/Areas/${deleteAreaId}`)
       .then((result) => {
         handleDeleteClose();
         getData();
-        toast.success("Account has been delete");
+        toast.success("Area has been delete");
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
+
+  const handleEdit = (id) => {
+    handleShow();
+    axios
+      .get(`https://localhost:7088/api/Areas/${id}`)
+      .then((result) => {
+        console.log(result.data);
+        setEditLocation(result.data.location);
+        setEditStatus(result.data.status);
+        setEditAreaId(result.data.areaId);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleUpdate = (id) => {
+    const url = `https://localhost:7088/api/Areas/${editAreaId}`;
+    const data = {
+      areaId: editAreaId,
+      location: editLocation,
+      status: editStatus,
+    };
+
+    axios
+      .put(url, data)
+      .then((result) => {
+        handleClose();
+        getData();
+        clear();
+        toast.success("Area has been update");
       })
       .catch((error) => {
         toast.error(error);
@@ -94,16 +116,10 @@ const Users = () => {
   };
 
   const handleSave = () => {
-    const url = "https://localhost:7088/api/Accounts/CreateAccount";
+    const url = "https://localhost:7088/api/Areas";
     const data = {
-      accountName: accountName,
-      password: password,
-      fullName: fullname,
-      phone: phone,
-      email: email,
-      roleId: roleID,
+      location: location,
       status: status,
-      image: image,
     };
 
     axios
@@ -112,7 +128,7 @@ const Users = () => {
         getData();
         clear();
         handleCreateClose();
-        toast.success("Account has been added");
+        toast.success("Area has been added");
       })
       .catch((error) => {
         toast.error(error);
@@ -120,14 +136,11 @@ const Users = () => {
   };
 
   const clear = () => {
-    setAccountName("");
-    setPassword("");
-    setFullname("");
-    setPhone("");
-    setEmail("");
-    setRoleID("");
+    setLocation("");
     setStatus(true);
-    setImage("");
+    setEditLocation("");
+    setEditStatus(false);
+    setEditAreaId("");
   };
 
   const handleActiveChange = (e) => {
@@ -138,13 +151,17 @@ const Users = () => {
     }
   };
 
+  const handleEditActiveChange = (e) => {
+    if (e.target.checked) {
+      setEditStatus(true);
+    } else {
+      setEditStatus(false);
+    }
+  };
+
   const columns = [
-    { field: "accountId", headerName: "AccountID" },
-    { field: "accountName", headerName: "Account Name" },
-    { field: "fullName", headerName: "Full Name" },
-    { field: "phone", headerName: "Phone" },
-    { field: "email", headerName: "Email" },
-    { field: "roleId", headerName: "Role" },
+    { field: "areaId", headerName: "AreaID" },
+    { field: "location", headerName: "Location" },
     {
       field: "status",
       headerName: "Status",
@@ -158,17 +175,23 @@ const Users = () => {
       type: "Actions",
       headerName: "Actions",
       cellClassName: "actions",
-      renderCell: (params) => {
-        const { accountId } = params.row;
-        return [
+      renderCell: (params) => (
+        <>
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            color="inherit"
+            onClick={() => handleEdit(params.row.areaId)}
+          />
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             color="inherit"
-            onClick={() => handleDeleteShow(accountId)}
-          />,
-        ];
-      },
+            onClick={() => handleDeleteShow(params.row.areaId)}
+          />
+        </>
+      ),
     },
   ];
 
@@ -180,7 +203,7 @@ const Users = () => {
           <nav>
             <div className="sidebar-button">
               <i className="bx bx-menu sidebarBtn"></i>
-              <span className="dashboard">Users</span>
+              <span className="dashboard">Area</span>
             </div>
           </nav>
           <div className="home-content">
@@ -199,7 +222,7 @@ const Users = () => {
 
           <div style={{ width: "100%" }}>
             <DataGrid
-              getRowId={(data) => data.accountId}
+              getRowId={(data) => data.areaId}
               columns={columns}
               rows={data}
               initialState={{
@@ -224,7 +247,7 @@ const Users = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Create Account</Modal.Title>
+              <Modal.Title>Create Area</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -232,60 +255,10 @@ const Users = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter account name"
-                    value={accountName}
-                    onChange={(e) => setAccountName(e.target.value)}
+                    placeholder="Enter location"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
                   />
-                </Col>
-                <Col sm={12} style={{ display: "none" }}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter full name"
-                    value={fullname}
-                    onChange={(e) => setFullname(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <select
-                    className="form-control mb-3"
-                    value={roleID}
-                    onChange={(e) => setRoleID(e.target.value)}
-                  >
-                    <option value="">Select Role</option>
-                    {roles.map((role) => (
-                      <option key={role.roleId} value={role.roleId}>
-                        {role.roleName}
-                      </option>
-                    ))}
-                  </select>
                 </Col>
                 <Col sm={12}>
                   <input
@@ -307,13 +280,53 @@ const Users = () => {
             </Modal.Footer>
           </Modal>
 
+          <Modal
+            show={show}
+            onHide={handleClose}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Modify / Update Area</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Row>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter location"
+                    value={editLocation}
+                    onChange={(e) => setEditLocation(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="checkbox"
+                    checked={editStatus}
+                    onChange={(e) => handleEditActiveChange(e)}
+                    value={editStatus}
+                  />
+                  <label>Status</label>
+                </Col>
+              </Row>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleUpdate}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           <Modal show={showDeleteModal} onHide={handleDeleteClose} centered>
             <Modal.Header closeButton>
               <Modal.Title>Delete Confirmation</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              Are you sure you want to delete this account?
-            </Modal.Body>
+            <Modal.Body>Are you sure you want to delete this area?</Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleDeleteClose}>
                 Cancel
@@ -329,4 +342,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Area;

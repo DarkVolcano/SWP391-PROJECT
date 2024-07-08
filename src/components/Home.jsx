@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./StyleHome.css";
+import "../css/StyleHome.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

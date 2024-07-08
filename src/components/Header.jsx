@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import "./StyleHome.css";
-import { UserContext } from "./UserContext";
+import "../css/StyleHome.css";
+import { UserContext } from "../UserContext";
 import "https://cdn.lordicon.com/lordicon.js";
 
 const Header = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import "./StyleDashboardManager.css";
+import "../css/StyleDashboardAdmin.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -9,14 +9,13 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
-const Amenity = () => {
+const Users = () => {
   useEffect(() => {
-    let sidebar = document.querySelector(".sidebarM");
+    let sidebar = document.querySelector(".sidebarA");
     let sidebarBtn = document.querySelector(".sidebarBtn");
     sidebarBtn.onclick = function () {
       sidebar.classList.toggle("active");
@@ -29,38 +28,53 @@ const Amenity = () => {
   }, []);
 
   const [data, setData] = useState([]);
-  const [show, setShow] = useState(false);
+  const [roles, setRoles] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteAmenityId, setDeleteAmenityId] = useState("");
+  const [deleteAccountId, setDeleteAccountId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const [description, setDescription] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [password, setPassword] = useState("password123");
+  const [fullname, setFullname] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [roleID, setRoleID] = useState("");
   const [status, setStatus] = useState(true);
-
-  const [editAmenityId, setEditAmenityId] = useState("");
-  const [editDescription, setEditDescription] = useState("");
-  const [editStatus, setEditStatus] = useState(true);
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     getData();
-    document.title = "Amenity Management";
+    fetchRoles();
+    document.title = "User Management";
   }, []);
 
-  const getData = async () => {
-    try {
-      const result = await axios.get("https://localhost:7088/api/Amenities");
-      console.log(result.data);
-      setData(result.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const getData = () => {
+    axios
+      .get("https://localhost:7088/api/Accounts")
+      .then((result) => {
+        console.log(result.data);
+        setData(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const fetchRoles = () => {
+    axios
+      .get("https://localhost:7088/api/Roles")
+      .then((response) => {
+        console.log(response.data);
+        setRoles(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleDeleteClose = () => setShowDeleteModal(false);
   const handleDeleteShow = (id) => {
-    setDeleteAmenityId(id);
+    setDeleteAccountId(id);
     setShowDeleteModal(true);
   };
   const handleCreateClose = () => setShowCreateModal(false);
@@ -68,47 +82,11 @@ const Amenity = () => {
 
   const handleDelete = () => {
     axios
-      .delete(`https://localhost:7088/api/Amenities/${deleteAmenityId}`)
+      .delete(`https://localhost:7088/api/Accounts/id?id=${deleteAccountId}`)
       .then((result) => {
         handleDeleteClose();
         getData();
-        toast.success("Amenity has been delete");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
-  };
-
-  const handleEdit = (id) => {
-    handleShow();
-    axios
-      .get(`https://localhost:7088/api/Amenities/${id}`)
-      .then((result) => {
-        console.log(result.data);
-        setEditDescription(result.data.description);
-        setEditStatus(result.data.status);
-        setEditAmenityId(result.data.amenityId);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Amenities/${editAmenityId}`;
-    const data = {
-      amenityId: editAmenityId,
-      description: editDescription,
-      status: editStatus,
-    };
-
-    axios
-      .put(url, data)
-      .then((result) => {
-        handleClose();
-        getData();
-        clear();
-        toast.success("Amenity has been update");
+        toast.success("Account has been delete");
       })
       .catch((error) => {
         toast.error(error);
@@ -116,10 +94,16 @@ const Amenity = () => {
   };
 
   const handleSave = () => {
-    const url = "https://localhost:7088/api/Amenities";
+    const url = "https://localhost:7088/api/Accounts/CreateAccount";
     const data = {
-      description: description,
+      accountName: accountName,
+      password: password,
+      fullName: fullname,
+      phone: phone,
+      email: email,
+      roleId: roleID,
       status: status,
+      image: image,
     };
 
     axios
@@ -128,7 +112,7 @@ const Amenity = () => {
         getData();
         clear();
         handleCreateClose();
-        toast.success("Amenity has been added");
+        toast.success("Account has been added");
       })
       .catch((error) => {
         toast.error(error);
@@ -136,11 +120,14 @@ const Amenity = () => {
   };
 
   const clear = () => {
-    setDescription("");
+    setAccountName("");
+    setPassword("");
+    setFullname("");
+    setPhone("");
+    setEmail("");
+    setRoleID("");
     setStatus(true);
-    setEditDescription("");
-    setEditStatus(false);
-    setEditAmenityId("");
+    setImage("");
   };
 
   const handleActiveChange = (e) => {
@@ -151,17 +138,13 @@ const Amenity = () => {
     }
   };
 
-  const handleEditActiveChange = (e) => {
-    if (e.target.checked) {
-      setEditStatus(true);
-    } else {
-      setEditStatus(false);
-    }
-  };
-
   const columns = [
-    { field: "amenityId", headerName: "AmenityID" },
-    { field: "description", headerName: "Description" },
+    { field: "accountId", headerName: "AccountID" },
+    { field: "accountName", headerName: "Account Name" },
+    { field: "fullName", headerName: "Full Name" },
+    { field: "phone", headerName: "Phone" },
+    { field: "email", headerName: "Email" },
+    { field: "roleId", headerName: "Role" },
     {
       field: "status",
       headerName: "Status",
@@ -175,23 +158,17 @@ const Amenity = () => {
       type: "Actions",
       headerName: "Actions",
       cellClassName: "actions",
-      renderCell: (params) => (
-        <>
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            color="inherit"
-            onClick={() => handleEdit(params.row.amenityId)}
-          />
+      renderCell: (params) => {
+        const { accountId } = params.row;
+        return [
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete"
             color="inherit"
-            onClick={() => handleDeleteShow(params.row.amenityId)}
-          />
-        </>
-      ),
+            onClick={() => handleDeleteShow(accountId)}
+          />,
+        ];
+      },
     },
   ];
 
@@ -199,14 +176,14 @@ const Amenity = () => {
     <>
       <Fragment>
         <ToastContainer />
-        <section className="home-section-M" style={{ padding: "0 27px" }}>
+        <section className="home-section" style={{ padding: "0 27px" }}>
           <nav>
             <div className="sidebar-button">
               <i className="bx bx-menu sidebarBtn"></i>
-              <span className="dashboard">Amenity</span>
+              <span className="dashboard">Users</span>
             </div>
           </nav>
-          <div className="home-content-M">
+          <div className="home-content">
             <div className="infor">
               <div className="total">{data.length} total</div>
               <div className="function">
@@ -222,7 +199,7 @@ const Amenity = () => {
 
           <div style={{ width: "100%" }}>
             <DataGrid
-              getRowId={(data) => data.amenityId}
+              getRowId={(data) => data.accountId}
               columns={columns}
               rows={data}
               initialState={{
@@ -247,7 +224,7 @@ const Amenity = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title>Create Amenity</Modal.Title>
+              <Modal.Title>Create Account</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -255,10 +232,60 @@ const Amenity = () => {
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter location"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter account name"
+                    value={accountName}
+                    onChange={(e) => setAccountName(e.target.value)}
                   />
+                </Col>
+                <Col sm={12} style={{ display: "none" }}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter full name"
+                    value={fullname}
+                    onChange={(e) => setFullname(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <input
+                    type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Col>
+                <Col sm={12}>
+                  <select
+                    className="form-control mb-3"
+                    value={roleID}
+                    onChange={(e) => setRoleID(e.target.value)}
+                  >
+                    <option value="">Select Role</option>
+                    {roles.map((role) => (
+                      <option key={role.roleId} value={role.roleId}>
+                        {role.roleName}
+                      </option>
+                    ))}
+                  </select>
                 </Col>
                 <Col sm={12}>
                   <input
@@ -280,54 +307,12 @@ const Amenity = () => {
             </Modal.Footer>
           </Modal>
 
-          <Modal
-            show={show}
-            onHide={handleClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Amenity</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter location"
-                    value={editDescription}
-                    onChange={(e) => setEditDescription(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="checkbox"
-                    checked={editStatus}
-                    onChange={(e) => handleEditActiveChange(e)}
-                    value={editStatus}
-                  />
-                  <label>Status</label>
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleUpdate}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
           <Modal show={showDeleteModal} onHide={handleDeleteClose} centered>
             <Modal.Header closeButton>
               <Modal.Title>Delete Confirmation</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              Are you sure you want to delete this amenity?
+              Are you sure you want to delete this account?
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleDeleteClose}>
@@ -344,4 +329,4 @@ const Amenity = () => {
   );
 };
 
-export default Amenity;
+export default Users;
