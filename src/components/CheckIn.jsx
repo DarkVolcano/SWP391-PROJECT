@@ -18,7 +18,7 @@ const CheckIn = () => {
     };
 
     axios
-      .post(url, data)
+      .put(url, data)
       .then((result) => {
         clear();
         toast.success("Check in successfully");
@@ -79,6 +79,32 @@ const CheckIn = () => {
       )}
       {bookingDetails && !showInputForm && (
         <form className="check-input">
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputCourtid"
+              placeholder="Court id"
+              value={bookingDetails.customerName}
+              disabled
+            ></input>
+            <label htmlFor="outputCourtid" className="form-label">
+              Tên khách hàng
+            </label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="text"
+              className="form-control"
+              id="outputCourtid"
+              placeholder="Court id"
+              value={bookingDetails.fullName}
+              disabled
+            ></input>
+            <label htmlFor="outputCourtid" className="form-label">
+              Họ & Tên
+            </label>
+          </div>
           <div className="form-floating mb-3">
             <input
               type="text"
