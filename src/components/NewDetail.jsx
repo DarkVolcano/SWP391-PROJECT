@@ -14,8 +14,13 @@ const NewsDetail = () => {
 
   useEffect(() => {
     getData();
-    document.title = "Chi tiết tin tức";
   }, [postId]);
+
+  useEffect(() => {
+    if (data.context) {
+      document.title = data.context;
+    }
+  }, [data.context]);
 
   useEffect(() => {
     axios
