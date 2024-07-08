@@ -91,9 +91,9 @@ const Header = () => {
             <NavLink to="/BookInStaff">Thủ tục</NavLink>
           </li>
         )}
-        {/* <li>
-          <a href="">SUPPORT</a>
-        </li> */}
+        <li>
+          <NavLink to="/New">Tin tức</NavLink>
+        </li>
         {user ? (
           <div class="dropdowns">
             <lord-icon

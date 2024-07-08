@@ -5,7 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../UserContext";
 
-const Book = () => {
+const News = () => {
   const [data, setData] = useState([]);
   const { setCourt } = useContext(UserContext);
   const [courtImages, setCourtImages] = useState({});
@@ -139,4 +139,4 @@ const Book = () => {
   );
 };
 
-export default Book;
+export default News;

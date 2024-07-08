@@ -34,6 +34,7 @@ import "@progress/kendo-theme-default/dist/all.css";
 import FixedSchedule from "./components/FixedSchedule";
 import OneTimeSchedule from "./components/OneTimeSchedule";
 import FlexibleSchedule from "./components/FlexibleSchedule";
+import News from "./components/New";
 
 const App = () => {
   return (
