@@ -35,6 +35,7 @@ import FixedSchedule from "./components/FixedSchedule";
 import OneTimeSchedule from "./components/OneTimeSchedule";
 import FlexibleSchedule from "./components/FlexibleSchedule";
 import News from "./components/New";
+import NewsDetail from "./components/NewDetail";
 
 const App = () => {
   return (
@@ -171,6 +172,16 @@ const App = () => {
               <>
                 <Header />
                 <BookInfor />
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="NewDetail/:postId"
+            element={
+              <>
+                <Header />
+                <NewsDetail />
                 <Footer />
               </>
             }
