@@ -28,6 +28,7 @@ const Court = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteCourtId, setDeleteCourtId] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedAmenities, setSelectedAmenities] = useState([]);
 
   const [areaId, setAreaId] = useState("");
   const [courtName, setCourtName] = useState("");
@@ -42,24 +43,8 @@ const Court = () => {
   const [totalRate, setTotalRate] = useState("");
   const [priceAvr, setPriceAvr] = useState("");
   const [courtImages, setCourtImages] = useState("");
-
-  const [subCourts, setSubCourts] = useState([
-    {
-      number: "",
-      status: true,
-      amenities: [],
-      slotTimes: [],
-    },
-  ]);
-
-  // State for managing amenities and slotTimes
+  const [subCourts, setSubCourts] = useState([]);
   const [slotTimes, setSlotTimes] = useState([]);
-  const addSubCourt = () => {
-    setSubCourts([
-      ...subCourts,
-      { number: "", status: true, amenities: [], slotTimes: [] },
-    ]);
-  };
 
   const [number, setNumber] = useState("");
   const [subStatus, setSubStatus] = useState(true);
@@ -341,29 +326,50 @@ const Court = () => {
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Courts";
-    const subCourtsArray = [
-      {
-        number,
-        status: subStatus,
-      },
-    ];
+    // const subCourtsArray = [
+    //   {
+    //     number,
+    //     status: subStatus,
+    //   },
+    // ];
 
-    const amenitiesArray = [
-      {
-        amenityId,
-        status: amenStatus,
-      },
-    ];
+    // const amenitiesArray = [
+    //   {
+    //     amenityId,
+    //     status: amenStatus,
+    //   },
+    // ];
 
-    const slotTimesArray = [
-      {
-        startTime,
-        endTime,
-        weekdayPrice,
-        weekendPrice,
-        status: slotStatus,
-      },
-    ];
+    // const slotTimesArray = [
+    //   {
+    //     startTime,
+    //     endTime,
+    //     weekdayPrice,
+    //     weekendPrice,
+    //     status: slotStatus,
+    //   },
+    // ];
+
+    // Prepare subCourts array
+    const subCourtsArray = subCourts.map((subCourt) => ({
+      number: subCourt.number,
+      status: subCourt.status,
+    }));
+
+    // Prepare amenities array
+    const amenitiesArray = selectedAmenities.map((amenity) => ({
+      amenityId: amenity.amenityId,
+      status: amenity.status,
+    }));
+
+    // Prepare slotTimes array
+    const slotTimesArray = slotTimes.map((slotTime) => ({
+      startTime: slotTime.startTime,
+      endTime: slotTime.endTime,
+      weekdayPrice: slotTime.weekdayPrice,
+      weekendPrice: slotTime.weekendPrice,
+      status: slotTime.status,
+    }));
 
     const data = {
       areaId: areaId,
@@ -401,6 +407,50 @@ const Court = () => {
           toast.error("An error occurred while adding court.");
         }
       });
+  };
+
+  const handleAddSubCourt = () => {
+    setSubCourts([...subCourts, { number: "", status: true }]);
+  };
+
+  const handleSubCourtChange = (value, index) => {
+    const updatedSubCourts = [...subCourts];
+    updatedSubCourts[index].number = value;
+    setSubCourts(updatedSubCourts);
+  };
+
+  const handleAmenityToggle = (amenity) => {
+    const updatedAmenities = [...selectedAmenities];
+    const existingIndex = selectedAmenities.findIndex(
+      (a) => a.amenityId === amenity.amenityId
+    );
+
+    if (existingIndex !== -1) {
+      updatedAmenities.splice(existingIndex, 1);
+    } else {
+      updatedAmenities.push({ amenityId: amenity.amenityId, status: true });
+    }
+
+    setSelectedAmenities(updatedAmenities);
+  };
+
+  const handleAddSlotTime = () => {
+    setSlotTimes([
+      ...slotTimes,
+      {
+        startTime: "",
+        endTime: "",
+        weekdayPrice: "",
+        weekendPrice: "",
+        status: true,
+      },
+    ]);
+  };
+
+  const handleSlotTimeChange = (value, index, field) => {
+    const updatedSlotTimes = [...slotTimes];
+    updatedSlotTimes[index][field] = value;
+    setSlotTimes(updatedSlotTimes);
   };
 
   const clear = () => {
@@ -480,14 +530,6 @@ const Court = () => {
     }
   };
 
-  // const handleEditActiveChange = (e) => {
-  //   if (e.target.checked) {
-  //     setEditStatus(true);
-  //   } else {
-  //     setEditStatus(false);
-  //   }
-  // };
-
   const columns = [
     { field: "courtId", headerName: "CourtId" },
     { field: "areaId", headerName: "Area" },
@@ -560,76 +602,6 @@ const Court = () => {
     },
   ];
 
-  // const handleAddSubCourt = () => {
-  //   if (number === "") {
-  //     toast.error("Please enter a number for subcourt.");
-  //     return;
-  //   }
-
-  //   const newSubCourt = {
-  //     number: number,
-  //     status: subStatus,
-  //   };
-
-  //   setSubCourts([...subCourts, newSubCourt]);
-  //   setNumber("");
-  //   setSubStatus(true);
-  // };
-
-  // const handleDeleteSubCourt = (index) => {
-  //   const updatedSubCourts = [...subCourts];
-  //   updatedSubCourts.splice(index, 1);
-  //   setSubCourts(updatedSubCourts);
-  // };
-
-  // const handleSelectAmenity = (e) => {
-  //   const id = e.target.value;
-  //   const isChecked = e.target.checked;
-
-  //   if (isChecked) {
-  //     const amenity = amenities.find((amenity) => amenity.amenityId === id);
-  //     setSelectedAmenities([...selectedAmenities, amenity]);
-  //   } else {
-  //     const filteredAmenities = selectedAmenities.filter(
-  //       (amenity) => amenity.amenityId !== id
-  //     );
-  //     setSelectedAmenities(filteredAmenities);
-  //   }
-  // };
-
-  // const handleAddSlotTime = () => {
-  //   if (
-  //     startTime === "" ||
-  //     endTime === "" ||
-  //     weekdayPrice === "" ||
-  //     weekendPrice === ""
-  //   ) {
-  //     toast.error("Please fill in all fields for slot time.");
-  //     return;
-  //   }
-
-  //   const newSlotTime = {
-  //     startTime: startTime,
-  //     endTime: endTime,
-  //     weekdayPrice: weekdayPrice,
-  //     weekendPrice: weekendPrice,
-  //     status: slotStatus,
-  //   };
-
-  //   setSlotTimes([...slotTimes, newSlotTime]);
-  //   setStartTime("");
-  //   setEndTime("");
-  //   setWeekdayPrice("");
-  //   setWeekendPrice("");
-  //   setSlotStatus(true);
-  // };
-
-  // const handleDeleteSlotTime = (index) => {
-  //   const updatedSlotTimes = [...slotTimes];
-  //   updatedSlotTimes.splice(index, 1);
-  //   setSlotTimes(updatedSlotTimes);
-  // };
-
   // Function to add Amenities for a specific SubCourt
   const addAmenity = (subCourtIndex, amenity) => {
     const updatedSubCourts = [...subCourts];
@@ -646,425 +618,236 @@ const Court = () => {
 
   return (
     <>
-      <Fragment>
-        <ToastContainer />
-        <section className="home-section" style={{ padding: "0 27px" }}>
-          <nav>
-            <div className="sidebar-button">
-              <i className="bx bx-menu sidebarBtn"></i>
-              <span className="dashboard">Court</span>
-            </div>
-          </nav>
-          <div className="home-content">
-            <div className="infor">
-              <div className="total">{data.length} total</div>
-              <div className="function">
-                <Button
-                  className="btn btn-primary create"
-                  onClick={handleCreateShow}
-                >
-                  Create
-                </Button>
-              </div>
+      <ToastContainer />
+      <section className="home-section" style={{ padding: "0 27px" }}>
+        <nav>
+          <div className="sidebar-button">
+            <i className="bx bx-menu sidebarBtn"></i>
+            <span className="dashboard">Court</span>
+          </div>
+        </nav>
+        <div className="home-content">
+          <div className="infor">
+            <div className="total">{data.length} total</div>
+            <div className="function">
+              <Button
+                className="btn btn-primary create"
+                onClick={handleCreateShow}
+              >
+                Create
+              </Button>
             </div>
           </div>
+        </div>
 
-          <div style={{ width: "100%" }}>
-            <DataGrid
-              getRowId={(data) => data.courtId}
-              columns={columns}
-              rows={data}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 7,
-                  },
+        <div style={{ width: "100%" }}>
+          <DataGrid
+            getRowId={(data) => data.courtId}
+            columns={columns}
+            rows={data}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 7,
                 },
-              }}
-              pageSizeOptions={[7]}
-              sx={{
-                width: "-webkit-fill-available",
-              }}
-            />
-          </div>
+              },
+            }}
+            pageSizeOptions={[7]}
+            sx={{
+              width: "-webkit-fill-available",
+            }}
+          />
+        </div>
 
-          <Modal
-            show={showCreateModal}
-            onHide={handleCreateClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Create Court</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <h3>Court</h3>
-              <Row>
-                <Col sm={6}>
-                  <select
-                    className="form-control mb-3"
-                    value={areaId}
-                    onChange={(e) => setAreaId(e.target.value)}
-                  >
-                    <option value="">Select Area</option>
-                    {areas.map((area) => (
-                      <option key={area.areaId} value={area.areaId}>
-                        {area.location}
+        <Modal
+          show={showCreateModal}
+          onHide={handleCreateClose}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Create Court</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h3>Court</h3>
+            <Row>
+              <Col sm={6}>
+                <select
+                  className="form-control mb-3"
+                  value={areaId}
+                  onChange={(e) => setAreaId(e.target.value)}
+                >
+                  <option value="">Select Area</option>
+                  {areas.map((area) => (
+                    <option key={area.areaId} value={area.areaId}>
+                      {area.location}
+                    </option>
+                  ))}
+                </select>
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter court name"
+                  value={courtName}
+                  onChange={(e) => setCourtName(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="time"
+                  className="form-control mb-3"
+                  placeholder="Enter open time"
+                  value={openTime}
+                  onChange={(e) => setOpenTime(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="time"
+                  className="form-control mb-3"
+                  placeholder="Enter close time"
+                  value={closeTime}
+                  onChange={(e) => setCloseTime(e.target.value)}
+                />
+              </Col>
+              <Col sm={12}>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={rules}
+                  onChange={handleEditorChange}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="file"
+                  className="form-control mb-3"
+                  placeholder="Choose image"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <select
+                  className="form-control mb-3"
+                  value={managerId}
+                  onChange={(e) => setManagerId(e.target.value)}
+                >
+                  <option value="">Select Manager</option>
+                  {managers
+                    .filter((manager) => manager.roleId === 4)
+                    .map((manager) => (
+                      <option key={manager.managerId} value={manager.accountId}>
+                        {manager.fullName}
                       </option>
                     ))}
-                  </select>
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter court name"
-                    value={courtName}
-                    onChange={(e) => setCourtName(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="time"
-                    className="form-control mb-3"
-                    placeholder="Enter open time"
-                    value={openTime}
-                    onChange={(e) => setOpenTime(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="time"
-                    className="form-control mb-3"
-                    placeholder="Enter close time"
-                    value={closeTime}
-                    onChange={(e) => setCloseTime(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={rules}
-                    onChange={handleEditorChange}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="file"
-                    className="form-control mb-3"
-                    placeholder="Choose image"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <select
-                    className="form-control mb-3"
-                    value={managerId}
-                    onChange={(e) => setManagerId(e.target.value)}
-                  >
-                    <option value="">Select Manager</option>
-                    {managers
-                      .filter((manager) => manager.roleId === 4)
-                      .map((manager) => (
-                        <option
-                          key={manager.managerId}
-                          value={manager.accountId}
-                        >
-                          {manager.fullName}
-                        </option>
-                      ))}
-                  </select>
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter rate"
-                    value={totalRate}
-                    onChange={(e) => setTotalRate(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter price"
-                    value={priceAvr}
-                    onChange={(e) => setPriceAvr(e.target.value)}
-                  />
-                </Col>
-                <Col sm={6}>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label="Status"
-                    defaultChecked={status}
-                    onChange={handleCourtActive}
-                    style={{ paddingLeft: "2.5em" }}
-                  />
-                </Col>
-              </Row>
-              {/* <h5>SubCourts</h5>
-              <Form.Group className="mb-3">
-                <Form.Control
+                </select>
+              </Col>
+              <Col sm={6}>
+                <input
                   type="text"
-                  placeholder="Enter SubCourt Number"
-                  value={number}
-                  onChange={(e) => setNumber(e.target.value)}
+                  className="form-control mb-3"
+                  placeholder="Enter title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Check
-                  type="checkbox"
-                  label="Active"
-                  checked={subStatus}
-                  onChange={handleSubActive}
-                />
-              </Form.Group>
-              <Button variant="success" onClick={handleAddSubCourt}>
-                Add SubCourt
-              </Button>
-              <br />
-              <br />
-              {subCourts.length > 0 && (
-                <Fragment>
-                  <h6>SubCourts List:</h6>
-                  {subCourts.map((subCourt, index) => (
-                    <Row key={index}>
-                      <Col>
-                        <p>{subCourt.number}</p>
-                      </Col>
-                      <Col>
-                        <Button
-                          variant="danger"
-                          onClick={() => handleDeleteSubCourt(index)}
-                        >
-                          <HighlightOffIcon />
-                        </Button>
-                      </Col>
-                    </Row>
-                  ))}
-                </Fragment>
-              )}
-              <hr />
-              <h5>Amenities</h5>
-              {amenities.map((amenity) => (
-                <Form.Check
-                  key={amenity.amenityId}
-                  type="checkbox"
-                  id={amenity.amenityId}
-                  label={amenity.name}
-                  value={amenity.amenityId}
-                  checked={selectedAmenities.some(
-                    (selected) => selected.amenityId === amenity.amenityId
-                  )}
-                  onChange={handleSelectAmenity}
-                />
-              ))}
-              <hr />
-              <h5>SlotTimes</h5>
-              <Form.Group className="mb-3">
-                <Form.Label>Start Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>End Time</Form.Label>
-                <Form.Control
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Weekday Price</Form.Label>
-                <Form.Control
+              </Col>
+              <Col sm={6}>
+                <input
                   type="text"
-                  placeholder="Enter Weekday Price"
-                  value={weekdayPrice}
-                  onChange={(e) => setWeekdayPrice(e.target.value)}
+                  className="form-control mb-3"
+                  placeholder="Enter address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Weekend Price</Form.Label>
-                <Form.Control
+              </Col>
+              <Col sm={6}>
+                <input
                   type="text"
-                  placeholder="Enter Weekend Price"
-                  value={weekendPrice}
-                  onChange={(e) => setWeekendPrice(e.target.value)}
+                  className="form-control mb-3"
+                  placeholder="Enter rate"
+                  value={totalRate}
+                  onChange={(e) => setTotalRate(e.target.value)}
                 />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter price"
+                  value={priceAvr}
+                  onChange={(e) => setPriceAvr(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
                 <Form.Check
-                  type="checkbox"
-                  label="Active"
-                  checked={slotStatus}
-                  onChange={handleSlotActive}
+                  type="switch"
+                  id="custom-switch"
+                  label="Status"
+                  defaultChecked={status}
+                  onChange={handleCourtActive}
+                  style={{ paddingLeft: "2.5em" }}
                 />
-              </Form.Group>
+              </Col>
+            </Row>
 
-              <Button variant="success" onClick={handleAddSlotTime}>
-                Add SlotTime
-              </Button>
-              <br />
-              <br />
-              {slotTimes.length > 0 && (
-                <Fragment>
-                  <h6>SlotTimes List:</h6>
-                  {slotTimes.map((slotTime, index) => (
-                    <Row key={index}>
-                      <Col>
-                        <p>
-                          {slotTime.startTime} - {slotTime.endTime}
-                        </p>
-                      </Col>
-                      <Col>
-                        <Button
-                          variant="danger"
-                          onClick={() => handleDeleteSlotTime(index)}
-                        >
-                          <HighlightOffIcon />
-                        </Button>
-                      </Col>
-                    </Row>
-                  ))}
-                </Fragment>
-              )} */}
-
-              {/* {subCourts.map((subCourt, index) => (
-                <div key={index}>
+            <h3>SubCourts</h3>
+            {subCourts.map((subCourt, index) => (
+              <Row key={index}>
+                <Col sm={6}>
                   <input
                     type="text"
+                    className="form-control mb-3"
+                    placeholder="Enter sub court name"
                     value={subCourt.number}
-                    onChange={(e) => {
-                      const updatedSubCourts = [...subCourts];
-                      updatedSubCourts[index].number = e.target.value;
-                      setSubCourts(updatedSubCourts);
-                    }}
-                  />
-                  {subCourt.amenities.map((amenity, amenityIndex) => (
-                    <input
-                      key={amenityIndex}
-                      type="text"
-                      value={amenity}
-                      onChange={(e) => {
-                        const updatedSubCourts = [...subCourts];
-                        updatedSubCourts[index].amenities[amenityIndex] =
-                          e.target.value;
-                        setSubCourts(updatedSubCourts);
-                      }}
-                    />
-                  ))}
-                  <button onClick={() => addAmenity(index, "")}>
-                    Add Amenity
-                  </button>
-
-                  {subCourt.slotTimes.map((slotTime, slotTimeIndex) => (
-                    <input
-                      key={slotTimeIndex}
-                      type="text"
-                      value={slotTime}
-                      onChange={(e) => {
-                        const updatedSubCourts = [...subCourts];
-                        updatedSubCourts[index].slotTimes[slotTimeIndex] =
-                          e.target.value;
-                        setSubCourts(updatedSubCourts);
-                      }}
-                    />
-                  ))}
-                  <button onClick={() => addSlotTime(index, "")}>
-                    Add SlotTime
-                  </button>
-                </div>
-              ))}
-
-              <button onClick={addSubCourt}>Add SubCourt</button> */}
-
-              <h3>Sub</h3>
-              <Row>
-                <Col sm={6}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter sub name"
-                    value={number}
-                    onChange={(e) => setNumber(e.target.value)}
+                    onChange={(e) =>
+                      handleSubCourtChange(e.target.value, index)
+                    }
                   />
                 </Col>
-                <Col sm={6}>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label="Status"
-                    defaultChecked={subStatus}
-                    onChange={handleSubActive}
-                    style={{ paddingLeft: "2.5em" }}
-                  />
-                </Col>
+                <Col sm={6}></Col>
               </Row>
-              <h3>Amenity</h3>
-              <Row>
+            ))}
+            <Button variant="success" onClick={handleAddSubCourt}>
+              Add SubCourt
+            </Button>
+            <hr />
+
+            <h3>Amenities</h3>
+            {amenities.map((amenity) => (
+              <Row key={amenity.amenityId} className="mb-2">
                 <Col sm={6}>
-                  <select
-                    className="form-control mb-3"
-                    value={amenityId}
-                    onChange={(e) => setAmenityId(e.target.value)}
-                  >
-                    <option value="">Select Amenity</option>
-                    {amenities.map((amenity) => (
-                      <option key={amenity.amenityId} value={amenity.amenityId}>
-                        {amenity.description}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="checkbox-wrapper">
+                    <Form.Check
+                      className="checkbox-label"
+                      type="checkbox"
+                      label={amenity.description}
+                      checked={selectedAmenities.some(
+                        (selected) => selected.amenityId === amenity.amenityId
+                      )}
+                      onChange={() => handleAmenityToggle(amenity)}
+                    />
+                  </div>
                 </Col>
-                <Col sm={6}>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label="Status"
-                    defaultChecked={amenStatus}
-                    onChange={handleAmenActive}
-                    style={{ paddingLeft: "2.5em" }}
-                  />
-                </Col>
+                <Col sm={6}></Col>
               </Row>
-              <h3>Slot</h3>
-              <Row>
+            ))}
+            <hr />
+
+            <h3>SlotTimes</h3>
+            {slotTimes.map((slotTime, index) => (
+              <Row key={index}>
                 <Col sm={6}>
                   <input
                     type="time"
                     className="form-control mb-3"
                     placeholder="Enter start time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
+                    value={slotTime.startTime}
+                    onChange={(e) =>
+                      handleSlotTimeChange(e.target.value, index, "startTime")
+                    }
                   />
                 </Col>
                 <Col sm={6}>
@@ -1072,17 +855,25 @@ const Court = () => {
                     type="time"
                     className="form-control mb-3"
                     placeholder="Enter end time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
+                    value={slotTime.endTime}
+                    onChange={(e) =>
+                      handleSlotTimeChange(e.target.value, index, "endTime")
+                    }
                   />
                 </Col>
                 <Col sm={6}>
                   <input
                     type="text"
                     className="form-control mb-3"
-                    placeholder="Enter week day price"
-                    value={weekdayPrice}
-                    onChange={(e) => setWeekdayPrice(e.target.value)}
+                    placeholder="Enter weekday price"
+                    value={slotTime.weekdayPrice}
+                    onChange={(e) =>
+                      handleSlotTimeChange(
+                        e.target.value,
+                        index,
+                        "weekdayPrice"
+                      )
+                    }
                   />
                 </Col>
                 <Col sm={6}>
@@ -1090,159 +881,177 @@ const Court = () => {
                     type="text"
                     className="form-control mb-3"
                     placeholder="Enter weekend price"
-                    value={weekendPrice}
-                    onChange={(e) => setWeekendPrice(e.target.value)}
+                    value={slotTime.weekendPrice}
+                    onChange={(e) =>
+                      handleSlotTimeChange(
+                        e.target.value,
+                        index,
+                        "weekendPrice"
+                      )
+                    }
                   />
                 </Col>
-                <Col sm={6}>
-                  <Form.Check
-                    type="switch"
-                    id="custom-switch"
-                    label="Status"
-                    defaultChecked={slotStatus}
-                    onChange={handleSlotActive}
-                    style={{ paddingLeft: "2.5em" }}
-                  />
-                </Col>
+                <Col sm={6}></Col>
               </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCreateClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleSave}>
-                Submit
-              </Button>
-            </Modal.Footer>
-          </Modal>
+            ))}
+            <Button variant="success" onClick={handleAddSlotTime}>
+              Add SlotTime
+            </Button>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCreateClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleSave}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
-          <Modal
-            show={show}
-            onHide={handleClose}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Court</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter court name"
-                    value={editCourtName}
-                    onChange={(e) => setEditCourtName(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="time"
-                    className="form-control mb-3"
-                    placeholder="Choose open time"
-                    value={editOpenTime}
-                    onChange={(e) => setEditOpenTime(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="time"
-                    className="form-control mb-3"
-                    placeholder="Choose close time"
-                    value={editCloseTime}
-                    onChange={(e) => setEditCloseTime(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter email"
-                    value={editRules}
-                    onChange={(e) => setEditRules(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter title"
-                    value={editTitle}
-                    onChange={(e) => setEditTitle(e.target.value)}
-                  />
-                </Col>
-                <Col sm={12}>
-                  <input
-                    type="text"
-                    className="form-control mb-3"
-                    placeholder="Enter address"
-                    value={editAddress}
-                    onChange={(e) => setEditAddress(e.target.value)}
-                  />
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleUpdate}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal
-            show={showImage}
-            onHide={handleCloseImage}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Modify / Update Court Image</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col sm={12}>
-                  <input
-                    type="file"
-                    className="form-control mb-3"
-                    placeholder="Enter address"
-                    // value={editCourtImages}
-                    onChange={(e) => setEditCourtImages(e.target.files[0])} // Update the image state correctly
-                  />
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleCloseImage}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={handleUpdateImage}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-          <Modal show={showDeleteModal} onHide={handleDeleteClose} centered>
-            <Modal.Header closeButton>
-              <Modal.Title>Delete Confirmation</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>Are you sure you want to delete this court?</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleDeleteClose}>
-                Cancel
-              </Button>
-              <Button variant="danger" onClick={handleDelete}>
-                Delete
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </section>
-      </Fragment>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Update Court</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <h3>Court</h3>
+            <Row>
+              <Col sm={6}>
+                <select
+                  className="form-control mb-3"
+                  value={areaId}
+                  onChange={(e) => setAreaId(e.target.value)}
+                >
+                  <option value="">Select Area</option>
+                  {areas.map((area) => (
+                    <option key={area.areaId} value={area.areaId}>
+                      {area.location}
+                    </option>
+                  ))}
+                </select>
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter court name"
+                  value={courtName}
+                  onChange={(e) => setCourtName(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="time"
+                  className="form-control mb-3"
+                  placeholder="Enter open time"
+                  value={openTime}
+                  onChange={(e) => setOpenTime(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="time"
+                  className="form-control mb-3"
+                  placeholder="Enter close time"
+                  value={closeTime}
+                  onChange={(e) => setCloseTime(e.target.value)}
+                />
+              </Col>
+              <Col sm={12}>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={rules}
+                  onChange={handleEditorChange}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="file"
+                  className="form-control mb-3"
+                  placeholder="Choose image"
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <select
+                  className="form-control mb-3"
+                  value={managerId}
+                  onChange={(e) => setManagerId(e.target.value)}
+                >
+                  <option value="">Select Manager</option>
+                  {managers
+                    .filter((manager) => manager.roleId === 4)
+                    .map((manager) => (
+                      <option key={manager.managerId} value={manager.accountId}>
+                        {manager.fullName}
+                      </option>
+                    ))}
+                </select>
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter rate"
+                  value={totalRate}
+                  onChange={(e) => setTotalRate(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  placeholder="Enter price"
+                  value={priceAvr}
+                  onChange={(e) => setPriceAvr(e.target.value)}
+                />
+              </Col>
+              <Col sm={6}>
+                <Form.Check
+                  type="switch"
+                  id="custom-switch"
+                  label="Status"
+                  defaultChecked={status}
+                  onChange={handleCourtActive}
+                  style={{ paddingLeft: "2.5em" }}
+                />
+              </Col>
+            </Row>
+            <Button variant="primary" onClick={handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </section>
     </>
   );
 };
