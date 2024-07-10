@@ -83,12 +83,11 @@ export const Profile = () => {
     e.preventDefault();
 
     const data = {
-      accountId: accountId,
-      accountName: user.accountName,
+      username: user.accountName,
       fullName: user.fullName,
-      phone: user.phone,
+      phoneNumber: user.phone,
       email: user.email.trim(),
-      image: user.image,
+      imgUrl: user.image,
     };
 
     axios
@@ -313,9 +312,6 @@ export const Profile = () => {
                 <p>No court available</p>
               )}
             </Tab>
-            {/* <Tab eventKey="contact" title="Contact" disabled>
-              Tab content for Contact
-            </Tab> */}
           </Tabs>
         </div>
       </div>
