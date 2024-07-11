@@ -1,7 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import "../css/StyleDashboardAdmin.css";
 import { UserContext } from "../UserContext";
+import Chart from "chart.js/auto";
 import axios from "axios";
+import { Row } from "react-bootstrap";
 
 const Dashboard = () => {
   const [user, setUser] = useState(0);
@@ -10,6 +12,13 @@ const Dashboard = () => {
   const [venue, setVenue] = useState(0);
   const { loginMessage, setLoginMessage } = useContext(UserContext);
   const [noticeVisible, setNoticeVisible] = useState(false);
+
+  const [totalBookings, setTotalBookings] = useState(0);
+  const [successfulBookingRate, setSuccessfulBookingRate] = useState(0);
+  const [revenueData, setRevenueData] = useState([]);
+
+  const bookingRateChartRef = useRef(null);
+  const revenueChartRef = useRef(null);
 
   React.useEffect(() => {
     let sidebar = document.querySelector(".sidebarA");
@@ -35,6 +44,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getData();
+    fetchData();
     document.title = "Admin Dashboard";
   }, []);
 
@@ -98,8 +108,189 @@ const Dashboard = () => {
       });
   };
 
+  useEffect(() => {
+    if (bookingRateChartRef.current && revenueChartRef.current) {
+      renderCharts();
+    }
+  }, [totalBookings, successfulBookingRate, revenueData]);
+
+  const fetchData = () => {
+    axios
+      .get("https://localhost:7088/api/Reports/total-bookings")
+      .then((response) => setTotalBookings(response.data || 0))
+      .catch((error) => console.error("Error fetching Total Bookings:", error));
+
+    axios
+      .get("https://localhost:7088/api/Reports/successful-booking-rate")
+      .then((response) => setSuccessfulBookingRate(response.data || 0))
+      .catch((error) =>
+        console.error("Error fetching Successful Booking Rate:", error)
+      );
+
+    fetchRevenueData();
+  };
+
+  const fetchRevenueData = () => {
+    axios
+      .get("https://localhost:7088/api/Reports/total-revenue-by-month-year")
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setRevenueData(response.data);
+        } else {
+          setRevenueData([]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching Revenue Data:", error);
+        setRevenueData([]);
+      });
+  };
+
+  const renderCharts = () => {
+    renderBookingRateChart();
+    renderRevenueChart();
+  };
+
+  const renderBookingRateChart = () => {
+    const ctx = bookingRateChartRef.current.getContext("2d");
+    if (ctx) {
+      if (bookingRateChartRef.current.chart) {
+        bookingRateChartRef.current.chart.destroy();
+      }
+
+      bookingRateChartRef.current.chart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: ["Successful Bookings", "Failed Bookings"],
+          datasets: [
+            {
+              label: "Booking Rate",
+              data: [successfulBookingRate, 1 - successfulBookingRate],
+              backgroundColor: [
+                "rgba(54, 162, 235, 0.5)",
+                "rgba(255, 99, 132, 0.5)",
+              ],
+              Color: ["rgb(255,255,255) !important"],
+              borderColor: ["rgba(54, 162, 235, 1)", "rgba(255, 99, 132, 1)"],
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "right",
+              labels: {
+                boxWidth: 10,
+              },
+            },
+            tooltip: {
+              padding: 8,
+            },
+          },
+          layout: {
+            padding: {
+              left: 0,
+              right: -50,
+            },
+          },
+          elements: {
+            arc: {
+              borderWidth: 0,
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const renderRevenueChart = () => {
+    const ctx = revenueChartRef.current.getContext("2d");
+    if (ctx) {
+      if (revenueChartRef.current.chart) {
+        revenueChartRef.current.chart.destroy();
+      }
+
+      const labels = revenueData.map((data) => data.monthYear);
+      const dataPoints = revenueData.map((data) => data.totalAmount);
+
+      revenueChartRef.current.chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Total Revenue",
+              data: dataPoints,
+              fill: false,
+              borderColor: "rgba(54, 162, 235, 0.7)",
+              borderWidth: 2,
+              pointBackgroundColor: "rgba(54, 162, 235, 1)",
+              pointBorderColor: "rgba(54, 162, 235, 1)",
+              pointBorderWidth: 1,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: "top",
+              labels: {
+                boxWidth: 12,
+                font: {
+                  size: 14,
+                },
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label: function (tooltipItem) {
+                  return `Revenue: $${tooltipItem.raw}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                font: {
+                  size: 14,
+                },
+              },
+              ticks: {
+                font: {
+                  size: 14,
+                },
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                font: {
+                  size: 14,
+                },
+              },
+              ticks: {
+                font: {
+                  size: 10,
+                },
+                stepSize: 200000,
+                beginAtZero: true,
+              },
+            },
+          },
+        },
+      });
+    }
+  };
+
   return (
-    <section className="home-section">
+    <section className="home-section" style={{ overflow: "hidden" }}>
       <nav>
         <div className="sidebar-button">
           <i className="bx bx-menu sidebarBtn"></i>
@@ -137,6 +328,24 @@ const Dashboard = () => {
             </div>
             <i className="bx bxs-cart-download cart four"></i>
           </div>
+          <div className="box">
+            <div className="right-side">
+              <div className="box-topic">Total Bookings</div>
+              <div className="number">{totalBookings}</div>
+            </div>
+            <i className="bx bxs-cart-download cart four"></i>
+          </div>
+          <div className="box">
+            <div className="right-side">
+              <div className="box-topic">Successful Booking Rate</div>
+              <div className="number">{successfulBookingRate.toFixed(2)}%</div>
+              <div className="box-topic">Cancel Booking Rate</div>
+              <div className="number">
+                {1 - successfulBookingRate.toFixed(2)}%
+              </div>
+            </div>
+            <i className="bx bxs-cart-download cart four"></i>
+          </div>
           {loginMessage && (
             <div className={`success ${noticeVisible ? "" : "hide"}`}>
               <span className="check">
@@ -150,6 +359,21 @@ const Dashboard = () => {
           )}
         </div>
       </div>
+      <Row className="align-items-center" style={{ padding: "0 20px" }}>
+        <div className="chart-container col-sm-5">
+          <canvas ref={bookingRateChartRef} id="bookingRateChart"></canvas>
+        </div>
+        <div
+          className="chart-Line col-sm-5 justify-content-end"
+          style={{
+            padding: "0 20px",
+            backgroundColor: "white",
+            borderRadius: "15px",
+          }}
+        >
+          <canvas ref={revenueChartRef} id="revenueChart"></canvas>
+        </div>
+      </Row>
     </section>
   );
 };
