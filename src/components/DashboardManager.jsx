@@ -40,7 +40,7 @@ const DashboardManager = () => {
 
   const getData = () => {
     axios
-      .get("https://localhost:7088/api/Reports/Total-Account")
+      .get("https://localhost:7088/api/Reports/total-accounts")
       .then((result) => {
         console.log(result.data);
         setUser(result.data);
@@ -72,7 +72,7 @@ const DashboardManager = () => {
 
   const getDataP = () => {
     axios
-      .get("https://localhost:7088/api/Reports/Total-Post")
+      .get("https://localhost:7088/api/Reports/total-posts")
       .then((result) => {
         console.log(result.data);
         setPost(result.data);

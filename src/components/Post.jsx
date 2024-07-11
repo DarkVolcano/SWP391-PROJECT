@@ -107,29 +107,6 @@ const Post = () => {
       });
   };
 
-  // const handleUpdate = (id) => {
-  //   const url = `https://localhost:7088/api/Posts/${editPostId}`;
-  //   const data = {
-  //     postId: editPostId,
-  //     context: editContext,
-  //     totalRate: editTotalRate,
-  //     image: editImage,
-  //     title: editTitle,
-  //   };
-
-  //   axios
-  //     .put(url, data)
-  //     .then((result) => {
-  //       handleClose();
-  //       getData();
-  //       clear();
-  //       toast.success("Post has been update");
-  //     })
-  //     .catch((error) => {
-  //       toast.error(error);
-  //     });
-  // };
-
   const handleUpdate = async () => {
     const url = `https://localhost:7088/api/Posts/${editPostId}`;
     const data = {
