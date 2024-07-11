@@ -7,11 +7,20 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import "../css/Profile.css";
 import { Button } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
+import { Col } from "react-bootstrap";
+import { Row } from "react-bootstrap";
+import { format } from "date-fns";
 
 export const Profile = () => {
   const navigate = useNavigate();
   const { accountId } = useParams();
   const [data, setData] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState([]);
+  const [slotTimes, setSlotTimes] = useState([]);
+  const [subCourts, setSubCourts] = useState([]);
+  const handleShow = () => setModalShow(true);
 
   const [user, setUser] = useState({
     accountName: "",
@@ -51,7 +60,7 @@ export const Profile = () => {
       .then((response) => {
         const data = response.data;
         setUserHistory(data);
-        setFilteredHistory(data); // Initialize filtered history
+        setFilteredHistory(data);
       })
       .catch((error) => {
         console.error("Error fetching user booking history:", error);
@@ -75,8 +84,51 @@ export const Profile = () => {
     }
   };
 
+  useEffect(() => {
+    fetchSlotTimes();
+    fetchSubCourts();
+  }, []);
+
+  const fetchSlotTimes = async () => {
+    try {
+      const response = await axios.get(`https://localhost:7088/api/SlotTimes`);
+      setSlotTimes(response.data);
+    } catch (error) {
+      console.error("Error fetching slot times:", error);
+      toast.error("Error fetching slot times");
+    }
+  };
+
+  const fetchSubCourts = async () => {
+    try {
+      const response = await axios.get(`https://localhost:7088/api/SubCourt`);
+      setSubCourts(response.data);
+    } catch (error) {
+      console.error("Error fetching sub-courts:", error);
+      toast.error("Error fetching sub-courts");
+    }
+  };
+
   const handleBack = () => {
     navigate("/");
+  };
+
+  const handleViewDetails = (bookingId) => {
+    handleShow();
+    axios
+      .get(`https://localhost:7088/api/BookingDetails/${bookingId}`)
+      .then((response) => {
+        setBookingDetails(response.data);
+        setModalShow(true);
+      })
+      .catch((error) => {
+        console.error("Error fetching booking details:", error);
+      });
+  };
+
+  const closeModal = () => {
+    setModalShow(false);
+    setBookingDetails([]);
   };
 
   const handleSubmit = (e) => {
@@ -302,9 +354,17 @@ export const Profile = () => {
                       <div>Booking Type: {datas ? datas.description : ""}</div>
                       <div>Total Hours: {item.totalHours}</div>
                       <div>Total Price: {item.totalPrice}</div>
-                      <div>Start Date: {item.startDate}</div>
-                      <div>End Date: {item.endDate}</div>
+                      <div>
+                        Start Date: {format(item.startDate, "dd/MM/yyyy")}
+                      </div>
+                      <div>End Date: {format(item.endDate, "dd/MM/yyyy")}</div>
                       <div>Note: {item.note}</div>
+                      <Button
+                        className="btn btn-primary"
+                        onClick={() => handleViewDetails(item.bookingId)}
+                      >
+                        Xem chi tiết
+                      </Button>
                     </div>
                   );
                 })
@@ -315,6 +375,48 @@ export const Profile = () => {
           </Tabs>
         </div>
       </div>
+      <Modal show={modalShow} onHide={closeModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Chi tiết đặt lịch</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Row>
+            {bookingDetails.length > 0 ? (
+              bookingDetails.map((detail, index) => {
+                const slotTime = slotTimes.find(
+                  (slot) => slot.slotId === detail.slotId
+                );
+                const subCourt = subCourts.find(
+                  (court) => court.subCourtId === detail.subCourtId
+                );
+
+                return (
+                  <Col sm={6} key={index}>
+                    <h5>Booking Detail {detail.bookingDetailId}</h5>
+                    {/* <p>Date: {new Date(detail.date).toLocaleDateString()}</p> */}
+                    <p>Date: {format(detail.date, "dd/MM/yyyy")}</p>
+                    <p>
+                      Slot Time:{" "}
+                      {slotTime
+                        ? `${slotTime.startTime.trim()} - ${slotTime.endTime.trim()}`
+                        : "N/A"}
+                    </p>
+                    <p>Sub-court Name: {subCourt ? subCourt.number : "N/A"}</p>
+                    <p>Status: {detail.status ? "Active" : "Cancelled"}</p>
+                  </Col>
+                );
+              })
+            ) : (
+              <p>Loading booking details...</p>
+            )}
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

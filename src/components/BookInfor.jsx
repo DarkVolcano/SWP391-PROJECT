@@ -6,6 +6,9 @@ import { UserContext } from "../UserContext";
 import { format } from "date-fns";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Button } from "react-bootstrap";
 
 const BookInfor = (props) => {
   const [bookingDate, setBookingDate] = useState(null);
@@ -16,6 +19,9 @@ const BookInfor = (props) => {
   const { courtId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [comments, setComments] = useState([]);
+  const [context, setContext] = useState("");
+  const [image, setImage] = useState("");
 
   const [court, setCourt] = useState({
     courtName: "",
@@ -147,6 +153,49 @@ const BookInfor = (props) => {
     }
   };
 
+  const getComments = () => {
+    axios
+      .get(`https://localhost:7088/api/Comments/by-court/${courtId}`)
+      .then((result) => {
+        setComments(result.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleSave = () => {
+    const url = "https://localhost:7088/api/Comments";
+    const commentData = {
+      userId: user.accountId,
+      context: context,
+      image: image,
+      courtId: courtId,
+    };
+
+    axios
+      .post(url, commentData)
+      .then((response) => {
+        getComments();
+        clearCourt();
+        toast.success("Comment successfully added");
+      })
+      .catch((error) => {
+        console.error("Error adding comment:", error);
+        toast.error("Failed to add comment");
+      });
+  };
+
+  const clearCourt = () => {
+    setContext("");
+    setImage("");
+  };
+
+  const clear = () => {
+    setContext("");
+    setImage(""); // Optionally clear image state if needed
+  };
+
   useEffect(() => {
     document.title = "Thông tin sân chi tiết";
   }, []);
@@ -157,6 +206,7 @@ const BookInfor = (props) => {
 
   return (
     <>
+      <ToastContainer />
       <div className="court-name">{court.courtName}</div>
       <div
         style={{
@@ -241,13 +291,59 @@ const BookInfor = (props) => {
             ></div>
           )}
         </InputGroup.Text>
-        <Form.Control
-          as="textarea"
-          aria-label="With textarea"
-          rows={4}
-          className="col-sm-10"
-        />
+        <div className="col-sm-9">
+          <Form.Control
+            as="textarea"
+            aria-label="With textarea"
+            rows={4}
+            value={context}
+            onChange={(e) => setContext(e.target.value)}
+          />
+          <Button variant="primary float-end mt-2" onClick={handleSave}>
+            Bình luận
+          </Button>
+        </div>
       </InputGroup>
+
+      <div className="comments-section">
+        {comments && comments.length > 0 ? (
+          comments.map((comment) => (
+            <InputGroup
+              style={{ justifyContent: "center", marginBottom: "40px" }}
+            >
+              <InputGroup.Text>
+                {userImage ? (
+                  <img
+                    src={userImage}
+                    alt="User"
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      borderRadius: "20px",
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      backgroundColor: "gray",
+                    }}
+                  ></div>
+                )}
+              </InputGroup.Text>
+              <div className="col-sm-9">
+                <div className="col-sm-9 fw-bold fst-italic">
+                  {user.accountName}
+                </div>
+              </div>
+              <div className="col-sm-9">{comment.context}</div>
+            </InputGroup>
+          ))
+        ) : (
+          <p>No comments available</p>
+        )}
+      </div>
     </>
   );
 };

@@ -118,10 +118,9 @@ const Header = () => {
               <button
                 className="user-info dropbtn"
                 onClick={toggleDropdown}
-                style={{ width: "max-content" }}
+                style={{ width: "max-content", display: "flex" }}
               >
                 Hello {user.name || user.accountName}
-                {/* <img src={user.picture || user.image} alt="pictures" /> */}
                 {userImage ? (
                   <img
                     src={userImage}
@@ -130,6 +129,7 @@ const Header = () => {
                       width: "30px",
                       height: "30px",
                       borderRadius: "20px",
+                      marginLeft: "10px",
                     }}
                   />
                 ) : (
@@ -138,6 +138,7 @@ const Header = () => {
                       width: "30px",
                       height: "30px",
                       backgroundColor: "gray",
+                      marginLeft: "10px",
                     }}
                   ></div>
                 )}

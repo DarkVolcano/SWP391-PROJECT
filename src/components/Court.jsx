@@ -253,7 +253,7 @@ const Court = () => {
       .get(`https://localhost:7088/api/Courts/UploadCourtImage/${id}`)
       .then((result) => {
         console.log(result.data);
-        setEditCourtImages(result.data.image); // Make sure this updates correctly
+        setEditCourtImages(result.data.image);
         setEditCourtId(id);
       })
       .catch((error) => {
@@ -326,43 +326,16 @@ const Court = () => {
 
   const handleSave = () => {
     const url = "https://localhost:7088/api/Courts";
-    // const subCourtsArray = [
-    //   {
-    //     number,
-    //     status: subStatus,
-    //   },
-    // ];
-
-    // const amenitiesArray = [
-    //   {
-    //     amenityId,
-    //     status: amenStatus,
-    //   },
-    // ];
-
-    // const slotTimesArray = [
-    //   {
-    //     startTime,
-    //     endTime,
-    //     weekdayPrice,
-    //     weekendPrice,
-    //     status: slotStatus,
-    //   },
-    // ];
-
-    // Prepare subCourts array
     const subCourtsArray = subCourts.map((subCourt) => ({
       number: subCourt.number,
       status: subCourt.status,
     }));
 
-    // Prepare amenities array
     const amenitiesArray = selectedAmenities.map((amenity) => ({
       amenityId: amenity.amenityId,
       status: amenity.status,
     }));
 
-    // Prepare slotTimes array
     const slotTimesArray = slotTimes.map((slotTime) => ({
       startTime: slotTime.startTime,
       endTime: slotTime.endTime,
@@ -602,14 +575,12 @@ const Court = () => {
     },
   ];
 
-  // Function to add Amenities for a specific SubCourt
   const addAmenity = (subCourtIndex, amenity) => {
     const updatedSubCourts = [...subCourts];
     updatedSubCourts[subCourtIndex].amenities.push(amenity);
     setSubCourts(updatedSubCourts);
   };
 
-  // Function to add SlotTimes for a specific SubCourt
   const addSlotTime = (subCourtIndex, slotTime) => {
     const updatedSubCourts = [...subCourts];
     updatedSubCourts[subCourtIndex].slotTimes.push(slotTime);
