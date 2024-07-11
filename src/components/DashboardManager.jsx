@@ -42,7 +42,6 @@ const DashboardManager = () => {
     axios
       .get("https://localhost:7088/api/Reports/total-accounts")
       .then((result) => {
-        console.log(result.data);
         setUser(result.data);
       })
       .catch((error) => {
@@ -58,7 +57,6 @@ const DashboardManager = () => {
     axios
       .get("https://localhost:7088/api/Reports/Total-Courts")
       .then((result) => {
-        console.log(result.data);
         setCourt(result.data);
       })
       .catch((error) => {
@@ -74,7 +72,6 @@ const DashboardManager = () => {
     axios
       .get("https://localhost:7088/api/Reports/total-posts")
       .then((result) => {
-        console.log(result.data);
         setPost(result.data);
       })
       .catch((error) => {
@@ -90,7 +87,6 @@ const DashboardManager = () => {
     axios
       .get("https://localhost:7088/api/Reports/Total-Revenue")
       .then((result) => {
-        console.log(result.data);
         setVenue(result.data);
       })
       .catch((error) => {

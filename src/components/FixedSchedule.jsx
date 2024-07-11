@@ -81,7 +81,6 @@ const FixedSchedule = () => {
       .post(url)
       .then((response) => {
         const paymentUri = response.data.data.uri;
-        console.log("Payment result:", paymentUri);
         toast.success("Payment initiated successfully");
         if (paymentUri) {
           window.open(paymentUri, "_blank");

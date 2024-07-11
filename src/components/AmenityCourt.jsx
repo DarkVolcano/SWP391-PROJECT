@@ -53,7 +53,6 @@ const AmenityCourt = () => {
       const result = await axios.get(
         "https://localhost:7088/api/AmenityCourts"
       );
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -90,7 +89,6 @@ const AmenityCourt = () => {
     axios
       .get(`https://localhost:7088/api/AmenityCourts/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditAmenityId(result.data.amenityId);
         setEditCourtId(result.data.courtId);
         setEditStatus(result.data.status);

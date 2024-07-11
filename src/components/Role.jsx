@@ -49,7 +49,6 @@ const Role = () => {
   const getData = async () => {
     try {
       const result = await axios.get("https://localhost:7088/api/Roles");
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,7 +83,6 @@ const Role = () => {
     axios
       .get(`https://localhost:7088/api/Roles/id?role_id=${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditRoleName(result.data.roleName);
         setEditStatus(result.data.status);
         setEditRoleID(result.data.roleId);

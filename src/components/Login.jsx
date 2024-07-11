@@ -47,7 +47,7 @@ const Login = () => {
   };
 
   const handleCallbackResponse = (response) => {
-    console.log("Encoded JWT ID token: " + response.credential);
+    // console.log("Encoded JWT ID token: " + response.credential);
     const userObject = jwtDecode(response.credential);
     console.log(userObject);
     setUser(userObject);

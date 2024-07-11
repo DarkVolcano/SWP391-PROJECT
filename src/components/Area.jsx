@@ -49,7 +49,6 @@ const Area = () => {
   const getData = async () => {
     try {
       const result = await axios.get("https://localhost:7088/api/Areas");
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,7 +83,6 @@ const Area = () => {
     axios
       .get(`https://localhost:7088/api/Areas/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditLocation(result.data.location);
         setEditStatus(result.data.status);
         setEditAreaId(result.data.areaId);

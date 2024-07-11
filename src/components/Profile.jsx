@@ -148,7 +148,6 @@ export const Profile = () => {
         data
       )
       .then((response) => {
-        console.log("updated successfully:", response.data);
         toast.success("Update profile successfully");
       })
       .catch((error) => {
@@ -160,7 +159,6 @@ export const Profile = () => {
   const getData = async () => {
     try {
       const result = await axios.get("https://localhost:7088/api/BookingTypes");
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);

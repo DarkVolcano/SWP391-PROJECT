@@ -52,7 +52,6 @@ const Users = () => {
     axios
       .get("https://localhost:7088/api/Accounts")
       .then((result) => {
-        console.log(result.data);
         setData(result.data);
       })
       .catch((error) => {
@@ -64,7 +63,6 @@ const Users = () => {
     axios
       .get("https://localhost:7088/api/Roles")
       .then((response) => {
-        console.log(response.data);
         setRoles(response.data);
       })
       .catch((error) => {

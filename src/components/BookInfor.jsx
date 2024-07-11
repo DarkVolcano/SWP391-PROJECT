@@ -134,10 +134,6 @@ const BookInfor = (props) => {
 
   const handleUserBooking = (timeSlot) => {
     if (user && timeSlot) {
-      console.log("courtId:", courtId);
-      console.log("accountId:", user.accountId);
-      console.log("selectedTimeSlot:", timeSlot.time);
-      console.log("slotId:", timeSlot.slotId);
       console.log("bookingDate:", format(bookingDate, "dd/MM/yyyy"));
 
       navigate(`/UserBooking`, {

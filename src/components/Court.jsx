@@ -98,7 +98,6 @@ const Court = () => {
     axios
       .get("https://localhost:7088/api/Courts")
       .then((result) => {
-        console.log(result.data);
         setData(result.data);
       })
       .catch((error) => {
@@ -110,7 +109,6 @@ const Court = () => {
     axios
       .get("https://localhost:7088/api/Areas")
       .then((response) => {
-        console.log(response.data);
         setAreas(response.data);
       })
       .catch((error) => {
@@ -122,7 +120,6 @@ const Court = () => {
     axios
       .get("https://localhost:7088/api/Accounts")
       .then((respond) => {
-        console.log(respond.data);
         setManagers(respond.data);
       })
       .catch((error) => {
@@ -134,7 +131,6 @@ const Court = () => {
     axios
       .get("https://localhost:7088/api/Amenities")
       .then((responses) => {
-        console.log(responses.data);
         setAmenities(responses.data);
       })
       .catch((error) => {
@@ -196,7 +192,6 @@ const Court = () => {
     axios
       .get(`https://localhost:7088/api/Courts/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditAreaId(result.data.areaId);
         setEditCourtName(result.data.courtName);
         setEditOpenTime(result.data.openTime.trim());
@@ -252,7 +247,6 @@ const Court = () => {
     axios
       .get(`https://localhost:7088/api/Courts/UploadCourtImage/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditCourtImages(result.data.image);
         setEditCourtId(id);
       })
@@ -367,7 +361,6 @@ const Court = () => {
       .then((result) => {
         getData();
         clear();
-        console.log(result.data);
         handleCreateClose();
         toast.success("Court has been added");
       })

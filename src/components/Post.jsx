@@ -60,7 +60,6 @@ const Post = () => {
   const getData = async () => {
     try {
       const result = await axios.get("https://localhost:7088/api/Posts");
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -95,7 +94,6 @@ const Post = () => {
     axios
       .get(`https://localhost:7088/api/Posts/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditContext(result.data.context);
         setEditTotalRate(result.data.totalRate);
         setEditImage(result.data.image);
@@ -123,7 +121,6 @@ const Post = () => {
       }
 
       const response = await axios.put(url, data);
-      console.log("Update Response:", response);
       handleClose();
       getData();
       clear();
@@ -148,7 +145,6 @@ const Post = () => {
           },
         }
       );
-      console.log("Upload Response:", response);
       toast.success("Image has been uploaded");
     } catch (error) {
       console.error("Upload Error:", error);

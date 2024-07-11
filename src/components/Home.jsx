@@ -21,7 +21,6 @@ const Home = () => {
     axios
       .get("https://localhost:7088/api/Courts")
       .then((result) => {
-        console.log(result.data);
         setData(result.data);
         result.data.forEach((court) => {
           fetchCourtImage(court.courtId);
@@ -53,7 +52,6 @@ const Home = () => {
     axios
       .get("https://localhost:7088/api/Areas")
       .then((response) => {
-        console.log(response.data);
         setAreas(response.data);
       })
       .catch((error) => {
@@ -68,7 +66,6 @@ const Home = () => {
     axios
       .get(url)
       .then((response) => {
-        console.log("Search result:", response.data.items);
         setData(response.data.items);
         toast.success("Search successfully");
         response.data.items.forEach((court) => {

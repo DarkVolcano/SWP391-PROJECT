@@ -49,7 +49,6 @@ const BookingType = () => {
   const getData = async () => {
     try {
       const result = await axios.get("https://localhost:7088/api/BookingTypes");
-      console.log(result.data);
       setData(result.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -84,7 +83,6 @@ const BookingType = () => {
     axios
       .get(`https://localhost:7088/api/BookingTypes/${id}`)
       .then((result) => {
-        console.log(result.data);
         setEditDescription(result.data.description);
         setEditStatus(result.data.status);
         setEditBookingTypeId(result.data.bookingTypeId);
