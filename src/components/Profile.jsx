@@ -350,14 +350,14 @@ export const Profile = () => {
                       key={index}
                       className={item.status ? "history" : "cancelled"}
                     >
-                      <div>BookingId: {item.bookingId}</div>
-                      <div>Booking Type: {datas ? datas.description : ""}</div>
-                      <div>Total Hours: {item.totalHours}</div>
-                      <div>Total Price: {item.totalPrice}</div>
+                      <div>Tổng phút: {item.totalHours}</div>
+                      <div>Tổng tiền: {item.totalPrice} VNĐ</div>
                       <div>
-                        Start Date: {format(item.startDate, "dd/MM/yyyy")}
+                        Ngày bắt đầu: {format(item.startDate, "dd/MM/yyyy")}
                       </div>
-                      <div>End Date: {format(item.endDate, "dd/MM/yyyy")}</div>
+                      <div>
+                        Ngày kết thúc: {format(item.endDate, "dd/MM/yyyy")}
+                      </div>
                       <div>Note: {item.note}</div>
                       <Button
                         className="btn btn-primary"
@@ -393,16 +393,15 @@ export const Profile = () => {
                 return (
                   <Col sm={6} key={index}>
                     <h5>Booking Detail {detail.bookingDetailId}</h5>
-                    {/* <p>Date: {new Date(detail.date).toLocaleDateString()}</p> */}
-                    <p>Date: {format(detail.date, "dd/MM/yyyy")}</p>
+                    <p>Ngày: {format(detail.date, "dd/MM/yyyy")}</p>
                     <p>
-                      Slot Time:{" "}
+                      Thời gian chơi:{" "}
                       {slotTime
                         ? `${slotTime.startTime.trim()} - ${slotTime.endTime.trim()}`
                         : "N/A"}
                     </p>
-                    <p>Sub-court Name: {subCourt ? subCourt.number : "N/A"}</p>
-                    <p>Status: {detail.status ? "Active" : "Cancelled"}</p>
+                    <p>Sân : {subCourt ? subCourt.number : "N/A"}</p>
+                    <p>Trạng thái: {detail.status ? "Active" : "Cancelled"}</p>
                   </Col>
                 );
               })
@@ -413,7 +412,7 @@ export const Profile = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModal}>
-            Close
+            Đóng
           </Button>
         </Modal.Footer>
       </Modal>
