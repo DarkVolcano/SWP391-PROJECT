@@ -23,7 +23,7 @@ const Verify = () => {
         console.log("Email sent response:", result);
         clear();
         toast.success("Send successfully");
-        navigate("/OTPVerify");
+        navigate("/OTPVerify", { state: { email } });
       })
       .catch((error) => {
         console.log(
@@ -39,7 +39,7 @@ const Verify = () => {
   };
 
   useEffect(() => {
-    document.title = "Xác thưc email";
+    document.title = "Xác thực email";
   }, []);
 
   return (

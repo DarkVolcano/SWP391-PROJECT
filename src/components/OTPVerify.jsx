@@ -1,10 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-function OtpInputWithValidation({ numberOfDigits, email }) {
+function OtpInputWithValidation({ numberOfDigits }) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const email = location.state?.email || "";
   const [otp, setOtp] = useState(new Array(numberOfDigits).fill(""));
   const [otpError, setOtpError] = useState(null);
   const otpBoxReference = useRef([]);
@@ -55,8 +58,7 @@ function OtpInputWithValidation({ numberOfDigits, email }) {
         console.log("OTP Verification Response:", response);
         setLoading(false);
         toast.success("OTP verified successfully");
-        // Navigate to NewPassword.jsx on success
-        // Replace with your desired navigation method
+        navigate("/NewPassword", { state: { email } });
       })
       .catch((error) => {
         console.error("OTP Verification Error:", error);
