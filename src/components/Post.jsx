@@ -50,6 +50,7 @@ const Post = () => {
   const [editTotalRate, setEditTotalRate] = useState("");
   const [editImage, setEditImage] = useState("");
   const [editTitle, setEditTitle] = useState("");
+  const [editImageFile, setEditImageFile] = useState(null);
 
   useEffect(() => {
     getData();
@@ -106,7 +107,30 @@ const Post = () => {
       });
   };
 
-  const handleUpdate = (id) => {
+  // const handleUpdate = (id) => {
+  //   const url = `https://localhost:7088/api/Posts/${editPostId}`;
+  //   const data = {
+  //     postId: editPostId,
+  //     context: editContext,
+  //     totalRate: editTotalRate,
+  //     image: editImage,
+  //     title: editTitle,
+  //   };
+
+  //   axios
+  //     .put(url, data)
+  //     .then((result) => {
+  //       handleClose();
+  //       getData();
+  //       clear();
+  //       toast.success("Post has been update");
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error);
+  //     });
+  // };
+
+  const handleUpdate = async () => {
     const url = `https://localhost:7088/api/Posts/${editPostId}`;
     const data = {
       postId: editPostId,
@@ -116,17 +140,62 @@ const Post = () => {
       title: editTitle,
     };
 
-    axios
-      .put(url, data)
-      .then((result) => {
-        handleClose();
-        getData();
-        clear();
-        toast.success("Post has been update");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
+    try {
+      if (editImageFile) {
+        await handleUploadImage(editPostId);
+      }
+
+      const response = await axios.put(url, data);
+      console.log("Update Response:", response);
+      handleClose();
+      getData();
+      clear();
+      toast.success("Post has been updated");
+    } catch (error) {
+      console.error("Update Error:", error);
+      toast.error("Error updating post");
+    }
+  };
+
+  const handleUploadImage = async (postId) => {
+    const formData = new FormData();
+    formData.append("image", editImageFile);
+
+    try {
+      const response = await axios.post(
+        `https://localhost:7088/api/Posts/UploadPostImage/${postId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Upload Response:", response);
+      toast.success("Image has been uploaded");
+    } catch (error) {
+      console.error("Upload Error:", error);
+      toast.error("Error uploading image");
+    }
+  };
+
+  const handleEditImageChange = (e) => {
+    const file = e.target.files[0];
+    setEditImageFile(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setEditImage(reader.result);
+    };
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImage(reader.result);
+    };
   };
 
   const handleSave = () => {
@@ -286,12 +355,18 @@ const Post = () => {
                 </Col>
                 <Col sm={12}>
                   <input
-                    type="text"
+                    type="file"
                     className="form-control mb-3"
                     placeholder="Enter image"
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
+                    onChange={handleImageChange}
                   />
+                  {image && (
+                    <img
+                      src={image}
+                      alt="Preview"
+                      style={{ width: "100%", marginTop: "10px" }}
+                    />
+                  )}
                 </Col>
                 <Col sm={12}>
                   <input
@@ -349,8 +424,12 @@ const Post = () => {
                     type="text"
                     className="form-control mb-3"
                     placeholder="Enter image"
-                    value={editImage}
-                    onChange={(e) => setEditImage(e.target.value)}
+                    onChange={handleEditImageChange}
+                  />
+                  <img
+                    src={editImage}
+                    alt="Post"
+                    style={{ width: "100%", marginTop: "10px" }}
                   />
                 </Col>
                 <Col sm={12}>
