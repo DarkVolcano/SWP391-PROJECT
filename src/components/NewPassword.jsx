@@ -1,41 +1,48 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { UserContext } from "../UserContext";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const NewPass = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  const email = location.state?.email || "";
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [notice, setNotice] = useState("");
+  const { user } = useContext(UserContext);
 
-  // const [errors, setErrors] = useState({
-  //   minValueValidation: false,
-  //   numberValidation: false,
-  //   capitalLetterValidation: false,
-  //   specialCharacterValidation: false,
-  // });
+  const handlePassword = () => {
+    const url = `https://localhost:7088/api/Accounts/UpdatePass/${email}`;
+    const data = {
+      email: email,
+      newPassword: password,
+      reEnterPassword: confirmPassword,
+    };
 
-  // const handlePasswordChange = (event) => {
-  //   const newPassword = event.target.value;
-  //   setPassword(newPassword);
-  //   validatePassword(newPassword);
-  // };
-
-  // const validatePassword = (password) => {
-  //   setErrors({
-  //     minValueValidation: password.length >= 8,
-  //     numberValidation: /\d/.test(password),
-  //     capitalLetterValidation: /[A-Z]/.test(password),
-  //     specialCharacterValidation: /[^A-Za-z0-9]/.test(password),
-  //   });
-  // };
-
-  const handleLogout = () => {
-    navigate("/Login");
+    axios
+      .put(url, data)
+      .then((response) => {
+        console.log("New Password", response);
+        toast.success("Password updated successfully");
+        navigate("/Login");
+      })
+      .catch((error) => {
+        console.error("Password error:", error);
+        if (error.response) {
+          console.error("Response Data:", error.response.data);
+        }
+        toast.error("Failed to update password. Please try again.");
+      });
   };
+
+  useEffect(() => {
+    document.title = "Đặt lại mật khẩu mới";
+  }, []);
 
   return (
     <div className="loginN">
+      <ToastContainer />
       <div className="container-fluid">
         <div className="row justify-content-center mt-3">
           <div className="text-center">
@@ -52,11 +59,6 @@ const NewPass = () => {
           className="col-md-7 mt-3 pt-3 pb-3"
           style={{ width: "auto", height: "auto" }}
         >
-          {"" !== notice && (
-            <div className="alert alert-warning" role="alert">
-              {notice}
-            </div>
-          )}
           <div className="form-floating mb-3">
             <input
               id="signupPassword"
@@ -64,7 +66,7 @@ const NewPass = () => {
               className="form-control"
               placeholder="Password"
               value={password}
-              // onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
             ></input>
             <label htmlFor="signupPassword" className="form-label">
               Password
@@ -83,42 +85,11 @@ const NewPass = () => {
               Confirm Password
             </label>
           </div>
-          {/* {Object.entries(errors).map(([key, value]) => (
-            <div
-              key={key}
-              className="flex items-center gap-4 my-6"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: "10px",
-              }}
-            >
-              {value ? (
-                <CorrectIcon wrapperClass="w-4 h-auto text-white text-green-500" />
-              ) : (
-                <WrongIcon wrapperClass="w-4 h-auto text-white text-red-500" />
-              )}
-              <p
-                className={`text-base font-medium ${
-                  value ? "text-green-500" : "text-red-500"
-                }`}
-              >
-                {key === "minValueValidation" &&
-                  "Password must be at least 8 Characters"}
-                {key === "numberValidation" &&
-                  "Password must have at least one Number"}
-                {key === "capitalLetterValidation" &&
-                  "Password must have at least one Capital Letter"}
-                {key === "specialCharacterValidation" &&
-                  "Password must have at least one Special Character"}
-              </p>
-            </div>
-          ))} */}
           <div className="d-grid" style={{ margin: "1rem 0" }}>
             <button
-              type="submit"
+              type="button"
               className="btn btn-primary pt-3 pb-3"
-              onClick={handleLogout}
+              onClick={handlePassword}
             >
               Submit
             </button>

@@ -17,6 +17,10 @@ function OtpInputWithValidation({ numberOfDigits }) {
     setOtpError(null); // Reset error message on OTP change
   }, [otp]);
 
+  useEffect(() => {
+    document.title = "Xác thực OTP";
+  }, []);
+
   function handleChange(value, index) {
     if (!isNaN(value) && value.length === 1) {
       let newArr = [...otp];
