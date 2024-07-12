@@ -81,7 +81,7 @@ const Role = () => {
   const handleEdit = (id) => {
     handleShow();
     axios
-      .get(`https://localhost:7088/api/Roles/id?role_id=${id}`)
+      .get(`https://localhost:7088/api/Roles/${id}`)
       .then((result) => {
         setEditRoleName(result.data.roleName);
         setEditStatus(result.data.status);
@@ -93,7 +93,7 @@ const Role = () => {
   };
 
   const handleUpdate = (id) => {
-    const url = `https://localhost:7088/api/Roles/id?role_id=${editRoleID}`;
+    const url = `https://localhost:7088/api/Roles/${editRoleID}`;
     const data = {
       roleId: editRoleID,
       roleName: editRoleName,

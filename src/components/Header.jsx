@@ -4,6 +4,7 @@ import "../css/StyleHome.css";
 import { UserContext } from "../UserContext";
 import "https://cdn.lordicon.com/lordicon.js";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const Header = () => {
   const { user, logout } = useContext(UserContext);
@@ -11,6 +12,8 @@ const Header = () => {
   const [userImage, setUserImage] = useState("");
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const [timeoutExpired, setTimeoutExpired] = useState(false);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -48,8 +51,29 @@ const Header = () => {
       });
   }, [user.accountId]);
 
+  // useEffect(() => {
+  //   if (user) {
+  //     const logoutDuration = 60000;
+  //     const warningDuration = logoutDuration - 5000;
+
+  //     const warningTimer = setTimeout(() => {
+  //       toast.warning("User has been timed out");
+  //     }, warningDuration);
+
+  //     const logoutTimer = setTimeout(() => {
+  //       navigate("/Login");
+  //     }, logoutDuration);
+
+  //     return () => {
+  //       clearTimeout(warningTimer);
+  //       clearTimeout(logoutTimer);
+  //     };
+  //   }
+  // }, [user, logout]);
+
   return (
     <div className="image-container">
+      <ToastContainer />
       <img
         className="background"
         src={
